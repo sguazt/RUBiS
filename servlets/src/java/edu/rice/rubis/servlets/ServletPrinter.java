@@ -144,7 +144,7 @@ public class ServletPrinter
         "<a href=\"edu.rice.rubis.servlets.SearchItemsByCategory?category="
           + categoryId
           + "&categoryName="
-          + URLEncoder.encode(categoryName)
+          + URLEncoder.encode(categoryName, "UTF-8")
           + "\">"
           + categoryName
           + "</a><br>");
@@ -164,7 +164,7 @@ public class ServletPrinter
         "<a href=\"edu.rice.rubis.servlets.SearchItemsByRegion?category="
           + categoryId
           + "&categoryName="
-          + URLEncoder.encode(categoryName)
+          + URLEncoder.encode(categoryName, "UTF-8")
           + "&region="
           + regionId
           + "\">"
@@ -207,7 +207,7 @@ public class ServletPrinter
     {
       out.println(
         "<a href=\"edu.rice.rubis.servlets.BrowseCategories?region="
-          + URLEncoder.encode(regionName)
+          + URLEncoder.encode(regionName, "UTF-8")
           + "\">"
           + regionName
           + "</a><br>");

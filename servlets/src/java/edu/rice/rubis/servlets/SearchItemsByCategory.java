@@ -135,7 +135,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
             "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
               + categoryId
               + "&categoryName="
-              + URLEncoder.encode(categoryName)
+              + URLEncoder.encode(categoryName, "UTF-8")
               + "&page="
               + (page - 1)
               + "&nbOfItems="
@@ -168,7 +168,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
           "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
-            + URLEncoder.encode(categoryName)
+            + URLEncoder.encode(categoryName, "UTF-8")
             + "&page="
             + (page + 1)
             + "&nbOfItems="
@@ -181,7 +181,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
           "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
-            + URLEncoder.encode(categoryName)
+            + URLEncoder.encode(categoryName, "UTF-8")
             + "&page="
             + (page - 1)
             + "&nbOfItems="
@@ -190,7 +190,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
           "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
-            + URLEncoder.encode(categoryName)
+            + URLEncoder.encode(categoryName, "UTF-8")
             + "&page="
             + (page + 1)
             + "&nbOfItems="
