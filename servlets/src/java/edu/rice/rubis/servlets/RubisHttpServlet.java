@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 2002-2004 French National Institute For Research In Computer
- *                         Science And Control (INRIA).
- *                         [Contact: jmob@objectweb.org]
- * Copyright (C) 2002-2009  OW2 Consortium
+ * Copyright (C) 2002-2004  French National Institute For Research In Computer
+ *                          Science And Control (INRIA).
+ *                          [Contact: jmob@objectweb.org]
+ * Copyright (C) 2005-2009  OW2 Consortium
  *
  * This file is part of dcsj-rubis (below referred to as "this program").
  *
@@ -22,6 +22,7 @@
  * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
  * Contributor(s): Jeremy Philippe
  */
+
 package edu.rice.rubis.servlets;
 
 import java.io.FileInputStream;
