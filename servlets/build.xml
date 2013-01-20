@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+
+<project name="RUBiS Servlets" default="build" basedir=".">
+  <!-- set global properties for this build -->
+  <property file="../user.properties" />
+  <property file="../build.properties" />
+  <property file="build.properties" />
+
+  <!--
+  <property name="web.class.path" value="${web.path}/WEB-INF/classes"/>
+  <property name="web.lib.path" value="${web.path}/WEB-INF/lib"/>
+  <property name="build.class.path" value="${build.path}/WEB-INF/classes"/>
+  <property name="build.lib.path" value="${build.path}/WEB-INF/lib"/>
+  -->
+
+  <patternset id="web.lib.files">
+    <include name="*.jar"/>
+  </patternset>
+
+  <path id="j2ee.compile.classpath">
+    <fileset dir="${j2ee.home}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  <!--
+  <path id="j2ee-container.classpath">
+    <pathelement location="${tomcat.home}/bin"/>
+    <fileset dir="${tomcat.home}/bin">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${tomcat.home}/lib"/>
+    <fileset dir="${tomcat.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  <taskdef resource="org/apache/catalina/ant/catalina.tasks" classpathref="j2ee-container.classpath"/>
+  -->
+
+  <path id="common.compile.classpath">
+    <fileset dir="${build.path}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="compile.classpath">
+    <path refid="common.compile.classpath"/>
+    <path refid="j2ee.compile.classpath"/>
+  </path>
+
+
+  <!--
+    === "all" Target ===
+  -->
+  <target name="all"
+      depends="clean, build"
+      description="Clean 'build' and 'dist' directories, then compile"/>
+
+  <!--
+    === "clean" Target ===
+  -->
+  <target name="clean"
+      description="Delete old 'build' and 'dist' directories">
+    <delete dir="${build.path}"/>
+    <delete dir="${dist.path}"/>
+  </target>
+
+  <!--
+    === "dist" Target ===
+  -->
+  <target name="dist"
+      depends="doc,build"
+      description="Create binary distribution">
+
+    <!-- Copy documentation subdirectories -->
+    <mkdir dir="${dist.path}/docs"/>
+    <copy todir="${dist.path}/docs">
+      <fileset dir="${docs.path}"/>
+    </copy>
+    <!-- Copy additional files to ${dist.path} as necessary -->
+  </target>
+
+  <!--
+    === "doc" Target ===
+  -->
+  <target name="doc"
+      description="Create Javadoc API documentation">
+    <mkdir dir="${docs.path}/api"/>
+    <javadoc classpathref="compile.classpath"
+        packagenames="edu.rice.rubis.*"
+        sourcepath="${java.path}"
+        defaultexcludes="yes"
+        destdir="${docs.path}/docs/api"
+        author="true"
+        version="true"
+        use="true"
+        windowtitle="RUBiS API">
+      <doctitle><![CDATA[<h1>RUBiS API</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2002 - ObjectWeb Consortium - All Rights Reserved.</i>]]></bottom>
+    </javadoc>
+  </target>
+
+  <!--
+    === "build" Target ===
+  -->
+  <target name="build"
+      depends="post-compile"
+      description="Build from Java sources">
+    <mkdir dir="${dist.path}"/>
+    <war destfile="${dist.path}/${app.name}.war"
+        webxml="${build.path}/WEB-INF/web.xml"
+        basedir="${build.path}">
+    </war>
+  </target>
+
+  <!--
+    === "post-compile" Target ===
+  -->
+  <target name="post-compile"
+      depends="compile"
+      description="Operations to be done just after the compilation phase">
+    <!-- Set the correct values for version, copyright, ... -->
+  </target>
+
+  <!--
+    === "compile" Target ===
+  -->
+  <target name="compile"
+      depends="pre-compile"
+      description="Compile Java sources">
+    <!-- Compile Java classes as necessary -->
+    <mkdir dir="${build.path}/WEB-INF/classes"/>
+    <javac srcdir="${java.path}"
+        includeantruntime="false"
+        destdir="${build.path}/WEB-INF/classes"
+        debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+        optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+    <!-- Copy application resources -->
+    <copy  todir="${build.path}/WEB-INF/classes">
+      <fileset dir="${java.path}" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <!--
+    === "pre-compile" Target ===
+  -->
+  <target name="pre-compile">
+    <!-- Create build directories as needed -->
+    <mkdir dir="${build.path}"/>
+    <mkdir dir="${build.path}/WEB-INF"/>
+    <mkdir dir="${build.path}/WEB-INF/classes"/>
+    <mkdir dir="${build.path}/WEB-INF/classes/META-INF"/>
+    <mkdir dir="${build.path}/WEB-INF/lib"/>
+    <!-- Copy static content of this web application -->
+    <copy todir="${build.path}">
+      <fileset dir="${web.path}">
+        <include name="**/*.xml"/>
+        <include name="**/*.html"/>
+        <include name="images/**"/>
+        <exclude name="**/lib/**"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy static content of this web application -->
+    <copy todir="${build.path}/WEB-INF/classes/META-INF">
+      <fileset dir="${conf.path}">
+        <include name="*.xml"/>
+        <include name="*.conf"/>
+        <include name="*.properties"/>
+        <include name="MANIFEST.MF"/>
+    <!--
+        <include name="services"/>
+    -->
+      </fileset>
+    </copy>
+    <!-- Copy external dependencies as required -->
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+    <!--
+    <copy todir="${build.path}/WEB-INF/lib" file="${foo.jar}"/>
+    -->
+    <copy todir="${build.path}/WEB-INF/lib" flatten="true">
+      <fileset dir="${lib.path}">
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${web.path}/WEB-INF/lib">
+        <patternset refid="web.lib.files"/>
+      </fileset>
+    </copy>
+    <!-- Copy static files from external dependencies as needed -->
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+
+    <!-- Set the correct values for version, copyright, ... -->
+    <!--
+    <copy file="${java.path}/it/unipmn/di/dcs/rubis/AboutBean.java" tofile="${java.path}/it/unipmn/di/dcs/rubis/AboutBean.java.orig"/>
+    <replace    file="${java.path}/it/unipmn/di/dcs/rubis/AboutBean.java"
+        token="@VERSION@"
+        value="${app.version}"/>
+    -->
+  </target>
+</project>

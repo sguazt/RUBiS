@@ -4,3 +4,8 @@
 *.jar
 *.war
 *.ear
+
+# Other Files and Directories #
+user.properties
+build
+dist

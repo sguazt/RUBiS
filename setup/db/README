@@ -1,0 +1,20 @@
+List of files in this directory:
+
+rubis.sql			contains the SQL statements to create the RUBiS database using MySQL.
+categories.sql			SQL requests to initalize the categories table
+regions.sql			SQL requests to initalize the regions table
+
+generate_categories.awk		AWK script to generate a categories.sql file to initalize the categories table of the database
+generate_regions.awk		AWK script to generate a regions.sql file to initalize the regions table of the database
+
+ebay_full_categories.txt 	Snapshot of all categories available on eBay on Sept 20, 2001
+ebay_simple_categories.txt	Snapshot of main categories available on eBay on Sept 20, 2001
+ebay_regions.txt		Snapshot of regions available on eBay(.com) on Sept 20, 2001
+
+
+How to use the AWK Scripts ?
+
+Usage: script.awk input_file
+Examples :
+generate_categories.awk ebay_simple_categories.txt
+generate_regions.awk ebay_regions.txt

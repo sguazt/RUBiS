@@ -1,0 +1,2 @@
+ALTER TABLE users ADD COLUMN fk_region_id INTEGER UNSIGNED UNIQUE;
+ALTER TABLE users ADD CONSTRAINT fk_region_user FOREIGN KEY (fk_region_id) REFERENCES regions(id);

@@ -1,0 +1,10 @@
+#### CONFIGURABLE PROPERTIES ####
+
+j2ee.home = /opt/apache-tomcat-6.0.36/lib
+
+## compile.debug        Should compilation include the debug option?
+compile.debug=true
+## compile.deprecation  Should compilation include the deprecation option?
+compile.deprecation=true
+## compile.optimize     Should compilation include the optimize option?
+compile.optimize=true

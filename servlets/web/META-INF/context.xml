@@ -1,0 +1,29 @@
+<!-- MySQL database context -->
+<!--
+<Context path="/myfaces-demo" docBase="myfaces-demo" debug="5" reloadable="true" crossContext="true">
+<Context debug="5" reloadable="true" crossContext="true" path="/rubis_servlets">
+<Context path="/rubis_servlets">
+-->
+<Context path="/">
+<!--
+    <Resource   name="jdbc/mysql"
+                auth="Container"
+                type="javax.sql.DataSource"
+                username="rubis"
+                password="rubis"
+                driverClassName="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://localhost:3306/rubis"
+                maxActive="8"
+                maxIdle="4"
+                removeAbandoned="true"
+                removeAbandonedTimeout="60"
+                logAbandoned="true"/>
+-->
+    <Valve  className="org.apache.catalina.valves.AccessLogValve"
+            rotatable="true"
+            suffix="rubis"
+            pattern="combined"
+            directory="/opt/apache-6.0.36/logs"
+            resolveHosts="false"/>
+</Context>
+
