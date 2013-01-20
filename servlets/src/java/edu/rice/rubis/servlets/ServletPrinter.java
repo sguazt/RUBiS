@@ -19,6 +19,7 @@
 
 package edu.rice.rubis.servlets;
 
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,13 +28,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.GregorianCalendar;
-
 import javax.servlet.http.HttpServletResponse;
+
 
 /** In fact, this class is not a servlet itself but it provides
  * output services to servlets to send back HTML files.
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
- * @version 1.0
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
 
 public class ServletPrinter
@@ -250,7 +253,7 @@ public class ServletPrinter
           + endDate
           + "<TD><a href=\"edu.rice.rubis.servlets.PutBidAuth?itemId="
           + itemId
-          + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90></a>");
+          + "\"><IMG SRC=\"/rubis_servlets/images/bid_now.jpg\" height=22 width=90></a>");
     }
     catch (Exception e)
     {
@@ -404,7 +407,7 @@ public class ServletPrinter
           "<p><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.BuyNowAuth?itemId="
             + itemId
             + "\">"
-            + "<IMG SRC=\"/rubis_servlets/buy_it_now.jpg\" height=22 width=150></a>"
+            + "<IMG SRC=\"/rubis_servlets/images/buy_it_now.jpg\" height=22 width=150></a>"
             + "  <BIG><b>You can buy this item right now for only $"
             + buyNow
             + "</b></BIG><br><p>\n");
@@ -414,7 +417,7 @@ public class ServletPrinter
         out.println(
           "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.PutBidAuth?itemId="
             + itemId
-            + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90> on this item</a>\n");
+            + "\"><IMG SRC=\"/rubis_servlets/images/bid_now.jpg\" height=22 width=90> on this item</a>\n");
       }
 
       printHTMLHighlighted("Item description");
@@ -520,7 +523,7 @@ public class ServletPrinter
           + username
           + "&password="
           + password
-          + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90></a>\n");
+          + "\"><IMG SRC=\"/rubis_servlets/images/bid_now.jpg\" height=22 width=90></a>\n");
     }
     catch (Exception e)
     {
