@@ -19,26 +19,26 @@
 
 package edu.rice.rubis.servlets;
 
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
+
 
 /** 
  * Add a new user in the database 
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
- * @version 1.0
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
 public class RegisterUser extends RubisHttpServlet
 {
-  private UserTransaction utx = null;
-  
 
   public int getPoolSize()
   {
