@@ -117,8 +117,11 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 	/**
 	 * Clean up database connections.
 	 */
+	@Override
 	public void destroy()
 	{
+		super.destroy();
+
 		try
 		{
 			this.finalizeConnections();

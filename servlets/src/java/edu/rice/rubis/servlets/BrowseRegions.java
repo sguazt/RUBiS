@@ -49,7 +49,10 @@ public class BrowseRegions extends RubisHttpServlet
       if (stmt != null)
         stmt.close(); // close statement
       if (conn != null)
+	  {
+		conn.setAutoCommit(true);
         releaseConnection(conn);
+	  }
     }
     catch (Exception ignore)
     {
@@ -117,14 +120,6 @@ public class BrowseRegions extends RubisHttpServlet
 
     regionList(sp);
     sp.printHTMLfooter();
-  }
-
-  /**
-   * Clean up the connection pool.
-   */
-  public void destroy()
-  {
-    super.destroy();
   }
 
   private void printError(String errorMsg, ServletPrinter sp)

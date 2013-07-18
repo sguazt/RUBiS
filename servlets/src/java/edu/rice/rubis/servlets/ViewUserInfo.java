@@ -56,23 +56,17 @@ public class ViewUserInfo extends RubisHttpServlet
   {
     try
     {
-      if (conn != null)
-        if (conn.getAutoCommit() == false)
-          conn.rollback();
-    }
-    catch (Exception ignore)
-    {
-    }
-    try
-    {
       if (stmt != null)
         stmt.close(); // close statement
+      if (conn != null)
+	  {
+	    conn.setAutoCommit(true);
+        releaseConnection(conn);
+	  }
     }
     catch (SQLException e)
     {
     }
-    if (conn != null)
-      releaseConnection(conn);
   }
 
   private boolean commentList(Integer userId, PreparedStatement stmt,
@@ -89,8 +83,7 @@ public class ViewUserInfo extends RubisHttpServlet
       // Try to find the comment corresponding to the user
       try
       {
-        stmt = conn
-            .prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
+        stmt = conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
         stmt.setInt(1, userId.intValue());
         rs = stmt.executeQuery();
       }
@@ -123,8 +116,7 @@ public class ViewUserInfo extends RubisHttpServlet
         PreparedStatement authorStmt = null;
         try
         {
-          authorStmt = conn
-              .prepareStatement("SELECT nickname FROM users WHERE id=?");
+          authorStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           authorStmt.setInt(1, authorId);
           authorRS = authorStmt.executeQuery();
           if (authorRS.first())
@@ -135,7 +127,10 @@ public class ViewUserInfo extends RubisHttpServlet
         {
           this.printError("Failed to execute Query for the comment author: " + e, sp);
           conn.rollback();
-          authorStmt.close();
+		  if (authorStmt != null)
+		  {
+          	authorStmt.close();
+		  }
           closeConnection(stmt, conn);
           return false;
         }
@@ -249,14 +244,6 @@ public class ViewUserInfo extends RubisHttpServlet
     if(connAlive) {
         closeConnection(stmt, conn);
     }
-  }
-
-  /**
-   * Clean up the connection pool.
-   */
-  public void destroy()
-  {
-    super.destroy();
   }
 
   private void printError(String errorMsg, ServletPrinter sp)

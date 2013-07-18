@@ -63,8 +63,12 @@ public class StoreBuyNow extends RubisHttpServlet
     {
       if (stmt != null)
         stmt.close(); // close statement
+	  conn.setAutoCommit(true);
       if (conn != null)
+	  {
+		conn.setAutoCommit(true);
         releaseConnection(conn);
+	  }
     }
     catch (Exception ignore)
     {
@@ -265,14 +269,6 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     closeConnection(stmt, conn);
     sp.printHTMLfooter();
-  }
-
-  /**
-  * Clean up the connection pool.
-  */
-  public void destroy()
-  {
-    super.destroy();
   }
 
 }

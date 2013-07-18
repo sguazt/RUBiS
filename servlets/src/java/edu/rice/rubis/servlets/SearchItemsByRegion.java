@@ -51,7 +51,10 @@ public class SearchItemsByRegion extends RubisHttpServlet
       if (stmt != null)
         stmt.close(); // close statement
       if (conn != null)
+	  {
+		conn.setAutoCommit(true);
         releaseConnection(conn);
+	  }
     }
     catch (Exception ignore)
     {
@@ -241,13 +244,5 @@ public class SearchItemsByRegion extends RubisHttpServlet
     throws IOException, ServletException
   {
     doGet(request, response);
-  }
-
-  /**
-  * Clean up the connection pool.
-  */
-  public void destroy()
-  {
-    super.destroy();
   }
 }

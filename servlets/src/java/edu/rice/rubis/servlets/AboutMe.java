@@ -60,7 +60,8 @@ public class AboutMe extends RubisHttpServlet
 			}
 			if (conn != null)
 			{
-				releaseConnection(conn);
+				conn.setAutoCommit(true);
+				this.releaseConnection(conn);
 			}
 		}
 		catch (Exception e)
@@ -143,7 +144,7 @@ public class AboutMe extends RubisHttpServlet
 					catch (Exception e)
 					{
 						this.printError("Exception getting item: " + e, sp);
-						closeConnection(currentStmt, conn);
+						this.closeConnection(currentStmt, conn);
 						return false;
 					}
 
