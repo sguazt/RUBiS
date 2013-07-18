@@ -73,11 +73,7 @@ public class BuyNow extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: Buy now");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
+	this.printError("Buy Now", errorMsg, sp);
   }
 
   /**
@@ -105,7 +101,7 @@ public class BuyNow extends RubisHttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>", sp);
+      printError("Item id, name and password are required. Cannot process the request.", sp);
       return;
     }
     PreparedStatement stmt = null;
@@ -116,9 +112,7 @@ public class BuyNow extends RubisHttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      sp.printHTML("name: " + name + "<br>");
-      sp.printHTML("pwd: " + pass + "<br>");
-      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      printError(" You (" + name + "," + pass + ") don't have an account on RUBiS! You have to register first.", sp);
       closeConnection(stmt, conn);
       return;
     }

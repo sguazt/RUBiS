@@ -42,14 +42,14 @@ import javax.servlet.http.HttpServlet;
 /**
  * Provides the method to initialize connection to the database.
  *
- * All the servlets inherit from this class.
+ * All the servlets that uses DB connection should inherit from this class.
  *
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
  * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @author Jeremy Philippe
  * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-public abstract class RubisHttpServlet extends HttpServlet
+public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 {
 	/** Controls connection pooling */
 	private static final boolean _enablePooling = false;
@@ -63,8 +63,11 @@ public abstract class RubisHttpServlet extends HttpServlet
 	public abstract int getPoolSize();
 
 	/** Load the driver and get a connection to the database */
+	@Override
 	public void init() throws ServletException
 	{
+		super.init();
+
 		InputStream in = null;
 		this._poolSize = getPoolSize();
 		try
@@ -184,7 +187,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 					}
 					catch (InterruptedException e)
 					{
-						System.out.println("Connection pool wait interrupted.");
+						this.getLogger().info("Connection pool wait interrupted: " + e);
 					}
 				}
 
@@ -192,7 +195,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 			}
 			catch (NoSuchElementException e)
 			{
-				System.out.println("Out of connections.");
+				this.getLogger().severe("Out of connections: " + e);
 				return null;
 			}
 		}
@@ -206,6 +209,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 			}
 			catch (SQLException ex) 
 			{
+				this.getLogger().severe("Database connection failed: " + ex);
 				return null; 
 			}
 		}

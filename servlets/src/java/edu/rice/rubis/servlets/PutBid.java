@@ -75,12 +75,7 @@ public class PutBid extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: PutBid");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-    
+	this.printError("Put Bid", errorMsg, sp);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -113,7 +108,7 @@ public class PutBid extends RubisHttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      printError("You (" + name + "," + pass + ") don't have an account on RUBiS!<br>You have to register first.<br>", sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -139,7 +134,7 @@ public class PutBid extends RubisHttpServlet
     {
       if (!rs.first())
       {
-        printError("<h2>This item does not exist!</h2>", sp);
+        printError("This item does not exist!", sp);
         closeConnection(stmt, conn);
         return;
       }
@@ -241,7 +236,7 @@ public class PutBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " + e + "<br>", sp);
+      printError("Exception getting item list: " + e, sp);
       closeConnection(stmt, conn);
     }
     closeConnection(stmt, conn);

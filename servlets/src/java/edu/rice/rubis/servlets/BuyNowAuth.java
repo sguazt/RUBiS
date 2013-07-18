@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  */
 
-public class BuyNowAuth extends HttpServlet
+public class BuyNowAuth extends BaseRubisHttpServlet
 {
 
 
@@ -50,10 +50,7 @@ public class BuyNowAuth extends HttpServlet
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: Authentification for buying an item");
-      sp.printHTML(
-        "No item identifier received - Cannot process the request<br>");
-      sp.printHTMLfooter();
+	  this.printError("No item identifier received. Cannot process the request", sp);
       return;
     }
 
@@ -69,5 +66,10 @@ public class BuyNowAuth extends HttpServlet
     throws IOException, ServletException
   {
     doGet(request, response);
+  }
+
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+	this.printError("Buy Now Auth", errorMsg, sp);
   }
 }

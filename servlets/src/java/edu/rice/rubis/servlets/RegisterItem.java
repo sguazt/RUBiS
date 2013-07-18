@@ -67,12 +67,7 @@ public class RegisterItem extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: Register Item");
-    sp.printHTML(
-      "<h2>Your registration has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-    
+	this.printError("Register Item", errorMsg, sp);
   }
 
   /** Check the values from the html register item form and create a new item */
@@ -93,7 +88,7 @@ public class RegisterItem extends RubisHttpServlet
     String value = request.getParameter("name");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a name!<br>", sp);
+      this.printError("You must provide a name!", sp);
       return;
     }
     else
@@ -110,7 +105,7 @@ public class RegisterItem extends RubisHttpServlet
     value = request.getParameter("initialPrice");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an initial price!<br>", sp);
+      this.printError("You must provide an initial price!", sp);
       return;
     }
     else
@@ -145,7 +140,7 @@ public class RegisterItem extends RubisHttpServlet
     value = request.getParameter("duration");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a duration!<br>", sp);
+      this.printError("You must provide a duration!", sp);
       return;
     }
     else
@@ -162,7 +157,7 @@ public class RegisterItem extends RubisHttpServlet
     value = request.getParameter("quantity");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a quantity!<br>", sp);
+      this.printError("You must provide a quantity!", sp);
       return;
     }
     else
@@ -214,10 +209,7 @@ public class RegisterItem extends RubisHttpServlet
       catch (SQLException e)
       {
         conn.rollback();
-        printError(
-          "RUBiS internal error: Item registration failed (got exception: "
-            + e
-            + ")<br>", sp);
+        this.printError("Item registration failed: " + e, sp);
         closeConnection(stmt, conn);
         return;
       }
@@ -230,7 +222,7 @@ public class RegisterItem extends RubisHttpServlet
         if (!irs.first())
         {
           conn.rollback();
-          printError("This item does not exist in the database.", sp);
+          this.printError("This item does not exist in the database.", sp);
           closeConnection(stmt, conn);
           return;
         }
@@ -270,7 +262,7 @@ public class RegisterItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e + "<br>");
+      this.printError("Exception getting comment list: " + e, sp);
       try
       {
         conn.rollback();
@@ -278,7 +270,7 @@ public class RegisterItem extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e + "<br>");
+        this.printError("Transaction rollback failed: " + se, sp);
         closeConnection(stmt, conn);
       }
     }

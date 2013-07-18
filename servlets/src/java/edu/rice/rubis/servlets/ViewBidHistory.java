@@ -88,7 +88,7 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      sp.printHTML("Exception getting bids list: " + e + "<br>");
+      this.printError("Exception getting bids list: " + e, sp);
       closeConnection(stmt, conn);
       return false;
     }
@@ -119,7 +119,7 @@ public class ViewBidHistory extends RubisHttpServlet
         }
         catch (SQLException e)
         {
-          sp.printHTML("Couldn't get bidder name: " + e + "<br>");
+      	  this.printError("Couldn't get bidder name: " + e, sp);
           closeConnection(stmt, conn);
           return false;
         }
@@ -129,7 +129,7 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      sp.printHTML("Exception getting bid: " + e + "<br>");
+      this.printError("Exception getting bid: " + e, sp);
       closeConnection(stmt, conn);
       return false;
     }
@@ -158,9 +158,7 @@ public class ViewBidHistory extends RubisHttpServlet
 
     if ((value == null) || (value.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: View bids history");
-      sp.printHTML("<h3>You must provide an item identifier !<br></h3>");
-      sp.printHTMLfooter();
+      this.printError("You must provide an item identifier", sp);
       return;
     }
     else
@@ -180,7 +178,7 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item in table items: " + e);
+      this.printError("Failed to execute Query for item in table items: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -216,8 +214,7 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("This item does not exist (got exception: " + e + ")<br>");
-      sp.printHTMLfooter();
+      this.printError("This item does not exist: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -239,4 +236,8 @@ public class ViewBidHistory extends RubisHttpServlet
     super.destroy();
   }
 
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+	this.printError("View Bid History", errorMsg, sp);
+  }
 }

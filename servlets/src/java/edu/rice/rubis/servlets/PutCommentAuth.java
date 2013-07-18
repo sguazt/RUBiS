@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * /<pre>
  */
 
-public class PutCommentAuth extends HttpServlet
+public class PutCommentAuth extends BaseRubisHttpServlet
 {
 
 
@@ -50,10 +50,7 @@ public class PutCommentAuth extends HttpServlet
     String item = request.getParameter("itemId");
     if ((to == null) || (to.equals("")) || (item == null) || (item.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: Authentification for comment");
-      sp.printHTML(
-        "No item or user identifier received - Cannot process the request<br>");
-      sp.printHTMLfooter();
+      this.printError("No item or user identifier received. Cannot process the request", sp);
       return;
     }
 
@@ -69,5 +66,10 @@ public class PutCommentAuth extends HttpServlet
     throws IOException, ServletException
   {
     doGet(request, response);
+  }
+
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+	this.printError("Put Comment Auth", errorMsg, sp);
   }
 }

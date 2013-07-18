@@ -77,11 +77,7 @@ public class StoreBid extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: StoreBid");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
+	this.printError("Store Bid", errorMsg, sp);
   }
 
   /**
@@ -329,8 +325,7 @@ public class StoreBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML(
-        "Error while storing the bid (got exception: " + e + ")<br>");
+      this.printError("Error while storing the bid: " + e, sp);
       try
       {
         conn.rollback();

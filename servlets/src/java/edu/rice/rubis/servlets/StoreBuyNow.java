@@ -77,12 +77,7 @@ public class StoreBuyNow extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-    
+	this.printError("Store Buy Now", errorMsg, sp);
   }
 
   /**
@@ -222,7 +217,7 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      sp.printHTML("Failed to execute Query for the item: " + e + "<br>");
+      this.printError("Failed to execute Query for the item: " + e, sp);
       try
       {
         conn.rollback();
@@ -261,8 +256,7 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML(
-        "Error while storing the BuyNow (got exception: " + e + ")<br>");
+      this.printError("Error while storing the BuyNow: " + e, sp);
       try
       {
         conn.rollback();
@@ -270,7 +264,7 @@ public class StoreBuyNow extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e + "<br>", sp);
+        this.printError("Transaction rollback failed: " + e, sp);
       }
       return;
     }

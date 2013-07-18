@@ -71,12 +71,7 @@ public class ViewItem extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: View item");
-    sp.printHTML(
-      "<h2>We cannot process your request due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-    
+	this.printError("View Item", errorMsg, sp);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -92,7 +87,7 @@ public class ViewItem extends RubisHttpServlet
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>", sp);
+      this.printError("No item identifier received. Cannot process the request", sp);
       return;
     }
     Integer itemId = new Integer(value);
@@ -106,7 +101,7 @@ public class ViewItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item: " + e);
+      this.printError("Failed to execute Query for item: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -176,7 +171,7 @@ public class ViewItem extends RubisHttpServlet
       }
       catch (SQLException e)
       {
-        sp.printHTML("Failed to executeQuery for seller: " + e);
+        this.printError("Failed to execute Query for seller: " + e, sp);
         sellerStmt.close();
         closeConnection(stmt, conn);
         return;
@@ -200,7 +195,7 @@ public class ViewItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " + e + "<br>", sp);
+      this.printError("Exception getting item list: " + e, sp);
     }
     closeConnection(stmt, conn);
     sp.printHTMLfooter();

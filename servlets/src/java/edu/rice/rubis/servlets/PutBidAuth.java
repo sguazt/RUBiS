@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  */
 
-public class PutBidAuth extends HttpServlet
+public class PutBidAuth extends BaseRubisHttpServlet
 {
 
 
@@ -49,11 +49,8 @@ public class PutBidAuth extends HttpServlet
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: Authentification for bidding");
-      sp.printHTML(
-        "No item identifier received - Cannot process the request<br>");
-      sp.printHTMLfooter();
-      return;
+	  this.printError("No item identifier received. Cannot process the request", sp);
+	  return;
     }
 
     sp.printHTMLheader("RUBiS: User authentification for bidding");
@@ -67,5 +64,10 @@ public class PutBidAuth extends HttpServlet
     throws IOException, ServletException
   {
     doGet(request, response);
+  }
+
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+    this.printError("Put Bid Auth", errorMsg, sp);
   }
 }

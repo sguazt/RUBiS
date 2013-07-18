@@ -96,7 +96,7 @@ public class ViewUserInfo extends RubisHttpServlet
       }
       catch (Exception e)
       {
-        sp.printHTML("Failed to execute Query for list of comments: " + e);
+        this.printError("Failed to execute Query for list of comments: " + e, sp);
         conn.rollback();
         closeConnection(stmt, conn);
         return false;
@@ -133,7 +133,7 @@ public class ViewUserInfo extends RubisHttpServlet
         }
         catch (Exception e)
         {
-          sp.printHTML("Failed to execute Query for the comment author: " + e);
+          this.printError("Failed to execute Query for the comment author: " + e, sp);
           conn.rollback();
           authorStmt.close();
           closeConnection(stmt, conn);
@@ -147,7 +147,7 @@ public class ViewUserInfo extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e + "<br>");
+      this.printError("Exception getting comment list: " + e, sp);
       try
       {
         conn.rollback();
@@ -156,7 +156,7 @@ public class ViewUserInfo extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e + "<br>");
+        this.printError("Transaction rollback failed: " + e, sp);
         closeConnection(stmt, conn);
         return false;
       }
@@ -184,9 +184,7 @@ public class ViewUserInfo extends RubisHttpServlet
 
     if ((value == null) || (value.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: View user information");
-      sp.printHTML("<h3>You must provide a user identifier !<br></h3>");
-      sp.printHTMLfooter();
+      this.printError("You must provide a user identifier!", sp);
       return;
     }
     else
@@ -204,7 +202,7 @@ public class ViewUserInfo extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for user: " + e);
+      this.printError("Failed to execute Query for user: " + e, sp);
       closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
@@ -239,7 +237,7 @@ public class ViewUserInfo extends RubisHttpServlet
     }
     catch (SQLException s)
     {
-      sp.printHTML("Failed to get general information about the user: " + s);
+      this.printError("Failed to get general information about the user: " + s, sp);
       closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
@@ -261,4 +259,8 @@ public class ViewUserInfo extends RubisHttpServlet
     super.destroy();
   }
 
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+	this.printError("View User Info", errorMsg, sp);
+  }
 }

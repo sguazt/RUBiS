@@ -68,13 +68,7 @@ public class RegisterUser extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: Register user");
-    sp.printHTML(
-      "<h2>Your registration has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-
-
+	this.printError("Register User", errorMsg, sp);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -143,7 +137,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a valid region!<br>", sp);
+      this.printError("You must provide a valid region!", sp);
       return;
     }
     else
@@ -182,7 +176,7 @@ public class RegisterUser extends RubisHttpServlet
       ResultSet rs = stmt.executeQuery();
       if (rs.first())
       {
-        printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>", sp);
+        this.printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.", sp);
         closeConnection(stmt, conn);
         return;
       }
@@ -190,7 +184,7 @@ public class RegisterUser extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query to check the nickname: " + e, sp);
+      this.printError("Failed to execute Query to check the nickname: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -219,10 +213,7 @@ public class RegisterUser extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      printError(
-        "RUBiS internal error: User registration failed (got exception: "
-          + e
-          + ")<br>", sp);
+      this.printError("User registration failed: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }

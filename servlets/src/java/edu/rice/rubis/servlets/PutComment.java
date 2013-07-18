@@ -72,12 +72,7 @@ public class PutComment extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: PutComment");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
- 
+	this.printError("Put Comment", errorMsg, sp);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -100,7 +95,7 @@ public class PutComment extends RubisHttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("User id, name and password are required - Cannot process the request<br>", sp);
+      printError("User id, name and password are required. Cannot process the request", sp);
       return;
     }
 
@@ -112,7 +107,7 @@ public class PutComment extends RubisHttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError("You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      printError("You (" + name + "," + pass + ") don't have an account on RUBiS! You have to register first", sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -193,7 +188,7 @@ public class PutComment extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("This item does not exist (got exception: " + e + ")<br>", sp);
+      printError("The item does not exist: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }

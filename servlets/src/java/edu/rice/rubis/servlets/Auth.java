@@ -62,7 +62,6 @@ public class Auth
     }
     catch (SQLException e)
     {
-      sp.printHTML("Failed to executeQuery " + e);
       return userId;
     }
     finally
@@ -78,5 +77,4 @@ public class Auth
       return userId;
     }
   }
-
 }

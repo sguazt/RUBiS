@@ -36,13 +36,16 @@ import javax.sql.DataSource;
  * pooling but relies on a datasource (such as the one provided by Tomcat) that
  * provides pooling.
  */
-public abstract class RubisHttpServlet2 extends HttpServlet
+public abstract class RubisHttpServlet2 extends BaseRubisHttpServlet
 {
   private DataSource ds = null;
 
   /** Initialize the datasource */
+  @Override
   public void init() throws ServletException
   {
+	super.init();
+
     try
     {
       Context ctx = new InitialContext();
@@ -98,7 +101,7 @@ public abstract class RubisHttpServlet2 extends HttpServlet
       }
     else
     {
-      System.out.println("ERROR: No datasource available");
+      this.getLogger().severe("No datasource available");
       return null;
     }
   }
@@ -116,6 +119,7 @@ public abstract class RubisHttpServlet2 extends HttpServlet
     }
     catch (SQLException e)
     {
+      this.getLogger().severe("Cannot release connection: " + e);
       e.printStackTrace();
     }
   }

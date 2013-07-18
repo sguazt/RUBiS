@@ -76,7 +76,7 @@ public class BrowseRegions extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to executeQuery for the list of regions" + e);
+	  this.printError("Failed to execute Query for the list of regions: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -103,7 +103,7 @@ public class BrowseRegions extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting region list: " + e + "<br>");    
+	  this.printError("Exception getting region list: " + e, sp);
       closeConnection(stmt, conn);
     }
   }
@@ -127,4 +127,8 @@ public class BrowseRegions extends RubisHttpServlet
     super.destroy();
   }
 
+  private void printError(String errorMsg, ServletPrinter sp)
+  {
+	this.printError("Browse Regions", errorMsg, sp);
+  }
 }

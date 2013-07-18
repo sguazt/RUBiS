@@ -64,12 +64,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: SearchItemsByRegion");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-    
+	this.printError("Search Items by Region", errorMsg, sp);
   }
 
   /** List items in the given category for the given region */
@@ -102,7 +97,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for items in region: " + e);
+      this.printError("Failed to execute Query for items in region: " + e, sp);
       closeConnection(stmt, conn);
       return;
     }
@@ -190,7 +185,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting item list: " + e + "<br>");
+      this.printError("Exception getting item list: " + e, sp);
       closeConnection(stmt, conn);
     }
   }

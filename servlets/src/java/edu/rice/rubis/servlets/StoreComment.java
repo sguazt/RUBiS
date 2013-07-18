@@ -78,12 +78,7 @@ public class StoreComment extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: StoreComment");
-    sp.printHTML(
-      "<h2>Your request has not been processed due to the following error :</h2><br>");
-    sp.printHTML(errorMsg);
-    sp.printHTMLfooter();
-   
+	this.printError("Store Comment", errorMsg, sp);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -181,8 +176,7 @@ public class StoreComment extends RubisHttpServlet
       catch (SQLException e)
       {
         conn.rollback();
-        printError(
-          "Error while storing the comment (got exception: " + e + ")<br>", sp);
+        this.printError("Error while storing the comment: " + e, sp);
          closeConnection(stmt, conn);
         return;
       }
@@ -207,9 +201,8 @@ public class StoreComment extends RubisHttpServlet
       catch (SQLException e)
       {
         conn.rollback();
-        printError(
-          "Error while updating user's rating (got exception: " + e + ")<br>", sp);
-         closeConnection(stmt, conn);
+        this.printError("Error while updating user's rating: " + e, sp);
+        closeConnection(stmt, conn);
         return;
       }
       sp.printHTMLheader("RUBiS: Comment posting");
@@ -222,7 +215,7 @@ public class StoreComment extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e + "<br>");
+      this.printError("Exception getting comment list: " + e, sp);
       try
       {
         conn.rollback();
@@ -230,7 +223,7 @@ public class StoreComment extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e + "<br>");
+        this.printError("Transaction rollback failed: " + e, sp);
         closeConnection(stmt, conn);
       }
     }
