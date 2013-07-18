@@ -109,8 +109,8 @@ public class StoreBuyNow extends RubisHttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
-    Integer userId; // item id
-    Integer itemId; // user id
+    int userId; // item id
+    int itemId; // user id
     //     float   minBuyNow; // minimum acceptable BuyNow for this item
     //     float   BuyNow;    // user BuyNow
     //     float   maxBuyNow; // maximum BuyNow the user wants
@@ -131,7 +131,9 @@ public class StoreBuyNow extends RubisHttpServlet
       return;
     }
     else
-      userId = new Integer(value);
+	{
+      userId = Integer.parseInt(value);
+	}
 
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
@@ -140,7 +142,9 @@ public class StoreBuyNow extends RubisHttpServlet
       return;
     }
     else
-      itemId = new Integer(value);
+	{
+      itemId = Integer.parseInt(value);
+	}
 
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
@@ -150,8 +154,7 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     else
     {
-      Integer foo = new Integer(value);
-      maxQty = foo.intValue();
+      maxQty = Integer.parseInt(value);
     }
 
     value = request.getParameter("qty");
@@ -162,12 +165,11 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     else
     {
-      Integer foo = new Integer(value);
-      qty = foo.intValue();
+      qty = Integer.parseInt(value);
     }
 
     /* Check for invalid values */
-    if (qty > maxQty)
+    if (maxQty <= 0 || qty > maxQty)
     {
       this.printError("You cannot request " + qty + " items because only " + maxQty + " are proposed!", sp);
       return;
@@ -182,7 +184,7 @@ public class StoreBuyNow extends RubisHttpServlet
       stmt =
         conn.prepareStatement(
           "SELECT quantity, end_date FROM items WHERE id=?");
-      stmt.setInt(1, itemId.intValue());
+      stmt.setInt(1, itemId);
       ResultSet irs = stmt.executeQuery();
       if (!irs.first())
       {
@@ -201,7 +203,7 @@ public class StoreBuyNow extends RubisHttpServlet
             "UPDATE items SET end_date=?, quantity=? WHERE id=?");
         stmt.setString(1, now);
         stmt.setInt(2, quantity);
-        stmt.setInt(3, itemId.intValue());
+        stmt.setInt(3, itemId);
         stmt.executeUpdate();
         stmt.close();
       }
@@ -209,7 +211,7 @@ public class StoreBuyNow extends RubisHttpServlet
       {
         stmt = conn.prepareStatement("UPDATE items SET quantity=? WHERE id=?");
         stmt.setInt(1, quantity);
-        stmt.setInt(2, itemId.intValue());
+        stmt.setInt(2, itemId);
         stmt.executeUpdate();
         stmt.close();
       }
