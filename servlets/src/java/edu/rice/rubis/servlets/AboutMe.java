@@ -94,7 +94,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting current sellings list: " + e + "<br>", sp);
+			this.printError("Exception getting current sellings list: " + e, sp);
 			this.closeConnection(currentStmt, conn);
 			return false;
 		}
@@ -142,7 +142,7 @@ public class AboutMe extends RubisHttpServlet
 					}
 					catch (Exception e)
 					{
-						this.printError("Exception getting item: " + e + "<br>", sp);
+						this.printError("Exception getting item: " + e, sp);
 						closeConnection(currentStmt, conn);
 						return false;
 					}
@@ -165,7 +165,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting current items in sell: " + e + "<br>", sp);
+			this.printError("Exception getting current items in sell: " + e, sp);
 			this.closeConnection(currentStmt, conn);
 			return false;
 		}
@@ -181,7 +181,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting past sellings list: " + e + "<br>", sp);
+			this.printError("Exception getting past sellings list: " + e, sp);
 			this.closeConnection(pastStmt, conn);
 			return false;
 		}
@@ -228,7 +228,7 @@ public class AboutMe extends RubisHttpServlet
 				}
 				catch (Exception e)
 				{
-					this.printError("Exception getting sold item: " + e + "<br>", sp);
+					this.printError("Exception getting sold item: " + e, sp);
 					this.closeConnection(pastStmt, conn);
 					return false;
 				}
@@ -249,7 +249,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting sold items: " + e + "<br>", sp);
+			this.printError("Exception getting sold items: " + e, sp);
 			this.closeConnection(pastStmt, conn);
 			return false;
 		}
@@ -289,7 +289,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting bought items list: " + e + "<br>", sp);
+			this.printError("Exception getting bought items list: " + e, sp);
 			this.closeConnection(stmt, conn);
 			return false;
 		}
@@ -366,7 +366,7 @@ public class AboutMe extends RubisHttpServlet
 				}
 				catch (Exception e)
 				{
-					this.printError("Exception getting buyNow: " + e + "<br>", sp);
+					this.printError("Exception getting buyNow: " + e, sp);
 					this.closeConnection(stmt, conn);
 					return false;
 				}
@@ -383,7 +383,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting bought items: " + e + "<br>", sp);
+			this.printError("Exception getting bought items: " + e, sp);
 			this.closeConnection(stmt, conn);
 			return false;
 		}
@@ -530,7 +530,7 @@ public class AboutMe extends RubisHttpServlet
 				}
 				catch (Exception e)
 				{
-					this.printError("Exception getting item: " + e + "<br>", sp);
+					this.printError("Exception getting item: " + e, sp);
 					this.closeConnection(stmt, conn);
 					return false;
 				}
@@ -785,7 +785,7 @@ public class AboutMe extends RubisHttpServlet
 				}
 				catch (Exception e)
 				{
-					this.printError("Exception getting item: " + e + "<br>", sp);
+					this.printError("Exception getting item: " + e, sp);
 					this.closeConnection(stmt, conn);
 					return false;
 				}
@@ -809,7 +809,7 @@ public class AboutMe extends RubisHttpServlet
 		}
 		catch (Exception e)
 		{
-			this.printError("Exception getting items the user has bid on: " + e + "<br>", sp);
+			this.printError("Exception getting items the user has bid on: " + e, sp);
 			this.closeConnection(stmt, conn);
 			return false;
 		}
@@ -858,7 +858,7 @@ public class AboutMe extends RubisHttpServlet
 			userId = auth.authenticate(username, password);
 			if (userId == -1)
 			{
-      			this.printError("You (" + username + "," + password + ") don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      			this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
 				this.closeConnection(conn);
 				return;
 			}

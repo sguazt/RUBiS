@@ -92,7 +92,7 @@ public class RegisterUser extends RubisHttpServlet
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a first name!<br>", sp);
+      printError("You must provide a first name!", sp);
       return;
     }
     else
@@ -101,7 +101,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("lastname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a last name!<br>", sp);
+      printError("You must provide a last name!", sp);
       return;
     }
     else
@@ -110,7 +110,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("nickname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a nick name!<br>", sp);
+      printError("You must provide a nick name!", sp);
       return;
     }
     else
@@ -119,7 +119,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("email");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an email address!<br>", sp);
+      printError("You must provide an email address!", sp);
       return;
     }
     else
@@ -128,7 +128,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("password");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a password!<br>", sp);
+      printError("You must provide a password!", sp);
       return;
     }
     else
@@ -153,7 +153,7 @@ public class RegisterUser extends RubisHttpServlet
         if (!rs.first())
         {
           printError(
-            " Region " + value + " does not exist in the database!<br>", sp);
+            " Region " + value + " does not exist in the database!", sp);
             closeConnection(stmt, conn);
           return;
         }

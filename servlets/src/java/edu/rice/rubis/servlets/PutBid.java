@@ -95,7 +95,7 @@ public class PutBid extends RubisHttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>", sp);
+      printError("Item id, name and password are required. Cannot process the request", sp);
       return;
     }
     Integer itemId = new Integer(itemStr);
@@ -108,7 +108,7 @@ public class PutBid extends RubisHttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError("You (" + name + "," + pass + ") don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      printError("You (" + name + "," + pass + ") don't have an account on RUBiS!. You have to register first", sp);
       closeConnection(stmt, conn);
       return;
     }
