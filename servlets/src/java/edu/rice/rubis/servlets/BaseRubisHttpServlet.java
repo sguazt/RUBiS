@@ -24,7 +24,6 @@ package edu.rice.rubis.servlets;
 
 
 import java.util.logging.Logger;
-import java.util.logging.LogManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
@@ -47,7 +46,11 @@ public class BaseRubisHttpServlet extends HttpServlet
 	@Override
 	public void init() throws ServletException
 	{
-		this._logger = LogManager.getLogManager().getLogger(RubisHttpServlet.class.getName());
+		this._logger = Logger.getLogger(RubisHttpServlet.class.getName());
+		if (this._logger == null)
+		{
+			throw new ServletException("Cannot create an instance of Logger");
+		}
 	}
 
 	/**
