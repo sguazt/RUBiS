@@ -64,7 +64,7 @@ public class BaseRubisHttpServlet extends HttpServlet
 		sp.printHTML(errorMsg + "<br>");
 		sp.printHTMLfooter();
 
-		this.getLogger().severe("[" + headerMsg + "]" + errorMsg);
+		this.getLogger().severe("[" + headerMsg + "] " + errorMsg);
 	}
 
 	protected Logger getLogger()
