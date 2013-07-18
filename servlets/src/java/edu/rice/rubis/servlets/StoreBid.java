@@ -123,7 +123,7 @@ public class StoreBid extends RubisHttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>", sp);
+      this.printError("You must provide a user identifier!", sp);
       return;
     }
     else
@@ -132,7 +132,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>", sp);
+      this.printError("You must provide an item identifier!", sp);
       return;
     }
     else
@@ -141,7 +141,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("minBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a minimum bid !<br></h3>", sp);
+      this.printError("You must provide a minimum bid!", sp);
       return;
     }
     else
@@ -153,7 +153,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("bid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a bid !<br></h3>", sp);
+      this.printError("You must provide a bid!", sp);
       return;
     }
     else
@@ -165,7 +165,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("maxBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum bid !<br></h3>", sp);
+      this.printError("You must provide a maximum bid!", sp);
       return;
     }
     else
@@ -177,7 +177,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
+      this.printError("You must provide a maximum quantity!", sp);
       return;
     }
     else
@@ -189,7 +189,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>", sp);
+      this.printError("You must provide a quantity!", sp);
       return;
     }
     else
@@ -202,42 +202,22 @@ public class StoreBid extends RubisHttpServlet
 
     if (qty > maxQty)
     {
-      printError(
-        "<h3>You cannot request "
-          + qty
-          + " items because only "
-          + maxQty
-          + " are proposed !<br></h3>", sp);
+      this.printError("You cannot request " + qty + " items because only " + maxQty + " are proposed!", sp);
       return;
     }
     if (bid < minBid)
     {
-      printError(
-        "<h3>Your bid of $"
-          + bid
-          + " is not acceptable because it is below the $"
-          + minBid
-          + " minimum bid !<br></h3>", sp);
+      this.printError("Your bid of $" + bid + " is not acceptable because it is below the $" + minBid + " minimum bid!", sp);
       return;
     }
     if (maxBid < minBid)
     {
-      printError(
-        "<h3>Your maximum bid of $"
-          + maxBid
-          + " is not acceptable because it is below the $"
-          + minBid
-          + " minimum bid !<br></h3>", sp);
+      this.printError("Your maximum bid of $" + maxBid + " is not acceptable because it is below the $" + minBid + " minimum bid!", sp);
       return;
     }
     if (maxBid < bid)
     {
-      printError(
-        "<h3>Your maximum bid of $"
-          + maxBid
-          + " is not acceptable because it is below your current bid of $"
-          + bid
-          + " !<br></h3>", sp);
+      this.printError("Your maximum bid of $" + maxBid + " is not acceptable because it is below your current bid of $" + bid + "!", sp);
       return;
     }
     try
@@ -303,7 +283,7 @@ public class StoreBid extends RubisHttpServlet
         else
         {
           conn.rollback();
-          printError("Couldn't find the item.", sp);
+          this.printError("Couldn't find the item.", sp);
           closeConnection(stmt, conn);
           return;
         }
@@ -311,7 +291,7 @@ public class StoreBid extends RubisHttpServlet
       catch (Exception ex)
       {
         conn.rollback();
-        printError("Failed to update nb of bids and max bid: " + ex, sp);
+        this.printError("Failed to update nb of bids and max bid: " + ex, sp);
         if (update != null) 
           update.close();
         closeConnection(stmt, conn);
@@ -333,7 +313,7 @@ public class StoreBid extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e, sp);
+        this.printError("Transaction rollback failed: " + e, sp);
       }
       return;
     }

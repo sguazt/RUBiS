@@ -28,10 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 
 /** 
  * Builds the html page that display the form to register a new item to sell.
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  * @version 1.0
  */
-public class SellItemForm extends HttpServlet
+public class SellItemForm extends BaseRubisHttpServlet
 {
 
 

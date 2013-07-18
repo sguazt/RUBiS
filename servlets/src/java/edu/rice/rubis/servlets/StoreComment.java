@@ -106,7 +106,7 @@ public class StoreComment extends RubisHttpServlet
     String value = request.getParameter("to");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'to user' identifier !<br></h3>", sp);
+      this.printError("You must provide a 'to user' identifier!", sp);
       return;
     }
     else
@@ -115,7 +115,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("from");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'from user' identifier !<br></h3>", sp);
+      this.printError("You must provide a 'from user' identifier!", sp);
       return;
     }
     else
@@ -124,7 +124,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>", sp);
+      this.printError("You must provide an item identifier!", sp);
       return;
     }
     else
@@ -133,7 +133,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("rating");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a rating !<br></h3>", sp);
+      this.printError("You must provide a rating!", sp);
       return;
     }
     else
@@ -142,7 +142,7 @@ public class StoreComment extends RubisHttpServlet
     comment = request.getParameter("comment");
     if ((comment == null) || (comment.equals("")))
     {
-      printError("<h3>You must provide a comment !<br></h3>", sp);
+      this.printError("You must provide a comment!", sp);
       return;
     }
 

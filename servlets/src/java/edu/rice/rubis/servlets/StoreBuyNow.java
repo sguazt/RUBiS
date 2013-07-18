@@ -123,7 +123,7 @@ public class StoreBuyNow extends RubisHttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>", sp);
+      this.printError("You must provide a user identifier!", sp);
       return;
     }
     else
@@ -132,7 +132,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>", sp);
+      this.printError("You must provide an item identifier!", sp);
       return;
     }
     else
@@ -141,7 +141,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
+      this.printError("You must provide a maximum quantity!", sp);
       return;
     }
     else
@@ -153,7 +153,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>", sp);
+      this.printError("You must provide a quantity!", sp);
       return;
     }
     else
@@ -165,12 +165,7 @@ public class StoreBuyNow extends RubisHttpServlet
     /* Check for invalid values */
     if (qty > maxQty)
     {
-      printError(
-        "<h3>You cannot request "
-          + qty
-          + " items because only "
-          + maxQty
-          + " are proposed !<br></h3>", sp);
+      this.printError("You cannot request " + qty + " items because only " + maxQty + " are proposed!", sp);
       return;
     }
     String now = TimeManagement.currentDateToString();
@@ -188,7 +183,7 @@ public class StoreBuyNow extends RubisHttpServlet
       if (!irs.first())
       {
         conn.rollback();
-        printError("This item does not exist in the database.", sp);
+        this.printError("This item does not exist in the database.", sp);
         closeConnection(stmt, conn);
         return;
       }
@@ -225,7 +220,7 @@ public class StoreBuyNow extends RubisHttpServlet
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e, sp);
+        this.printError("Transaction rollback failed: " + e, sp);
         closeConnection(stmt, conn);
       }
       return;

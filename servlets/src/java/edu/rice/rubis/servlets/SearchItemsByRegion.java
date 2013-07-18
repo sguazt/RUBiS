@@ -205,7 +205,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     String value = request.getParameter("category");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a category!<br>", sp);
+      printError("You must provide a category!", sp);
       return;
     }
     else
@@ -214,7 +214,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a region!<br>", sp);
+      printError("You must provide a region!", sp);
       return;
     }
     else
