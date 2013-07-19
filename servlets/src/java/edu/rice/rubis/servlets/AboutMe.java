@@ -860,7 +860,7 @@ public class AboutMe extends RubisHttpServlet
 			if (userId == -1)
 			{
       			this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
-				this.closeConnection(conn);
+				this.releaseConnection(conn);
 				return;
 			}
 		}
