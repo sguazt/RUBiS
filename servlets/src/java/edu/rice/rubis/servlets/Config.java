@@ -39,6 +39,7 @@ public class Config
   private static final String J2eeContainerPath = "/opt/apache-tomcat";
   public static final String HTMLFilesPath = J2eeContainerPath + "/webapps/rubis_servlets";
   public static final String DatabaseProperties = J2eeContainerPath + "/webapps/rubis_servlets/WEB-INF/classes/META-INF/mysql.properties";
+  public static final boolean EnablePooling = false;
 
   public static final int AboutMePoolSize = 10;
   public static final int BrowseCategoriesPoolSize = 6;

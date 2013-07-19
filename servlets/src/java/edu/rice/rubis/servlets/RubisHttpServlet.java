@@ -52,11 +52,8 @@ import javax.servlet.http.HttpServlet;
 public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 {
 	/** Controls connection pooling */
-	private static final boolean _enablePooling = false;
-	/** Stack of available connections (pool) */
-	private Deque<Connection> _freeConnections = null;
-	private int _poolSize;
-	private Properties _dbProperties = null;
+	private static boolean _enablePooling = false;
+	private DatabaseConnectionPooling _pool = null;
 
 
 	/** Get the pool size for this class. */
@@ -69,34 +66,36 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 		super.init();
 
 		InputStream in = null;
-		this._poolSize = getPoolSize();
 		try
 		{
+			this._enablePooling = Config.EnablePooling;
 			// Get the properties for the database connection
-			this._dbProperties = new Properties();
+			Properties dbProperties = new Properties();
 			in = new FileInputStream(Config.DatabaseProperties);
-			this._dbProperties.load(in);
+			dbProperties.load(in);
 
-			// load the driver
-			Class.forName(this._dbProperties.getProperty("datasource.classname"));
-			this._freeConnections = new ArrayDeque<Connection>();
-			this.initializeConnections();
+			// Create the connection pool
+			this._pool = new DatabaseConnectionPooling(dbProperties.getProperty("datasource.classname"),
+													   dbProperties.getProperty("datasource.url"),
+													   dbProperties.getProperty("datasource.username"),
+													   dbProperties.getProperty("datasource.password"),
+													   this._enablePooling ? this.getPoolSize() : 0);
+			if (this._enablePooling)
+			{
+				this._pool.initializeConnections();
+			}
 		}
-		catch (FileNotFoundException f)
+		catch (FileNotFoundException fnfe)
 		{
-			throw new UnavailableException("Couldn't find file mysql.properties: " + f + "<br>");
+			throw new ServletException("Couldn't find file mysql.properties: " + fnfe);
 		}
-		catch (IOException io)
+		catch (IOException ioe)
 		{
-			throw new UnavailableException("Cannot open read mysql.properties: " + io + "<br>");
+			throw new ServletException("Cannot open read mysql.properties: " + ioe);
 		}
-		catch (ClassNotFoundException c)
+		catch (SQLException se)
 		{
-			throw new UnavailableException("Couldn't load database driver: " + c + "<br>");
-		}
-		catch (SQLException s)
-		{
-			throw new UnavailableException("Couldn't get database connection: " + s + "<br>");
+			throw new ServletException("Couldn't get database connection: " + se);
 		}
 		finally
 		{
@@ -120,141 +119,49 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 	@Override
 	public void destroy()
 	{
-		super.destroy();
-
 		try
 		{
-			this.finalizeConnections();
+			this._pool.finalizeConnections();
 		}
 		catch (SQLException e)
 		{
 			// ignore
 		}
+
+		super.destroy();
 	}
 
-	/**
-	 * Initialize the pool of connections to the database. The caller must ensure
-	 * that the driver has already been loaded else an exception will be thrown.
-	 * 
-	 * @exception SQLException if an error occurs
-	 */
-	protected synchronized void initializeConnections() throws SQLException
-	{
-		if (this._enablePooling)
-		{
-			for (int i = 0; i < this._poolSize; i++)
-			{
-				// Get connections to the database
-				this._freeConnections.addFirst(
-					DriverManager.getConnection(this._dbProperties.getProperty("datasource.url"),
-												this._dbProperties.getProperty("datasource.username"),
-												this._dbProperties.getProperty("datasource.password")));
-			}
-		}
-	}
-
-	/**
-	 * Closes a <code>Connection</code>.
-	 * 
-	 * @param connection to close
-	 */
-	protected void closeConnection(Connection connection)
+	protected Connection getConnection() throws ServletException
 	{
 		try
 		{
-			connection.close();
+			if (this._enablePooling)
+			{
+				return this._pool.getConnection();
+			}
+			else
+			{
+				return DatabaseConnectionPooling.makeNewConnection(this._pool.getDriver(),
+																   this._pool.getUrl(),
+																   this._pool.getUsername(),
+																   this._pool.getPassword());
+			}
 		}
-		catch (Exception e)
+		catch (SQLException se)
 		{
-			// ignore
+			throw new ServletException(se);
 		}
-	}
+	} 
 
-	/**
-	 * Gets a connection from the pool (round-robin)
-	 * 
-	 * @return a <code>Connection</code> or null if no connection is available
-	 */
-	protected synchronized Connection getConnection()
+	protected void releaseConnection(Connection conn)
 	{
 		if (this._enablePooling)
 		{
-			try
-			{
-				// Wait for a connection to be available
-				while (this._freeConnections.isEmpty())
-				{
-					try
-					{
-						this.wait();
-					}
-					catch (InterruptedException e)
-					{
-						this.getLogger().info("Connection pool wait interrupted: " + e);
-					}
-				}
-
-				return this._freeConnections.removeFirst();
-			}
-			catch (NoSuchElementException e)
-			{
-				this.getLogger().severe("Out of connections: " + e);
-				return null;
-			}
+			this._pool.releaseConnection(conn);
 		}
 		else
 		{
-			try
-			{
-				return DriverManager.getConnection(this._dbProperties.getProperty("datasource.url"),
-												   this._dbProperties.getProperty("datasource.username"),
-												   this._dbProperties.getProperty("datasource.password"));
-			}
-			catch (SQLException ex) 
-			{
-				this.getLogger().severe("Database connection failed: " + ex);
-				return null; 
-			}
-		}
-	}
-
-	/**
-	 * Releases a connection to the pool.
-	 * 
-	 * @param c the connection to release
-	 */
-	protected synchronized void releaseConnection(Connection c)
-	{  
-		if (this._enablePooling)
-		{
-			boolean mustNotify = this._freeConnections.isEmpty();
-			this._freeConnections.addFirst(c);
-			// Wake up one servlet waiting for a connection (if any)
-			if (mustNotify)
-			{
-				this.notifyAll();
-			}
-		}
-		else
-		{
-			this.closeConnection(c);
-		}
-	}
-
-	/**
-	 * Release all the connections to the database.
-	 * 
-	 * @exception SQLException if an error occurs
-	 */
-	protected synchronized void finalizeConnections() throws SQLException
-	{
-		if (this._enablePooling)
-		{
-			while (!this._freeConnections.isEmpty())
-			{
-				Connection c = this._freeConnections.removeFirst();
-				c.close();
-			}
+			DatabaseConnectionPooling.closeConnection(conn);
 		}
 	}
 }
