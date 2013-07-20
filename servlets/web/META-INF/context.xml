@@ -5,8 +5,7 @@
 <Context path="/rubis_servlets">
 -->
 <Context path="/">
-<!--
-    <Resource   name="jdbc/mysql"
+    <Resource   name="jdbc/RUBiS"
                 auth="Container"
                 type="javax.sql.DataSource"
                 username="rubis"
@@ -19,11 +18,13 @@
                 removeAbandonedTimeout="60"
                 logAbandoned="true"/>
 -->
+<!--
     <Valve  className="org.apache.catalina.valves.AccessLogValve"
             rotatable="true"
             suffix="rubis"
             pattern="combined"
             directory="/opt/apache-6.0.36/logs"
             resolveHosts="false"/>
+-->
 </Context>
 

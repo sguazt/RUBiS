@@ -28,14 +28,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.Deque;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
 
 
@@ -51,13 +46,14 @@ import javax.servlet.http.HttpServlet;
  */
 public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 {
-	/** Controls connection pooling */
-	private static boolean _enablePooling = false;
 	private DatabaseConnectionManager _dbMngr = null;
 
 
 	/** Get the pool size for this class. */
-	public abstract int getPoolSize();
+	public int getPoolSize()
+	{
+		return 4; // Default pool size
+	}
 
 	/** Load the driver and get a connection to the database */
 	@Override
@@ -68,27 +64,33 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 		InputStream in = null;
 		try
 		{
-			this._enablePooling = Config.EnablePooling;
 			// Get the properties for the database connection
 			Properties dbProperties = new Properties();
 			in = new FileInputStream(Config.DatabaseProperties);
 			dbProperties.load(in);
 
 			// Create the DB manager
-			if (this._enablePooling)
+			switch (Config.DatabaseConnectionStrategy)
 			{
-				this._dbMngr = new CustomPooledDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
-																		 dbProperties.getProperty("datasource.url"),
-																		 dbProperties.getProperty("datasource.username"),
-																		 dbProperties.getProperty("datasource.password"),
-																		 this.getPoolSize());
-			}
-			else
-			{
-				this._dbMngr = new UnpooledDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
-																	 dbProperties.getProperty("datasource.url"),
-																	 dbProperties.getProperty("datasource.username"),
-																	 dbProperties.getProperty("datasource.password"));
+				case Config.UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY:
+					this._dbMngr = new UnpooledDriverManagerDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
+																					  dbProperties.getProperty("datasource.url"),
+																					  dbProperties.getProperty("datasource.username"),
+																					  dbProperties.getProperty("datasource.password"));
+					break;
+				case Config.POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY:
+					this._dbMngr = new PooledDriverManagerDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
+																					dbProperties.getProperty("datasource.url"),
+																					dbProperties.getProperty("datasource.username"),
+																					dbProperties.getProperty("datasource.password"),
+																					this.getPoolSize());
+					break;
+				case Config.DATASOURCE_DB_CONNECTION_STRATEGY:
+					this._dbMngr = new DataSourceDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
+																		   dbProperties.getProperty("datasource.url"),
+																		   dbProperties.getProperty("datasource.username"),
+																		   dbProperties.getProperty("datasource.password"));
+					break;
 			}
 			this._dbMngr.init();
 		}

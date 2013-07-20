@@ -26,11 +26,12 @@ import java.sql.SQLException;
 
 
 /**
- * Create database connections without managing a pool
+ * Create database connections (without managing a pool) by means of the
+ * DriverManager class
  *
  * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-public class UnpooledDatabaseConnectionManager implements DatabaseConnectionManager
+public class UnpooledDriverManagerDatabaseConnectionManager implements DatabaseConnectionManager
 {
 	private String _driver;
 	private String _url;
@@ -38,10 +39,10 @@ public class UnpooledDatabaseConnectionManager implements DatabaseConnectionMana
 	private String _passwd;
 
 
-	public UnpooledDatabaseConnectionManager(String driver,
-											 String url,
-											 String user,
-											 String password)
+	public UnpooledDriverManagerDatabaseConnectionManager(String driver,
+														  String url,
+														  String user,
+														  String password)
 	{
 		this._driver = driver;
 		this._url = url;

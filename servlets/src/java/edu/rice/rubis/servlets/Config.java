@@ -28,33 +28,29 @@ package edu.rice.rubis.servlets;
 public class Config
 {
 
-  /**
-   * Creates a new <code>Config</code> instance.
-   *
-   */
-  Config()
-  {
-  }
+    public static final int UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 0;
+    public static final int POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 1;
+    public static final int DATASOURCE_DB_CONNECTION_STRATEGY = 2;
 
-  private static final String J2eeContainerPath = "/opt/apache-tomcat";
-  public static final String HTMLFilesPath = J2eeContainerPath + "/webapps/rubis_servlets";
-  public static final String DatabaseProperties = J2eeContainerPath + "/webapps/rubis_servlets/WEB-INF/classes/META-INF/mysql.properties";
-  public static final boolean EnablePooling = false;
+	private static final String J2eeContainerPath = "/opt/apache-tomcat";
+	public static final String HTMLFilesPath = J2eeContainerPath + "/webapps/rubis_servlets";
+	public static final String DatabaseProperties = J2eeContainerPath + "/webapps/rubis_servlets/WEB-INF/classes/META-INF/mysql.properties";
 
-  public static final int AboutMePoolSize = 10;
-  public static final int BrowseCategoriesPoolSize = 6;
-  public static final int BrowseRegionsPoolSize = 6;
-  public static final int BuyNowPoolSize = 4;
-  public static final int PutBidPoolSize = 8;
-  public static final int PutCommentPoolSize = 2;
-  public static final int RegisterItemPoolSize = 2;
-  public static final int RegisterUserPoolSize = 2;
-  public static final int SearchItemsByCategoryPoolSize = 15;
-  public static final int SearchItemsByRegionPoolSize = 20;
-  public static final int StoreBidPoolSize = 8;
-  public static final int StoreBuyNowPoolSize = 4;
-  public static final int StoreCommentPoolSize = 2;
-  public static final int ViewBidHistoryPoolSize = 4;
-  public static final int ViewItemPoolSize = 20;
-  public static final int ViewUserInfoPoolSize = 4;
+	public static final int DatabaseConnectionStrategy = DATASOURCE_DB_CONNECTION_STRATEGY;
+	public static final int AboutMePoolSize = 10;
+	public static final int BrowseCategoriesPoolSize = 6;
+	public static final int BrowseRegionsPoolSize = 6;
+	public static final int BuyNowPoolSize = 4;
+	public static final int PutBidPoolSize = 8;
+	public static final int PutCommentPoolSize = 2;
+	public static final int RegisterItemPoolSize = 2;
+	public static final int RegisterUserPoolSize = 2;
+	public static final int SearchItemsByCategoryPoolSize = 15;
+	public static final int SearchItemsByRegionPoolSize = 20;
+	public static final int StoreBidPoolSize = 8;
+	public static final int StoreBuyNowPoolSize = 4;
+	public static final int StoreCommentPoolSize = 2;
+	public static final int ViewBidHistoryPoolSize = 4;
+	public static final int ViewItemPoolSize = 20;
+	public static final int ViewUserInfoPoolSize = 4;
 }

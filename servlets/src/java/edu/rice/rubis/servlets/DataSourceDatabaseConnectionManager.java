@@ -21,38 +21,36 @@ package edu.rice.rubis.servlets;
 
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 
 /**
- * Setup and manages a pool of database connections.
+ * Setup and manages a pool of database connections through a DataSource object.
  *
  * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-public class CustomPooledDatabaseConnectionManager implements DatabaseConnectionManager
+public class DataSourceDatabaseConnectionManager implements DatabaseConnectionManager
 {
 	private String _driver;
 	private String _url;
 	private String _user;
 	private String _passwd;
-	private int _size;
-	private BlockingQueue<Connection> _pool = null;
+	private DataSource _ds = null;
 
 
-	public CustomPooledDatabaseConnectionManager(String driver,
-												 String url,
-												 String user,
-												 String password,
-												 int maxConnections)
+	public DataSourceDatabaseConnectionManager(String driver,
+											   String url,
+											   String user,
+											   String password)
 	{
 		this._driver = driver;
 		this._url = url;
 		this._user = user;
 		this._passwd = password;
-		this._size = maxConnections;
 	}
 
 	public String getDriver()
@@ -79,64 +77,41 @@ public class CustomPooledDatabaseConnectionManager implements DatabaseConnection
 	{
 		try
 		{
-			// Load the database driver
-			Class.forName(this._driver);
-
-			this._pool = new ArrayBlockingQueue<Connection>(this._size);
-			for (int i = 0; i < this._size; ++i)
+			Context initCtx = new InitialContext();
+			if (initCtx == null)
 			{
-				// Get connections to the database
-				Connection conn = null;
-				conn = DriverManager.getConnection(this._url,
-												   this._user,
-												   this._passwd);
-				this._pool.add(conn);
+				throw new SQLException("Unable to create an initial context");
 			}
+
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			this._ds = (DataSource) envCtx.lookup("jdbc/RUBiS"); 
 		}
-		catch (ClassNotFoundException cnfe)
+		catch (NamingException ne)
 		{
-			throw new SQLException("Couldn't load database driver '" + this._driver + "': " + cnfe);
+			throw new SQLException("Unable to find the wanted context: " + ne);
 		}
 	}
 
 	public synchronized void destroy()
 	{
-		Connection conn = null;
-		while ((conn = this._pool.poll()) != null)
-		{
-			try
-			{
-				if (!conn.isClosed())
-				{
-					conn.close();
-				}
-			}
-			catch (Exception e)
-			{
-				// Ignore
-			}
-		}
+		// Empty
 	}
 
 	public synchronized Connection getConnection() throws SQLException
 	{
-		try
-		{
-			return this._pool.take();
-		}
-		catch (InterruptedException ie)
-		{
-			throw new SQLException("No available connection");
-		}
+		return this._ds.getConnection();
 	}
 
 	public synchronized void releaseConnection(Connection conn)
 	{  
 		try
 		{
-			this._pool.put(conn);
+			if (!conn.isClosed())
+			{
+				conn.close();
+			}
 		}
-		catch (InterruptedException ie)
+		catch (SQLException se)
 		{
 			// Ignore
 		}
