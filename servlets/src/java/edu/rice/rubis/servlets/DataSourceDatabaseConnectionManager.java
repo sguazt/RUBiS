@@ -35,43 +35,47 @@ import javax.sql.DataSource;
  */
 public class DataSourceDatabaseConnectionManager implements DatabaseConnectionManager
 {
-	private String _driver;
-	private String _url;
-	private String _user;
-	private String _passwd;
+//	private String _driver;
+//	private String _url;
+//	private String _user;
+//	private String _passwd;
 	private DataSource _ds = null;
 
 
-	public DataSourceDatabaseConnectionManager(String driver,
-											   String url,
-											   String user,
-											   String password)
+//	public DataSourceDatabaseConnectionManager(String driver,
+//											   String url,
+//											   String user,
+//											   String password)
+//	{
+//		this._driver = driver;
+//		this._url = url;
+//		this._user = user;
+//		this._passwd = password;
+//	}
+
+	public DataSourceDatabaseConnectionManager()
 	{
-		this._driver = driver;
-		this._url = url;
-		this._user = user;
-		this._passwd = password;
 	}
 
-	public String getDriver()
-	{
-		return this._driver;
-	}
+//	public String getDriver()
+//	{
+//		return this._driver;
+//	}
 
-	public String getUrl()
-	{
-		return this._url;
-	}
+//	public String getUrl()
+//	{
+//		return this._url;
+//	}
 
-	public String getUsername()
-	{
-		return this._user;
-	}
+//	public String getUsername()
+//	{
+//		return this._user;
+//	}
 
-	public String getPassword()
-	{
-		return this._passwd;
-	}
+//	public String getPassword()
+//	{
+//		return this._passwd;
+//	}
 
 	public synchronized void init() throws SQLException
 	{

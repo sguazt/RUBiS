@@ -31,17 +31,17 @@ import java.sql.SQLException;
  */
 public interface DatabaseConnectionManager
 {
-	/// Return the JDBC driver class name
-	String getDriver();
+//	/// Return the JDBC driver class name
+//	String getDriver();
 
-	/// Return the JDBC database URL
-	String getUrl();
+//	/// Return the JDBC database URL
+//	String getUrl();
 
-	/// Return the username to connect to the database
-	String getUsername();
+//	/// Return the username to connect to the database
+//	String getUsername();
 
-	/// Return the password used to authenticate the username to the database
-	String getPassword();
+//	/// Return the password used to authenticate the username to the database
+//	String getPassword();
 
 	/// Initialize the connection(s) to the database
 	void init() throws SQLException;

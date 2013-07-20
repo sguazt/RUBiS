@@ -58,21 +58,28 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 		InputStream in = null;
 		try
 		{
-			// Get the properties for the database connection
-			Properties dbProperties = new Properties();
-			in = new FileInputStream(Config.DatabaseProperties);
-			dbProperties.load(in);
+			Properties dbProperties = null;
 
 			// Create the DB manager
 			switch (Config.DatabaseConnectionStrategy)
 			{
 				case Config.UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY:
+					// Get the properties for the database connection
+					dbProperties = new Properties();
+					in = new FileInputStream(Config.DatabaseProperties);
+					dbProperties.load(in);
+					// Setup the connection manager according to the read properties
 					this._dbMngr = new UnpooledDriverManagerDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
 																					  dbProperties.getProperty("datasource.url"),
 																					  dbProperties.getProperty("datasource.username"),
 																					  dbProperties.getProperty("datasource.password"));
 					break;
 				case Config.POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY:
+					// Get the properties for the database connection
+					dbProperties = new Properties();
+					in = new FileInputStream(Config.DatabaseProperties);
+					dbProperties.load(in);
+					// Setup the connection manager according to the read properties
 					this._dbMngr = new PooledDriverManagerDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
 																					dbProperties.getProperty("datasource.url"),
 																					dbProperties.getProperty("datasource.username"),
@@ -80,10 +87,7 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 																					this.getPoolSize());
 					break;
 				case Config.DATASOURCE_DB_CONNECTION_STRATEGY:
-					this._dbMngr = new DataSourceDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
-																		   dbProperties.getProperty("datasource.url"),
-																		   dbProperties.getProperty("datasource.username"),
-																		   dbProperties.getProperty("datasource.password"));
+					this._dbMngr = new DataSourceDatabaseConnectionManager();
 					break;
 			}
 			this._dbMngr.init();
