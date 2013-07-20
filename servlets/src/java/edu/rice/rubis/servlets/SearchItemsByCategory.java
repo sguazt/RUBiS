@@ -36,234 +36,222 @@ import javax.servlet.http.HttpServletResponse;
  *    where xx is the category id
  *      and yy is the category name
  * /<pre>
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
- * @version 1.0
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-
 public class SearchItemsByCategory extends RubisHttpServlet
 {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		int page;
+		int nbOfItems;
+		String value = null;
+		int categoryId;
+		String categoryName = request.getParameter("categoryName");
 
+		ServletPrinter sp = null;
+		sp = new ServletPrinter(response, "SearchItemsByCategory");
 
-  public int getPoolSize()
-  {
-    return Config.SearchItemsByCategoryPoolSize;
-  }
+		value = request.getParameter("category");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a category identifier!", sp);
+			return;
+		}
+		categoryId = Integer.parseInt(value);
 
-/**
- * Close both statement and connection.
- */
-  private void closeConnection(PreparedStatement stmt, Connection conn)
-  {
-    try
-    {
-      if (stmt != null)
-        stmt.close(); // close statement
-      if (conn != null)
-	  {
-		conn.setAutoCommit(true);
-        releaseConnection(conn);
-	  }
-    }
-    catch (Exception ignore)
-    {
-    }
-  }
+		value = request.getParameter("page");
+		if ((value == null) || (value.equals("")))
+		{
+			page = 0;
+		}
+		else
+		{
+			page = Integer.parseInt(value);
+		}
 
-/**
- * Display an error message.
- * @param errorMsg the error message value
- */
-  private void printError(String errorMsg, ServletPrinter sp)
-  {
-	this.printError("Search Items by Category", errorMsg, sp);
-  }
+		value = request.getParameter("nbOfItems");
+		if ((value == null) || (value.equals("")))
+		{
+			nbOfItems = 25;
+		}
+		else
+		{
+			nbOfItems = Integer.parseInt(value);
+		}
 
-  private void itemList(
-    Integer categoryId,
-    String categoryName,
-    int page,
-    int nbOfItems,
-    ServletPrinter sp)
-  {
-    
-    PreparedStatement stmt = null;
-    Connection conn = null;
-    
-    String itemName, endDate;
-    int itemId;
-    float maxBid;
-    int nbOfBids = 0;
-    ResultSet rs = null;
+		if (categoryName == null)
+		{
+			sp.printHTMLheader("RUBiS: Missing category name");
+			sp.printHTML("<h2>Items in this category</h2><br><br>");
+		}
+		else
+		{
+			sp.printHTMLheader("RUBiS: Items in category " + categoryName);
+			sp.printHTML("<h2>Items in category " + categoryName + "</h2><br><br>");
+		}
 
-    // get the list of items
-    try
-    {
-      conn = getConnection();
-      //conn.setAutoCommit(false);
+		this.itemList(categoryId, categoryName, page, nbOfItems, sp);
+		sp.printHTMLfooter();
+	}
 
-      stmt =
-        conn.prepareStatement(
-          "SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
-      stmt.setInt(1, categoryId.intValue());
-      stmt.setInt(2, page * nbOfItems);
-      stmt.setInt(3, nbOfItems);
-      rs = stmt.executeQuery();
-    }
-    catch (Exception e)
-    {
-      this.printError("Failed to executeQuery for item: " + e, sp);
-      closeConnection(stmt, conn);
-      return;
-    }
-    try
-    {
-      if (!rs.first())
-      {
-        if (page == 0)
-        {
-          sp.printHTML(
-            "<h2>Sorry, but there are no items available in this category !</h2>");
-        }
-        else
-        {
-          sp.printHTML(
-            "<h2>Sorry, but there are no more items available in this category !</h2>");
-          sp.printItemHeader();
-          sp.printItemFooter(
-            "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
-              + categoryId
-              + "&categoryName="
-              + URLEncoder.encode(categoryName, "UTF-8")
-              + "&page="
-              + (page - 1)
-              + "&nbOfItems="
-              + nbOfItems
-              + "\">Previous page</a>",
-            "");
-        }
-        closeConnection(stmt, conn);
-        return;
-      }
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		this.doGet(request, response);
+	}
 
-      sp.printItemHeader();
-      do
-      {
-        itemName = rs.getString("name");
-        itemId = rs.getInt("id");
-        endDate = rs.getString("end_date");
-        maxBid = rs.getFloat("max_bid");
-        nbOfBids = rs.getInt("nb_of_bids");
-        float initialPrice = rs.getFloat("initial_price");
-        if (maxBid < initialPrice)
-          maxBid = initialPrice;
-        sp.printItem(itemName, itemId, maxBid, nbOfBids, endDate);
-      }
-      while (rs.next());
-      if (page == 0)
-      {
-        sp.printItemFooter(
-          "",
-          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
-            + categoryId
-            + "&categoryName="
-            + URLEncoder.encode(categoryName, "UTF-8")
-            + "&page="
-            + (page + 1)
-            + "&nbOfItems="
-            + nbOfItems
-            + "\">Next page</a>");
-      }
-      else
-      {
-        sp.printItemFooter(
-          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
-            + categoryId
-            + "&categoryName="
-            + URLEncoder.encode(categoryName, "UTF-8")
-            + "&page="
-            + (page - 1)
-            + "&nbOfItems="
-            + nbOfItems
-            + "\">Previous page</a>",
-          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
-            + categoryId
-            + "&categoryName="
-            + URLEncoder.encode(categoryName, "UTF-8")
-            + "&page="
-            + (page + 1)
-            + "&nbOfItems="
-            + nbOfItems
-            + "\">Next page</a>");
-      }
-      //conn.commit();
-      closeConnection(stmt, conn);
-    }
-    catch (Exception e)
-    {
-      printError("Exception getting item list: " + e, sp);
-      //       try
-      //       {
-      //         conn.rollback();
-      //       }
-      //       catch (Exception se) 
-      //       {
-      //         printError("Transaction rollback failed: " + e +"<br>");
-      //       }
-      closeConnection(stmt, conn);
-    }
-  }
+	@Override
+	protected int getPoolSize()
+	{
+		return Config.SearchItemsByCategoryPoolSize;
+	}
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    Integer page;
-    Integer nbOfItems;
-    String value = request.getParameter("category");
-    ;
-    Integer categoryId;
-    String categoryName = request.getParameter("categoryName");
+	/**
+	 * Close both statement and connection.
+	 */
+	private void closeConnection(PreparedStatement stmt, Connection conn)
+	{
+		try
+		{
+			if (stmt != null)
+			{
+				stmt.close(); // close statement
+			}
+			if (conn != null)
+			{
+				conn.setAutoCommit(true);
+				this.releaseConnection(conn);
+			}
+		}
+		catch (Exception ignore)
+		{
+		}
+	}
 
-    ServletPrinter sp = null;
-    sp = new ServletPrinter(response, "SearchItemsByCategory");
+	/**
+	 * Display an error message.
+	 * @param errorMsg the error message value
+	 */
+	private void printError(String errorMsg, ServletPrinter sp)
+	{
+		this.printError("Search Items by Category", errorMsg, sp);
+	}
 
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide a category identifier!", sp);
-      return;
-    }
-    else
-      categoryId = new Integer(value);
+	private void itemList(int categoryId, String categoryName, int page, int nbOfItems, ServletPrinter sp)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
 
-    value = request.getParameter("page");
-    if ((value == null) || (value.equals("")))
-      page = new Integer(0);
-    else
-      page = new Integer(value);
+		String itemName, endDate;
+		int itemId;
+		float maxBid;
+		int nbOfBids = 0;
+		ResultSet rs = null;
 
-    value = request.getParameter("nbOfItems");
-    if ((value == null) || (value.equals("")))
-      nbOfItems = new Integer(25);
-    else
-      nbOfItems = new Integer(value);
+		// get the list of items
+		try
+		{
+			conn = this.getConnection();
+			//conn.setAutoCommit(false);
 
-    if (categoryName == null)
-    {
-      sp.printHTMLheader("RUBiS: Missing category name");
-      sp.printHTML("<h2>Items in this category</h2><br><br>");
-    }
-    else
-    {
-      sp.printHTMLheader("RUBiS: Items in category " + categoryName);
-      sp.printHTML("<h2>Items in category " + categoryName + "</h2><br><br>");
-    }
+			stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
+			stmt.setInt(1, categoryId);
+			stmt.setInt(2, page * nbOfItems);
+			stmt.setInt(3, nbOfItems);
+			rs = stmt.executeQuery();
+		}
+		catch (Exception e)
+		{
+			this.printError("Failed to executeQuery for item: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
+		try
+		{
+			if (!rs.first())
+			{
+				if (page == 0)
+				{
+					sp.printHTML("<h2>Sorry, but there are no items available in this category !</h2>");
+				}
+				else
+				{
+					sp.printHTML("<h2>Sorry, but there are no more items available in this category !</h2>");
+					sp.printItemHeader();
+					sp.printItemFooter("<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+										+ categoryId
+										+ "&categoryName="
+										+ URLEncoder.encode(categoryName, "UTF-8")
+										+ "&page="
+										+ (page - 1)
+										+ "&nbOfItems="
+										+ nbOfItems
+										+ "\">Previous page</a>",
+										"");
+				}
+				this.closeConnection(stmt, conn);
+				return;
+			}
 
-    itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue(), sp);
-    sp.printHTMLfooter();
-  }
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    doGet(request, response);
-  }
+			sp.printItemHeader();
+			do
+			{
+				itemName = rs.getString("name");
+				itemId = rs.getInt("id");
+				endDate = rs.getString("end_date");
+				maxBid = rs.getFloat("max_bid");
+				nbOfBids = rs.getInt("nb_of_bids");
+				float initialPrice = rs.getFloat("initial_price");
+				if (maxBid < initialPrice)
+				{
+					maxBid = initialPrice;
+				}
+				sp.printItem(itemName, itemId, maxBid, nbOfBids, endDate);
+			}
+			while (rs.next());
+			if (page == 0)
+			{
+				sp.printItemFooter("",
+								"<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+								+ categoryId
+								+ "&categoryName="
+								+ URLEncoder.encode(categoryName, "UTF-8")
+								+ "&page="
+								+ (page + 1)
+								+ "&nbOfItems="
+								+ nbOfItems
+								+ "\">Next page</a>");
+			}
+			else
+			{
+				sp.printItemFooter("<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+								+ categoryId
+								+ "&categoryName="
+								+ URLEncoder.encode(categoryName, "UTF-8")
+								+ "&page="
+								+ (page - 1)
+								+ "&nbOfItems="
+								+ nbOfItems
+								+ "\">Previous page</a>",
+								"<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+								+ categoryId
+								+ "&categoryName="
+								+ URLEncoder.encode(categoryName, "UTF-8")
+								+ "&page="
+								+ (page + 1)
+								+ "&nbOfItems="
+								+ nbOfItems
+								+ "\">Next page</a>");
+			}
+		}
+		catch (Exception e)
+		{
+			this.printError("Exception getting item list: " + e, sp);
+		}
+		this.closeConnection(stmt, conn);
+	}
 }

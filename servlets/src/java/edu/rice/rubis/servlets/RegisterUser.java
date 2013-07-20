@@ -39,234 +39,214 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RegisterUser extends RubisHttpServlet
 {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
 
-  public int getPoolSize()
-  {
-    return Config.RegisterUserPoolSize;
-  }
+		String firstname = null,
+		lastname = null,
+		nickname = null,
+		email = null,
+		password = null;
+		int regionId;
+		int userId;
+		String creationDate, region;
 
-/**
- * Close both statement and connection.
- */
-  private void closeConnection(PreparedStatement stmt, Connection conn)
-  {
-    try
-    {
-      if (stmt != null)
-        stmt.close(); // close statement
-      if (conn != null)
-	  {
-		conn.setAutoCommit(true);
-        releaseConnection(conn);
-	  }
-    }
-    catch (Exception ignore)
-    {
-    }
-  }
+		ServletPrinter sp = null;
+		sp = new ServletPrinter(response, "RegisterUser");
 
-/**
- * Display an error message.
- * @param errorMsg the error message value
- */
-  private void printError(String errorMsg, ServletPrinter sp)
-  {
-	this.printError("Register User", errorMsg, sp);
-  }
+		String value = request.getParameter("firstname");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a first name!", sp);
+			return;
+		}
+		firstname = value;
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    PreparedStatement stmt = null;
-    Connection conn = null;
-    
-    String firstname = null,
-      lastname = null,
-      nickname = null,
-      email = null,
-      password = null;
-    int regionId;
-    int userId;
-    String creationDate, region;
+		value = request.getParameter("lastname");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a last name!", sp);
+			return;
+		}
+		lastname = value;
 
-    ServletPrinter sp = null;
-    sp = new ServletPrinter(response, "RegisterUser");
+		value = request.getParameter("nickname");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a nick name!", sp);
+			return;
+		}
+		nickname = value;
 
-    String value = request.getParameter("firstname");
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide a first name!", sp);
-      return;
-    }
-    else
-      firstname = value;
+		value = request.getParameter("email");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide an email address!", sp);
+			return;
+		}
+		email = value;
 
-    value = request.getParameter("lastname");
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide a last name!", sp);
-      return;
-    }
-    else
-      lastname = value;
+		value = request.getParameter("password");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a password!", sp);
+			return;
+		}
+		password = value;
 
-    value = request.getParameter("nickname");
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide a nick name!", sp);
-      return;
-    }
-    else
-      nickname = value;
+		value = request.getParameter("region");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a valid region!", sp);
+			return;
+		}
+		region = value;
 
-    value = request.getParameter("email");
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide an email address!", sp);
-      return;
-    }
-    else
-      email = value;
+		// Create the region ID
+		try
+		{
+			conn = this.getConnection();
+			stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
+			stmt.setString(1, region);
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.first())
+			{
+				this.printError(" Region " + value + " does not exist in the database!", sp);
+				this.closeConnection(stmt, conn);
+				return;
+			}
+			regionId = rs.getInt("id");
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			this.printError("Failed to execute Query for region: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
 
-    value = request.getParameter("password");
-    if ((value == null) || (value.equals("")))
-    {
-      printError("You must provide a password!", sp);
-      return;
-    }
-    else
-      password = value;
+		// Try to create a new user
+		try
+		{
+			stmt = conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
+			stmt.setString(1, nickname);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.first())
+			{
+				this.printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.", sp);
+				this.closeConnection(stmt, conn);
+				return;
+			}
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			this.printError("Failed to execute Query to check the nickname: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
+		try
+		{
+			String now = TimeManagement.currentDateToString();
+			stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL,?,?,?,?,?,0,0,?,?)");
+			stmt.setString(1, firstname);
+			stmt.setString(2, lastname);
+			stmt.setString(3, nickname);
+			stmt.setString(4, password);
+			stmt.setString(5, email);
+			stmt.setString(6, now);
+			stmt.setInt(7, regionId);
+			stmt.executeUpdate();
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			this.printError("User registration failed: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
+		try
+		{
+			stmt = conn.prepareStatement("SELECT id, creation_date FROM users WHERE nickname=?");
+			stmt.setString(1, nickname);
+			ResultSet urs = stmt.executeQuery();
+			if (!urs.first())
+			{
+				this.printError("This user does not exist in the database.", sp);
+				this.closeConnection(stmt, conn);
+				return;
+			}
+			userId = urs.getInt("id");
+			creationDate = urs.getString("creation_date");
+		}
+		catch (SQLException e)
+		{
+			this.printError("Failed to execute Query for user: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
 
-    value = request.getParameter("region");
-    if ((value == null) || (value.equals("")))
-    {
-      this.printError("You must provide a valid region!", sp);
-      return;
-    }
-    else
-    {
-      region = value;
-      
-      try
-      {
-        conn = getConnection();
-        stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
-        stmt.setString(1, region);
-        ResultSet rs = stmt.executeQuery();
-        if (!rs.first())
-        {
-          printError(
-            " Region " + value + " does not exist in the database!", sp);
-            closeConnection(stmt, conn);
-          return;
-        }
-        regionId = rs.getInt("id");
-        stmt.close();
-      }
-      catch (SQLException e)
-      {
-        printError("Failed to execute Query for region: " + e, sp);
-        closeConnection(stmt, conn);
-        return;
-      }
-    }
-    // Try to create a new user
-    try
-    {
-      stmt =
-        conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
-      stmt.setString(1, nickname);
-      ResultSet rs = stmt.executeQuery();
-      if (rs.first())
-      {
-        this.printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.", sp);
-        closeConnection(stmt, conn);
-        return;
-      }
-      stmt.close();
-    }
-    catch (SQLException e)
-    {
-      this.printError("Failed to execute Query to check the nickname: " + e, sp);
-      closeConnection(stmt, conn);
-      return;
-    }
-    try
-    {
-      String now = TimeManagement.currentDateToString();
-      stmt =
-        conn.prepareStatement(
-          "INSERT INTO users VALUES (NULL, \""
-            + firstname
-            + "\", \""
-            + lastname
-            + "\", \""
-            + nickname
-            + "\", \""
-            + password
-            + "\", \""
-            + email
-            + "\", 0, 0,\""
-            + now
-            + "\", "
-            + regionId
-            + ")");
-      stmt.executeUpdate();
-      stmt.close();
-    }
-    catch (SQLException e)
-    {
-      this.printError("User registration failed: " + e, sp);
-      closeConnection(stmt, conn);
-      return;
-    }
-    try
-    {
-      stmt =
-        conn.prepareStatement(
-          "SELECT id, creation_date FROM users WHERE nickname=?");
-      stmt.setString(1, nickname);
-      ResultSet urs = stmt.executeQuery();
-      if (!urs.first())
-      {
-        printError("This user does not exist in the database.", sp);
-        closeConnection(stmt, conn);
-        return;
-      }
-      userId = urs.getInt("id");
-      creationDate = urs.getString("creation_date");
-    }
-    catch (SQLException e)
-    {
-      printError("Failed to execute Query for user: " + e, sp);
-      closeConnection(stmt, conn);
-      return;
-    }
+		this.closeConnection(stmt, conn);
 
+		sp.printHTMLheader("RUBiS: Welcome to " + nickname);
+		sp.printHTML("<h2>Your registration has been processed successfully</h2><br>");
+		sp.printHTML("<h3>Welcome " + nickname + "</h3>");
+		sp.printHTML("RUBiS has stored the following information about you:<br>");
+		sp.printHTML("First Name : " + firstname + "<br>");
+		sp.printHTML("Last Name  : " + lastname + "<br>");
+		sp.printHTML("Nick Name  : " + nickname + "<br>");
+		sp.printHTML("Email      : " + email + "<br>");
+		sp.printHTML("Password   : " + password + "<br>");
+		sp.printHTML("Region     : " + region + "<br>");
+		sp.printHTML("<br>The following information has been automatically generated by RUBiS:<br>");
+		sp.printHTML("User id       :" + userId + "<br>");
+		sp.printHTML("Creation date :" + creationDate + "<br>");
+		sp.printHTMLfooter();
+	}
 
-    sp.printHTMLheader("RUBiS: Welcome to " + nickname);
-    sp.printHTML(
-      "<h2>Your registration has been processed successfully</h2><br>");
-    sp.printHTML("<h3>Welcome " + nickname + "</h3>");
-    sp.printHTML("RUBiS has stored the following information about you:<br>");
-    sp.printHTML("First Name : " + firstname + "<br>");
-    sp.printHTML("Last Name  : " + lastname + "<br>");
-    sp.printHTML("Nick Name  : " + nickname + "<br>");
-    sp.printHTML("Email      : " + email + "<br>");
-    sp.printHTML("Password   : " + password + "<br>");
-    sp.printHTML("Region     : " + region + "<br>");
-    sp.printHTML(
-      "<br>The following information has been automatically generated by RUBiS:<br>");
-    sp.printHTML("User id       :" + userId + "<br>");
-    sp.printHTML("Creation date :" + creationDate + "<br>");
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		this.doGet(request, response);
+	}
 
-    sp.printHTMLfooter();
-    closeConnection(stmt, conn);
-  }
+	@Override
+	protected int getPoolSize()
+	{
+		return Config.RegisterUserPoolSize;
+	}
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    doGet(request, response);
-  }
+	/**
+	 * Close both statement and connection.
+	 */
+	private void closeConnection(PreparedStatement stmt, Connection conn)
+	{
+		try
+		{
+			if (stmt != null)
+			{
+				stmt.close(); // close statement
+			}
+			if (conn != null)
+			{
+				conn.setAutoCommit(true);
+				this.releaseConnection(conn);
+			}
+		}
+		catch (Exception ignore)
+		{
+		}
+	}
+
+	/**
+	 * Display an error message.
+	 * @param errorMsg the error message value
+	 */
+	private void printError(String errorMsg, ServletPrinter sp)
+	{
+		this.printError("Register User", errorMsg, sp);
+	}
 }

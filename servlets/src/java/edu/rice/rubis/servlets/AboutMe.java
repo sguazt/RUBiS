@@ -42,7 +42,118 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AboutMe extends RubisHttpServlet
 {
-	public int getPoolSize()
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		this.doPost(request, response);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		ServletPrinter sp = new ServletPrinter(response, "About me");
+
+		String username = request.getParameter("nickname");
+		String password = request.getParameter("password");
+		if ((username == null || username.isEmpty())
+			|| (password == null || password.isEmpty()))
+		{
+			this.printError(" You must provide valid username and password.", sp);
+			return;
+		}
+
+		Connection conn = this.getConnection();
+
+		// Authenticate the user
+		int userId = -1;
+		{
+			Auth auth = new Auth(conn, sp);
+			userId = auth.authenticate(username, password);
+			if (userId == -1)
+			{
+				this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
+				this.releaseConnection(conn);
+				return;
+			}
+		}
+
+		// Try to find the user corresponding to the userId
+		ResultSet rs = null;
+		PreparedStatement stmt = null;
+		try
+		{
+			stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
+			stmt.setInt(1, userId);
+			rs = stmt.executeQuery();
+		}
+		catch (Exception e)
+		{
+			this.printError("Failed to execute Query for user: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
+		try
+		{
+			if (!rs.first())
+			{
+				sp.printHTML("<h2>This user does not exist!</h2>");
+				this.closeConnection(stmt, conn);
+				sp.printHTMLfooter();
+				return;
+			}
+
+			String firstname = rs.getString("firstname");
+			String lastname = rs.getString("lastname");
+			String nickname = rs.getString("nickname");
+			String email = rs.getString("email");
+			String date = rs.getString("creation_date");
+			int rating = rs.getInt("rating");
+			stmt.close();
+
+			StringBuilder result = new StringBuilder();
+			result.append("<h2>Information about " + nickname + "<br></h2>");
+			result.append("Real life name : " + firstname + " " + lastname + "<br>");
+			result.append("Email address  : " + email + "<br>");
+			result.append("User since     : " + date + "<br>");
+			result.append("Current rating : <b>" + rating + "</b><br>");
+			sp.printHTMLheader("RUBiS: About " + nickname);
+			sp.printHTML(result.toString());
+
+		}
+		catch (SQLException e)
+		{
+			this.printError("Failed to get general information about the user: " + e, sp);
+			this.closeConnection(stmt, conn);
+			return;
+		}
+
+		boolean connAlive = false;
+		connAlive = this.listBids(userId, username, password, stmt, conn, sp);
+		if (connAlive)
+		{
+			connAlive = this.listItem(userId, conn, sp);
+		}
+		if (connAlive)
+		{
+			connAlive = this.listWonItems(userId, stmt, conn, sp);
+		}
+		if (connAlive)
+		{
+			connAlive = this.listBoughtItems(userId, stmt, conn, sp);
+		}
+		if (connAlive)
+		{
+			connAlive = this.listComment(userId, stmt, conn, sp);
+		}
+		sp.printHTMLfooter();
+		if (connAlive)
+		{
+			this.closeConnection(stmt, conn);
+		}
+	}
+
+	@Override
+	protected int getPoolSize()
 	{
 		return Config.AboutMePoolSize;
 	}
@@ -588,6 +699,7 @@ public class AboutMe extends RubisHttpServlet
 				sp.printHTMLHighlighted("<h3>There is no comment yet for this user.</h3>");
 				sp.printHTML("<br>");
 				conn.commit();
+				conn.setAutoCommit(true);
 				stmt.close();
 				return true;
 			}
@@ -636,6 +748,7 @@ public class AboutMe extends RubisHttpServlet
 			sp.printCommentFooter();
 
 			conn.commit();
+			conn.setAutoCommit(true);
 			stmt.close();
 		}
 		catch (Exception e)
@@ -645,14 +758,13 @@ public class AboutMe extends RubisHttpServlet
 			{
 				conn.rollback();
 				this.closeConnection(stmt, conn);
-				return false;
 			}
 			catch (Exception se)
 			{
 				this.printError("Transaction rollback failed: " + e, sp);
 				this.closeConnection(stmt, conn);
-				return false;
 			}
+			return false;
 		}
 
 		return true;
@@ -760,11 +872,11 @@ public class AboutMe extends RubisHttpServlet
 						else
 						{
 							sp.printHTML("Unknown seller");
-							this.closeConnection(stmt, conn);
 							if (sellerStmt != null)
 							{
 								sellerStmt.close();
 							}
+							this.closeConnection(stmt, conn);
 							return false;
 						}
 						sellerStmt.close();
@@ -818,131 +930,5 @@ public class AboutMe extends RubisHttpServlet
 		sp.printItemFooter();
 
 		return true;
-	}
-
-	/**
-	 * Call <code>doPost</code> method.
-	 *
-	 * @param request a <code>HttpServletRequest</code> value
-	 * @param response a <code>HttpServletResponse</code> value
-	 * @exception IOException if an error occurs
-	 * @exception ServletException if an error occurs
-	 */
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
-	{
-		this.doPost(request, response);
-	}
-
-	/** 
-	 * Check username and password and build the web page that display the information about
-	 * the loged in user.
-	 *
-	 * @param request a <code>HttpServletRequest</code> value
-	 * @param response a <code>HttpServletResponse</code> value
-	 * @exception IOException if an error occurs
-	 * @exception ServletException if an error occurs
-	 */
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
-	{
-		ServletPrinter sp = new ServletPrinter(response, "About me");
-
-		String username = request.getParameter("nickname");
-		String password = request.getParameter("password");
-		Connection conn = this.getConnection();
-
-		// Authenticate the user
-		int userId = -1;
-		if ((username != null && !username.isEmpty())
-			|| (password != null && !password.isEmpty()))
-		{
-			Auth auth = new Auth(conn, sp);
-			userId = auth.authenticate(username, password);
-			if (userId == -1)
-			{
-      			this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
-				this.releaseConnection(conn);
-				return;
-			}
-		}
-		else
-		{
-			this.printError(" You must provide valid username and password.", sp);
-			return;
-		}
-
-		// Try to find the user corresponding to the userId
-		ResultSet rs = null;
-		PreparedStatement stmt = null;
-		try
-		{
-			stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
-			stmt.setInt(1, userId);
-			rs = stmt.executeQuery();
-		}
-		catch (Exception e)
-		{
-			this.printError("Failed to execute Query for user: " + e, sp);
-			this.closeConnection(stmt, conn);
-			sp.printHTMLfooter();
-			return;
-		}
-		try
-		{
-			if (!rs.first())
-			{
-				sp.printHTML("<h2>This user does not exist!</h2>");
-				this.closeConnection(stmt, conn);
-				sp.printHTMLfooter();
-				return;
-			}
-
-			String firstname = rs.getString("firstname");
-			String lastname = rs.getString("lastname");
-			String nickname = rs.getString("nickname");
-			String email = rs.getString("email");
-			String date = rs.getString("creation_date");
-			int rating = rs.getInt("rating");
-			stmt.close();
-
-			StringBuilder result = new StringBuilder();
-			result.append("<h2>Information about " + nickname + "<br></h2>");
-			result.append("Real life name : " + firstname + " " + lastname + "<br>");
-			result.append("Email address  : " + email + "<br>");
-			result.append("User since     : " + date + "<br>");
-			result.append("Current rating : <b>" + rating + "</b><br>");
-			sp.printHTMLheader("RUBiS: About " + nickname);
-			sp.printHTML(result.toString());
-
-		}
-		catch (SQLException e)
-		{
-			this.printError("Failed to get general information about the user: " + e, sp);
-			this.closeConnection(stmt, conn);
-			return;
-		}
-
-		boolean connAlive = false;
-		connAlive = this.listBids(userId, username, password, stmt, conn, sp);
-		if (connAlive)
-		{
-			connAlive = this.listItem(userId, conn, sp);
-		}
-		if (connAlive)
-		{
-			connAlive = this.listWonItems(userId, stmt, conn, sp);
-		}
-		if (connAlive)
-		{
-			connAlive = this.listBoughtItems(userId, stmt, conn, sp);
-		}
-		if (connAlive)
-		{
-			connAlive = this.listComment(userId, stmt, conn, sp);
-		}
-		sp.printHTMLfooter();
-		if (connAlive)
-		{
-			this.closeConnection(stmt, conn);
-		}
 	}
 }

@@ -26,7 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** This servlets display the page authentifying the user 
+/**
+ * This servlets display the page authentifying the user 
  * to allow him to put a comment on another user.
  * It must be called this way :
  * <pre>
@@ -34,42 +35,43 @@ import javax.servlet.http.HttpServletResponse;
  *     where xx is the id of the user that will receive the comment
  *           yy is the item id to which this comment is related to
  * /<pre>
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-
 public class PutCommentAuth extends BaseRubisHttpServlet
 {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		ServletPrinter sp = null;
+		sp = new ServletPrinter(response, "PubCommentAuth");
 
+		String to = request.getParameter("to");
+		String item = request.getParameter("itemId");
+		if ((to == null) || (to.equals("")) || (item == null) || (item.equals("")))
+		{
+			this.printError("No item or user identifier received. Cannot process the request", sp);
+			return;
+		}
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    ServletPrinter sp = null;
-    sp = new ServletPrinter(response, "PubCommentAuth");
+		sp.printHTMLheader("RUBiS: User authentification for comment");
+		sp.printFile(Config.HTMLFilesPath + "/put_comment_auth_header.html");
+		sp.printHTML("<input type=hidden name=\"to\" value=\"" + to + "\">");
+		sp.printHTML("<input type=hidden name=\"itemId\" value=\"" + item + "\">");
+		sp.printFile(Config.HTMLFilesPath + "/auth_footer.html");
+		sp.printHTMLfooter();
+	}
 
-    String to = request.getParameter("to");
-    String item = request.getParameter("itemId");
-    if ((to == null) || (to.equals("")) || (item == null) || (item.equals("")))
-    {
-      this.printError("No item or user identifier received. Cannot process the request", sp);
-      return;
-    }
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		this.doGet(request, response);
+	}
 
-    sp.printHTMLheader("RUBiS: User authentification for comment");
-    sp.printFile(Config.HTMLFilesPath + "/put_comment_auth_header.html");
-    sp.printHTML("<input type=hidden name=\"to\" value=\"" + to + "\">");
-    sp.printHTML("<input type=hidden name=\"itemId\" value=\"" + item + "\">");
-    sp.printFile(Config.HTMLFilesPath + "/auth_footer.html");
-    sp.printHTMLfooter();
-  }
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    doGet(request, response);
-  }
-
-  private void printError(String errorMsg, ServletPrinter sp)
-  {
-	this.printError("Put Comment Auth", errorMsg, sp);
-  }
+	private void printError(String errorMsg, ServletPrinter sp)
+	{
+		this.printError("Put Comment Auth", errorMsg, sp);
+	}
 }

@@ -24,57 +24,63 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Authenticate the current user.
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
+ */
 public class Auth
 {
 
-  //private Context servletContext;
-  private Connection conn = null;
-  private ServletPrinter sp;
+	//private Context servletContext;
+	private Connection _conn = null;
+	private ServletPrinter _sp = null;
 
-  public Auth(Connection connect, ServletPrinter printer)
-  {
-    conn = connect;
-    sp = printer;
-  }
+	public Auth(Connection connect, ServletPrinter printer)
+	{
+		this._conn = connect;
+		this._sp = printer;
+	}
 
-  public int authenticate(String name, String password)
-  {
-    int userId = -1;
-    ResultSet rs = null;
-    PreparedStatement stmt = null;
+	public int authenticate(String name, String password)
+	{
+		int userId = -1;
+		ResultSet rs = null;
+		PreparedStatement stmt = null;
 
-    // Lookup the user
-    try
-    {
-      stmt =
-        conn.prepareStatement(
-          "SELECT users.id FROM users WHERE nickname=? AND password=?");
-      stmt.setString(1, name);
-      stmt.setString(2, password);
-      rs = stmt.executeQuery();
-      if (!rs.first())
-      {
-        sp.printHTML(
-          " User " + name + " does not exist in the database!<br><br>");
-        return userId;
-      }
-      userId = rs.getInt("id");
-    }
-    catch (SQLException e)
-    {
-      return userId;
-    }
-    finally
-    {
-      try
-      {
-        if (stmt != null)
-          stmt.close(); // close statement
-      }
-      catch (Exception ignore)
-      {
-      }
-      return userId;
-    }
-  }
+		// Lookup the user
+		try
+		{
+			stmt = this._conn.prepareStatement("SELECT users.id FROM users WHERE nickname=? AND password=?");
+			stmt.setString(1, name);
+			stmt.setString(2, password);
+			rs = stmt.executeQuery();
+			if (!rs.first())
+			{
+				this._sp.printHTML(" User " + name + " does not exist in the database!<br><br>");
+				return userId;
+			}
+			userId = rs.getInt("id");
+		}
+		catch (SQLException e)
+		{
+			// Ignore: return -1 as userId
+		}
+		finally
+		{
+			try
+			{
+				if (stmt != null)
+				{
+					stmt.close(); // close statement
+				}
+			}
+			catch (Exception ignore)
+			{
+			}
+		}
+		return userId;
+	}
 }

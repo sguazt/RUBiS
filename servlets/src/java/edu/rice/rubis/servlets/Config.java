@@ -19,18 +19,20 @@
 
 package edu.rice.rubis.servlets;
 
-/** This class contains the configuration for the servlets
+/**
+ * This class contains the configuration for the servlets
  * like the path of HTML files, etc ...
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
- * @version 1.0
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
 
 public class Config
 {
-
-    public static final int UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 0;
-    public static final int POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 1;
-    public static final int DATASOURCE_DB_CONNECTION_STRATEGY = 2;
+	public static final int UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 0;
+	public static final int POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY = 1;
+	public static final int DATASOURCE_DB_CONNECTION_STRATEGY = 2;
 
 	private static final String J2eeContainerPath = "/opt/apache-tomcat";
 	public static final String HTMLFilesPath = J2eeContainerPath + "/webapps/rubis_servlets";

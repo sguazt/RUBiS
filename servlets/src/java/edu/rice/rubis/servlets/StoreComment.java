@@ -29,7 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** This servlets records a comment in the database and display
+/**
+ * This servlets records a comment in the database and display
  * the result of the transaction.
  * It must be called this way :
  * <pre>
@@ -42,193 +43,181 @@ import javax.servlet.http.HttpServletResponse;
  *          ff is the maximum comment the user wants
  *          gg is the quantity asked by the user
  * /<pre>
- * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
- * @version 1.0
+ *
+ * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a>
+ * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
+ * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-
 public class StoreComment extends RubisHttpServlet
 {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		this.doPost(request, response);
+	}
 
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+	{
+		int toId; // to user id
+		int fromId; // from user id
+		int itemId; // item id
+		String comment; // user comment
+		int rating; // user rating
+		ServletPrinter sp = null;
+		PreparedStatement stmt = null;
+		Connection conn = null;
 
-  public int getPoolSize()
-  {
-    return Config.StoreCommentPoolSize;
-  }
+		sp = new ServletPrinter(response, "StoreComment");
 
-/**
- * Close both statement and connection to the database.
- */
-  private void closeConnection(PreparedStatement stmt, Connection conn)
-  {
-    try
-    {
-      if (stmt != null)
-        stmt.close(); // close statement
-      if (conn != null)
-	  {
-		conn.setAutoCommit(true);
-        releaseConnection(conn);
-	  }
-    }
-    catch (Exception ignore)
-    {
-    }
-  }
+		/* Get and check all parameters */
 
-/**
- * Display an error message.
- * @param errorMsg the error message value
- */
-  private void printError(String errorMsg, ServletPrinter sp)
-  {
-	this.printError("Store Comment", errorMsg, sp);
-  }
+		String value = request.getParameter("to");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a 'to user' identifier!", sp);
+			return;
+		}
+		toId = Integer.parseInt(value);
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    doPost(request, response);
-  }
+		value = request.getParameter("from");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a 'from user' identifier!", sp);
+			return;
+		}
+		fromId = Integer.parseInt(value);
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-    Integer toId; // to user id
-    Integer fromId; // from user id
-    Integer itemId; // item id
-    String comment; // user comment
-    Integer rating; // user rating
-    ServletPrinter sp = null;
-    PreparedStatement stmt = null;
-    Connection conn = null;
+		value = request.getParameter("itemId");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide an item identifier!", sp);
+			return;
+		}
+		itemId = Integer.parseInt(value);
 
-    sp = new ServletPrinter(response, "StoreComment");
+		value = request.getParameter("rating");
+		if ((value == null) || (value.equals("")))
+		{
+			this.printError("You must provide a rating!", sp);
+			return;
+		}
+		rating = Integer.parseInt(value);
 
-    /* Get and check all parameters */
+		comment = request.getParameter("comment");
+		if ((comment == null) || (comment.equals("")))
+		{
+			this.printError("You must provide a comment!", sp);
+			return;
+		}
 
-    String value = request.getParameter("to");
-    if ((value == null) || (value.equals("")))
-    {
-      this.printError("You must provide a 'to user' identifier!", sp);
-      return;
-    }
-    else
-      toId = new Integer(value);
+		try
+		{
+			conn = this.getConnection();
+			conn.setAutoCommit(false); // faster if made inside a Tx
+			// Try to create a new comment
+			try
+			{
+				String now = TimeManagement.currentDateToString();
+				stmt = conn.prepareStatement("INSERT INTO comments VALUES (NULL,?,?,?,?,?,?)");
+				stmt.setInt(1, fromId);
+				stmt.setInt(2, toId);
+				stmt.setInt(3, itemId);
+				stmt.setInt(4, rating);
+				stmt.setString(5, now);
+				stmt.setString(6, comment);
 
-    value = request.getParameter("from");
-    if ((value == null) || (value.equals("")))
-    {
-      this.printError("You must provide a 'from user' identifier!", sp);
-      return;
-    }
-    else
-      fromId = new Integer(value);
+				stmt.executeUpdate();
+				stmt.close();
+			}
+			catch (SQLException e)
+			{
+				conn.rollback();
+				this.printError("Error while storing the comment: " + e, sp);
+				this.closeConnection(stmt, conn);
+				return;
+			}
+			// Try to find the user corresponding to the 'to' ID
+			try
+			{
+				ResultSet urs;
+				stmt = conn.prepareStatement("SELECT rating FROM users WHERE id=?");
+				stmt.setInt(1, toId);
+				urs = stmt.executeQuery();
+				if (urs.first())
+				{
+					int userRating = urs.getInt("rating");
+					userRating = userRating + rating;
 
-    value = request.getParameter("itemId");
-    if ((value == null) || (value.equals("")))
-    {
-      this.printError("You must provide an item identifier!", sp);
-      return;
-    }
-    else
-      itemId = new Integer(value);
+					stmt = conn.prepareStatement("UPDATE users SET rating=? WHERE id=?");
+					stmt.setInt(1, userRating);
+					stmt.setInt(2, toId);
+					stmt.executeUpdate();
+				}
+			}
+			catch (SQLException e)
+			{
+				conn.rollback();
+				this.printError("Error while updating user's rating: " + e, sp);
+				this.closeConnection(stmt, conn);
+				return;
+			}
 
-    value = request.getParameter("rating");
-    if ((value == null) || (value.equals("")))
-    {
-      this.printError("You must provide a rating!", sp);
-      return;
-    }
-    else
-      rating = new Integer(value);
+			conn.commit();
 
-    comment = request.getParameter("comment");
-    if ((comment == null) || (comment.equals("")))
-    {
-      this.printError("You must provide a comment!", sp);
-      return;
-    }
+			sp.printHTMLheader("RUBiS: Comment posting");
+			sp.printHTML("<center><h2>Your comment has been successfully posted.</h2></center>");
+			sp.printHTMLfooter();
+		}
+		catch (Exception e)
+		{
+			this.printError("Exception getting comment list: " + e, sp);
+			try
+			{
+				conn.rollback();
+			}
+			catch (Exception se)
+			{
+				this.printError("Transaction rollback failed: " + e, sp);
+			}
+		}
+		this.closeConnection(stmt, conn);
+	}
 
-    try
-    {
-      conn = getConnection();
-      conn.setAutoCommit(false); // faster if made inside a Tx
-      // Try to create a new comment
-      try
-      {
-        String now = TimeManagement.currentDateToString();
-        stmt =
-          conn.prepareStatement(
-            "INSERT INTO comments VALUES (NULL, \""
-              + fromId
-              + "\", \""
-              + toId
-              + "\", \""
-              + itemId
-              + "\", \""
-              + rating
-              + "\", \""
-              + now
-              + "\",\""
-              + comment
-              + "\")");
+	@Override
+	protected int getPoolSize()
+	{
+		return Config.StoreCommentPoolSize;
+	}
 
-        stmt.executeUpdate();
-        stmt.close();
-      }
-      catch (SQLException e)
-      {
-        conn.rollback();
-        this.printError("Error while storing the comment: " + e, sp);
-         closeConnection(stmt, conn);
-        return;
-      }
-      // Try to find the user corresponding to the 'to' ID
-      try
-      {
-        ResultSet urs;
-        stmt = conn.prepareStatement("SELECT rating FROM users WHERE id=?");
-        stmt.setInt(1, toId.intValue());
-        urs = stmt.executeQuery();
-        if (urs.first())
-        {
-          int userRating = urs.getInt("rating");
-          userRating = userRating + rating.intValue();
+	/**
+	 * Close both statement and connection to the database.
+	 */
+	private void closeConnection(PreparedStatement stmt, Connection conn)
+	{
+		try
+		{
+			if (stmt != null)
+			{
+				stmt.close(); // close statement
+			}
+			if (conn != null)
+			{
+				conn.setAutoCommit(true);
+				this.releaseConnection(conn);
+			}
+		}
+		catch (Exception ignore)
+		{
+		}
+	}
 
-          stmt = conn.prepareStatement("UPDATE users SET rating=? WHERE id=?");
-          stmt.setInt(1, userRating);
-          stmt.setInt(2, toId.intValue());
-          stmt.executeUpdate();
-        }
-      }
-      catch (SQLException e)
-      {
-        conn.rollback();
-        this.printError("Error while updating user's rating: " + e, sp);
-        closeConnection(stmt, conn);
-        return;
-      }
-      sp.printHTMLheader("RUBiS: Comment posting");
-      sp.printHTML(
-        "<center><h2>Your comment has been successfully posted.</h2></center>");
-
-      sp.printHTMLfooter();
-      conn.commit();
-      closeConnection(stmt, conn);
-    }
-    catch (Exception e)
-    {
-      this.printError("Exception getting comment list: " + e, sp);
-      try
-      {
-        conn.rollback();
-        closeConnection(stmt, conn);
-      }
-      catch (Exception se)
-      {
-        this.printError("Transaction rollback failed: " + e, sp);
-        closeConnection(stmt, conn);
-      }
-    }
-  }
+	/**
+	 * Display an error message.
+	 * @param errorMsg the error message value
+	 */
+	private void printError(String errorMsg, ServletPrinter sp)
+	{
+		this.printError("Store Comment", errorMsg, sp);
+	}
 }

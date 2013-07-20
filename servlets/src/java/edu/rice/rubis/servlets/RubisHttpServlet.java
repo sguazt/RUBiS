@@ -49,12 +49,6 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 	private DatabaseConnectionManager _dbMngr = null;
 
 
-	/** Get the pool size for this class. */
-	public int getPoolSize()
-	{
-		return 4; // Default pool size
-	}
-
 	/** Load the driver and get a connection to the database */
 	@Override
 	public void init() throws ServletException
@@ -131,6 +125,12 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 		this._dbMngr.destroy();
 
 		super.destroy();
+	}
+
+	/** Get the pool size for this class. */
+	protected int getPoolSize()
+	{
+		return 4; // Default pool size
 	}
 
 	protected Connection getConnection() throws ServletException
