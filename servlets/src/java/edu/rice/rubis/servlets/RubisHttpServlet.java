@@ -53,7 +53,7 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 {
 	/** Controls connection pooling */
 	private static boolean _enablePooling = false;
-	private DatabaseConnectionPooling _pool = null;
+	private DatabaseConnectionManager _dbMngr = null;
 
 
 	/** Get the pool size for this class. */
@@ -74,16 +74,23 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 			in = new FileInputStream(Config.DatabaseProperties);
 			dbProperties.load(in);
 
-			// Create the connection pool
-			this._pool = new DatabaseConnectionPooling(dbProperties.getProperty("datasource.classname"),
-													   dbProperties.getProperty("datasource.url"),
-													   dbProperties.getProperty("datasource.username"),
-													   dbProperties.getProperty("datasource.password"),
-													   this._enablePooling ? this.getPoolSize() : 0);
+			// Create the DB manager
 			if (this._enablePooling)
 			{
-				this._pool.initializeConnections();
+				this._dbMngr = new CustomPooledDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
+																		 dbProperties.getProperty("datasource.url"),
+																		 dbProperties.getProperty("datasource.username"),
+																		 dbProperties.getProperty("datasource.password"),
+																		 this.getPoolSize());
 			}
+			else
+			{
+				this._dbMngr = new UnpooledDatabaseConnectionManager(dbProperties.getProperty("datasource.classname"),
+																	 dbProperties.getProperty("datasource.url"),
+																	 dbProperties.getProperty("datasource.username"),
+																	 dbProperties.getProperty("datasource.password"));
+			}
+			this._dbMngr.init();
 		}
 		catch (FileNotFoundException fnfe)
 		{
@@ -119,14 +126,7 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 	@Override
 	public void destroy()
 	{
-		try
-		{
-			this._pool.finalizeConnections();
-		}
-		catch (SQLException e)
-		{
-			// ignore
-		}
+		this._dbMngr.destroy();
 
 		super.destroy();
 	}
@@ -135,17 +135,7 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 	{
 		try
 		{
-			if (this._enablePooling)
-			{
-				return this._pool.getConnection();
-			}
-			else
-			{
-				return DatabaseConnectionPooling.makeNewConnection(this._pool.getDriver(),
-																   this._pool.getUrl(),
-																   this._pool.getUsername(),
-																   this._pool.getPassword());
-			}
+			return this._dbMngr.getConnection();
 		}
 		catch (SQLException se)
 		{
@@ -155,13 +145,6 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 
 	protected void releaseConnection(Connection conn)
 	{
-		if (this._enablePooling)
-		{
-			this._pool.releaseConnection(conn);
-		}
-		else
-		{
-			DatabaseConnectionPooling.closeConnection(conn);
-		}
+		this._dbMngr.releaseConnection(conn);
 	}
 }
