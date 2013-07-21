@@ -76,7 +76,7 @@ public class PooledDriverManagerDatabaseConnectionManager implements DatabaseCon
 		return this._passwd;
 	}
 
-	public synchronized void init() throws SQLException
+	public void init() throws SQLException
 	{
 		try
 		{
@@ -100,7 +100,7 @@ public class PooledDriverManagerDatabaseConnectionManager implements DatabaseCon
 		}
 	}
 
-	public synchronized void destroy()
+	public void destroy()
 	{
 		Connection conn = null;
 		while ((conn = this._pool.poll()) != null)
@@ -119,11 +119,18 @@ public class PooledDriverManagerDatabaseConnectionManager implements DatabaseCon
 		}
 	}
 
-	public synchronized Connection getConnection() throws SQLException
+	public Connection getConnection() throws SQLException
 	{
 		try
 		{
-			return this._pool.take();
+			Connection conn = this._pool.take();
+			if (conn.isClosed())
+			{
+				conn = DriverManager.getConnection(this._url,
+												   this._user,
+												   this._passwd);
+			}
+			return conn;
 		}
 		catch (InterruptedException ie)
 		{
@@ -131,7 +138,7 @@ public class PooledDriverManagerDatabaseConnectionManager implements DatabaseCon
 		}
 	}
 
-	public synchronized void releaseConnection(Connection conn)
+	public void releaseConnection(Connection conn) throws SQLException
 	{  
 		try
 		{

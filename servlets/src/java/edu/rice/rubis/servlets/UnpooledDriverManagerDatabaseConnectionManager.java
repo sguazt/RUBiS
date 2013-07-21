@@ -98,18 +98,11 @@ public class UnpooledDriverManagerDatabaseConnectionManager implements DatabaseC
 		}
 	}
 
-	public void releaseConnection(Connection conn)
+	public void releaseConnection(Connection conn) throws SQLException
 	{  
-		try
+		if (!conn.isClosed())
 		{
-			if (!conn.isClosed())
-			{
-				conn.close();
-			}
-		}
-		catch (Exception e)
-		{
-			// Ignore
+			conn.close();
 		}
 	}
 }

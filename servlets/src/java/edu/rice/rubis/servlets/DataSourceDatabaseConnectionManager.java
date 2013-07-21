@@ -77,7 +77,7 @@ public class DataSourceDatabaseConnectionManager implements DatabaseConnectionMa
 //		return this._passwd;
 //	}
 
-	public synchronized void init() throws SQLException
+	public void init() throws SQLException
 	{
 		try
 		{
@@ -96,28 +96,21 @@ public class DataSourceDatabaseConnectionManager implements DatabaseConnectionMa
 		}
 	}
 
-	public synchronized void destroy()
+	public void destroy()
 	{
 		// Empty
 	}
 
-	public synchronized Connection getConnection() throws SQLException
+	public Connection getConnection() throws SQLException
 	{
 		return this._ds.getConnection();
 	}
 
-	public synchronized void releaseConnection(Connection conn)
+	public void releaseConnection(Connection conn) throws SQLException
 	{  
-		try
+		if (!conn.isClosed())
 		{
-			if (!conn.isClosed())
-			{
-				conn.close();
-			}
-		}
-		catch (SQLException se)
-		{
-			// Ignore
+			conn.close();
 		}
 	}
 }

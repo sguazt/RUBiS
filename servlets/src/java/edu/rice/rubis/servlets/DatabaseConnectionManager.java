@@ -53,5 +53,5 @@ public interface DatabaseConnectionManager
 	Connection getConnection() throws SQLException;
 
 	/// Release the given connection to the database
-	void releaseConnection(Connection conn);
+	void releaseConnection(Connection conn) throws SQLException;
 }
