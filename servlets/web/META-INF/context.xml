@@ -12,17 +12,17 @@
                 password="rubis"
                 driverClassName="com.mysql.jdbc.Driver"
                 url="jdbc:mysql://localhost:3306/rubis"
-                maxActive="8"
-                maxIdle="4"
+                maxActive="-1"
+                maxIdle="-1"
                 removeAbandoned="true"
-                removeAbandonedTimeout="60"
+                removeAbandonedTimeout="300"
                 logAbandoned="true"/>
 <!--
     <Valve  className="org.apache.catalina.valves.AccessLogValve"
             rotatable="true"
             suffix="rubis"
             pattern="combined"
-            directory="/opt/apache-6.0.36/logs"
+            directory="/opt/apache-tomcat6/logs"
             resolveHosts="false"/>
 -->
 </Context>
