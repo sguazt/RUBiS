@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-
 public class ViewItem extends RubisHttpServlet
 {
 	@Override
@@ -73,7 +72,7 @@ public class ViewItem extends RubisHttpServlet
 		catch (Exception e)
 		{
 			this.printError("Failed to execute Query for item: " + e, sp);
-			closeConnection(stmt, conn);
+			this.closeConnection(stmt, conn);
 			return;
 		}
 		try

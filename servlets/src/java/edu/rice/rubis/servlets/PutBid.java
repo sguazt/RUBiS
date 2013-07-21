@@ -67,7 +67,7 @@ public class PutBid extends RubisHttpServlet
 			this.printError("Item id, name and password are required. Cannot process the request", sp);
 			return;
 		}
-		Integer itemId = new Integer(itemStr);
+		int itemId = Integer.parseInt(itemStr);
 
 		PreparedStatement stmt = null;
 		Connection conn = null;
@@ -91,7 +91,7 @@ public class PutBid extends RubisHttpServlet
 		try
 		{
 			stmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
-			stmt.setInt(1, itemId.intValue());
+			stmt.setInt(1, itemId);
 			rs = stmt.executeQuery();
 		}
 		catch (Exception e)
@@ -155,7 +155,7 @@ public class PutBid extends RubisHttpServlet
 			try
 			{
 				maxBidStmt = conn.prepareStatement("SELECT MAX(bid) AS bid FROM bids WHERE item_id=?");
-				maxBidStmt.setInt(1, itemId.intValue());
+				maxBidStmt.setInt(1, itemId);
 				ResultSet maxBidResult = maxBidStmt.executeQuery();
 				// Get the current price (max bid)		 
 				if (maxBidResult.first())
@@ -182,7 +182,7 @@ public class PutBid extends RubisHttpServlet
 			try
 			{
 				nbStmt = conn.prepareStatement("SELECT COUNT(*) AS bid FROM bids WHERE item_id=?");
-				nbStmt.setInt(1, itemId.intValue());
+				nbStmt.setInt(1, itemId);
 				ResultSet nbResult = nbStmt.executeQuery();
 				// Get the number of bids for this item
 				if (nbResult.first())
@@ -201,7 +201,7 @@ public class PutBid extends RubisHttpServlet
 				this.closeConnection(stmt, conn);
 				return;
 			}
-			sp.printItemDescription(itemId.intValue(),
+			sp.printItemDescription(itemId,
 									itemName,
 									description,
 									initialPrice,
@@ -216,7 +216,7 @@ public class PutBid extends RubisHttpServlet
 									endDate,
 									userId,
 									conn);
-		sp.printHTMLfooter();
+			sp.printHTMLfooter();
 		}
 		catch (Exception e)
 		{

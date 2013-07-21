@@ -95,7 +95,7 @@ public class BrowseCategories extends RubisHttpServlet
 			}
 		}
 
-		boolean connAlive = categoryList(regionId, userId, stmt, conn, sp);
+		boolean connAlive = this.categoryList(regionId, userId, stmt, conn, sp);
 		if (connAlive)
 		{
 			this.closeConnection(stmt, conn);

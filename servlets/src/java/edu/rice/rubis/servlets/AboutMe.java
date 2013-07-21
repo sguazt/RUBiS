@@ -66,15 +66,13 @@ public class AboutMe extends RubisHttpServlet
 
 		// Authenticate the user
 		int userId = -1;
+		Auth auth = new Auth(conn, sp);
+		userId = auth.authenticate(username, password);
+		if (userId == -1)
 		{
-			Auth auth = new Auth(conn, sp);
-			userId = auth.authenticate(username, password);
-			if (userId == -1)
-			{
-				this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
-				this.releaseConnection(conn);
-				return;
-			}
+			this.printError("You (" + username + "," + password + ") don't have an account on RUBiS! You have to register first", sp);
+			this.releaseConnection(conn);
+			return;
 		}
 
 		// Try to find the user corresponding to the userId

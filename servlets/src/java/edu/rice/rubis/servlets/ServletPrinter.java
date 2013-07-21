@@ -292,34 +292,38 @@ public class ServletPrinter
 				{
 					try
 					{
-					/* Get the qty max first bids and parse bids in this order
-					until qty is reached. The bid that reaches qty is the
-					current minimum bid. */
+						/* Get the qty max first bids and parse bids in this order
+						until qty is reached. The bid that reaches qty is the
+						current minimum bid. */
 
-					stmt = conn.prepareStatement("SELECT id,qty,max_bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
-					stmt.setInt(1, itemId);
-					stmt.setInt(2, quantity);
-					ResultSet rs = stmt.executeQuery();
-					if (rs.first())
-					{
-						int numberOfItems = 0;
-						int qty;
-						do
+						stmt = conn.prepareStatement("SELECT id,qty,max_bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
+						stmt.setInt(1, itemId);
+						stmt.setInt(2, quantity);
+						ResultSet rs = stmt.executeQuery();
+						if (rs.first())
 						{
-							qty = rs.getInt("qty");
-							numberOfItems = numberOfItems + qty;
-							if (numberOfItems >= quantity)
+							int numberOfItems = 0;
+							int qty;
+							do
 							{
-								maxBid = rs.getFloat("max_bid");
-								break;
+								qty = rs.getInt("qty");
+								numberOfItems = numberOfItems + qty;
+								if (numberOfItems >= quantity)
+								{
+									maxBid = rs.getFloat("max_bid");
+									break;
+								}
 							}
+							while (rs.next());
 						}
-						while (rs.next());
-					}
 					}
 					catch (Exception e)
 					{
 						this.printHTML("Problem while computing current bid: " + e + "<br>");
+						if (stmt != null)
+						{
+							stmt.close();
+						}
 						return;
 					}
 				}

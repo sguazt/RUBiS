@@ -81,11 +81,11 @@ public class BuyNow extends RubisHttpServlet
 			return;
 		}
 		// Try to find the Item corresponding to the Item ID
-		Integer itemId = new Integer(itemStr);
+		int itemId = Integer.parseInt(itemStr);
 		try
 		{
 			stmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
-			stmt.setInt(1, itemId.intValue());
+			stmt.setInt(1, itemId);
 			ResultSet irs = stmt.executeQuery();
 			if (!irs.first())
 			{
@@ -123,7 +123,7 @@ public class BuyNow extends RubisHttpServlet
 				return;
 			}
 			// Display the form for buying the item
-			sp.printItemDescriptionToBuyNow(itemId.intValue(),
+			sp.printItemDescriptionToBuyNow(itemId,
 											itemName,
 											description,
 											buyNow,
@@ -152,7 +152,7 @@ public class BuyNow extends RubisHttpServlet
 	@Override
 	protected int getPoolSize()
 	{
-	return Config.BuyNowPoolSize;
+		return Config.BuyNowPoolSize;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class BuyNow extends RubisHttpServlet
 			if (conn != null)
 			{
 				conn.setAutoCommit(true);
-				releaseConnection(conn);
+				this.releaseConnection(conn);
 			}
 		}
 		catch (Exception ignore)

@@ -132,7 +132,7 @@ public class StoreBid extends RubisHttpServlet
 
 		/* Check for invalid values */
 
-		if (qty > maxQty)
+		if (maxQty <= 0 || qty > maxQty)
 		{
 			this.printError("You cannot request " + qty + " items because only " + maxQty + " are proposed!", sp);
 			return;

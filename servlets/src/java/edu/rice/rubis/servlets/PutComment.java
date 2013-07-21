@@ -87,14 +87,14 @@ public class PutComment extends RubisHttpServlet
 
 		try
 		{
-			Integer toId = new Integer(toStr);
-			Integer itemId = new Integer(itemStr);
+			int toId = Integer.parseInt(toStr);
+			int itemId = Integer.parseInt(itemStr);
 			ResultSet urs, irs;
 			String toName = null, itemName = null;
 			try
 			{
 				stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-				stmt.setInt(1, toId.intValue());
+				stmt.setInt(1, toId);
 				urs = stmt.executeQuery();
 				if (urs.first())
 				{
@@ -111,7 +111,7 @@ public class PutComment extends RubisHttpServlet
 			try
 			{
 				stmt = conn.prepareStatement("SELECT name FROM items WHERE id=?");
-				stmt.setInt(1, itemId.intValue());
+				stmt.setInt(1, itemId);
 				irs = stmt.executeQuery();
 				if (irs.first())
 				{

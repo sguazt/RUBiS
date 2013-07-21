@@ -151,6 +151,14 @@ public abstract class RubisHttpServlet extends BaseRubisHttpServlet
 
 	protected void releaseConnection(Connection conn)
 	{
-		this._dbMngr.releaseConnection(conn);
+		try
+		{
+			this._dbMngr.releaseConnection(conn);
+		}
+		catch (Exception e)
+		{
+			// Only print a log entry
+			this.getLogger().warning("Connection to database cannot be released: " + e);
+		}
 	}
 }
