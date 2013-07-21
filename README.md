@@ -43,9 +43,9 @@ While the code should compile and run with every J2EE container and DBMS, we hav
 
 ### Compilation Steps
 
-In the following we refer to the variable `$RUBIS\_HOME` as a variable containing the path pointing to this version of RUBiS.
+In the following we refer to the variable `$RUBIS_HOME` as a variable containing the path pointing to this version of RUBiS.
 
-1. Move to the `$RUBIS\_HOME' directory.
+1. Move to the `$RUBIS_HOME` directory.
 
 	$ cd $RUBIS_HOME
 
@@ -53,7 +53,7 @@ In the following we refer to the variable `$RUBIS\_HOME` as a variable containin
 
 	$ cp setup/user.properties.template user.properties
 
-3. Edit the file `user.properties` to set properties to a proper value (e.g., if you use Apache Tomcat this is the same of `$CATALINA\_HOME`).
+3. Edit the file `user.properties` to set properties to a proper value (e.g., if you use Apache Tomcat this is the same of `$CATALINA_HOME`).
 
 	$ vi user.properties
 
@@ -62,19 +62,19 @@ In the following we refer to the variable `$RUBIS\_HOME` as a variable containin
 	$ cd servlets
 
 5. Edit the file `src/java/edu/rice/rubis/servlets/Config.java` to set the following properties
- * `J2eeContainerPath`: this is the path to the J2EE container (e.g., if you use Apache Tomcat this is the same of `$CATALINA\_HOME`).
+ * `J2eeContainerPath`: this is the path to the J2EE container (e.g., if you use Apache Tomcat this is the same of `$CATALINA_HOME`).
  * `DatabaseConnectionStrategy`: this is the type of strategy you want to use to connect to the database.
    You can choose among the following values:
-   - `UNPOOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY`: don't use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
-   - `POOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY`: use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
-   - `DATASOURCE\_DB\_CONNECTION\_STRATEGY`: setup and manage database connections by means of `javax.sql.DataSource` class (recommended).
+   - `UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY`: don't use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
+   - `POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY`: use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
+   - `DATASOURCE_DB_CONNECTION_STRATEGY`: setup and manage database connections by means of `javax.sql.DataSource` class (recommended).
 
 6. Edit the database properties
-   - If you chose `DATASOURCE\_DB\_CONNECTION\_STRATEGY` as database connection strategy, you have to edit the context file to set properties to a proper value:
+   - If you chose `DATASOURCE_DB_CONNECTION_STRATEGY` as database connection strategy, you have to edit the context file to set properties to a proper value:
 
      $ vi web/META-INF/context.xml
 
-   - Otherwise, if you chose either `UNPOOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY` or`POOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY` as database connection strategy, you have to create a property file in `src/conf/dbms.property` directory (optionally, replace `dbms' with the name of your DBMS).
+   - Otherwise, if you chose either `UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` or`POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` as database connection strategy, you have to create a property file in `src/conf/dbms.property` directory (optionally, replace `dbms' with the name of your DBMS).
      For instance, if you use MySQL you can edit the file `src/conf/mysql.properties` to set properties to a proper value (e.g., the host name where the DBMS runs).
 
 	 $ vi src/conf/mysql.properties
@@ -82,7 +82,7 @@ In the following we refer to the variable `$RUBIS\_HOME` as a variable containin
      Then you have to edit the file `src/java/edu/rice/rubis/servlets/Config.java` and change the value of `DatabaseProperties` to point to the name of your `dbms.property` file.
      If you use MySQL, you can use the default value.
 
-7. Copy the JAR file of the JDBC database driver in `$RUBIS\_HOME/lib`.
+7. Copy the JAR file of the JDBC database driver in `$RUBIS_HOME/lib`.
    For instance, if you use MySQL you have to copy the Connector/J JAR file in that location:
 
    $ cp mysql-connector-java-5.1.22-bin.jar lib/
