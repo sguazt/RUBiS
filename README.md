@@ -74,7 +74,7 @@ In the following we refer to the variable `$RUBIS_HOME` as a variable containing
 
      $ vi web/META-INF/context.xml
 
-   - Otherwise, if you chose either `UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` or`POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` as database connection strategy, you have to create a property file in `src/conf/dbms.property` directory (optionally, replace `dbms' with the name of your DBMS).
+   - Otherwise, if you chose either `UNPOOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` or`POOLED_DRIVERMANAGER_DB_CONNECTION_STRATEGY` as database connection strategy, you have to create a property file in `src/conf/dbms.property` directory (optionally, replace `dbms` with the name of your DBMS).
      For instance, if you use MySQL you can edit the file `src/conf/mysql.properties` to set properties to a proper value (e.g., the host name where the DBMS runs).
 
 	 $ vi src/conf/mysql.properties
