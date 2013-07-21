@@ -4,7 +4,7 @@
 <Context debug="5" reloadable="true" crossContext="true" path="/rubis_servlets">
 <Context path="/rubis_servlets">
 -->
-<Context path="/">
+<Context>
     <Resource   name="jdbc/RUBiS"
                 auth="Container"
                 type="javax.sql.DataSource"
@@ -17,7 +17,6 @@
                 removeAbandoned="true"
                 removeAbandonedTimeout="60"
                 logAbandoned="true"/>
--->
 <!--
     <Valve  className="org.apache.catalina.valves.AccessLogValve"
             rotatable="true"
