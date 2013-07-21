@@ -30,6 +30,8 @@ The main purpose is to compare the trade-off between performance and complexity 
 
 In our implementation, unlike the OW2 one, we do not focus on the performance evaluation of different technologies and design patterns.
 Instead, our aim is to provide a fully functional implementation that can be used to benchmark real computing systems and evaluate their performance.
+Most of the changes will focus on stability and improvements to the original OW2 version.
+
 For these reasons, currently we only provide an implementation based on Java servlets.
 
 ## Compile and Install
@@ -37,11 +39,13 @@ For these reasons, currently we only provide an implementation based on Java ser
 To compile RUBiS you need Java &ge; 1.5 and [Apache Ant](http://ant.apache.org).
 To run RUBiS you need a Java Servlet container &ge; 2.5, like [Apache Tomcat](http://tomcat.apache.org), and a DBMS like [MySQL](http://www.mysql.com).
 
+While the code should compile and run with every J2EE container and DBMS, we have currently tested it only with Apache Tomcat 6 and MySQL 5.6.\* (with MySQL Connector/J 5.0.\*).
+
 ### Compilation Steps
 
-In the following we refer to the variable `$RUBIS_HOME` as a variable containing the path pointing to this version of RUBiS.
+In the following we refer to the variable `$RUBIS\_HOME` as a variable containing the path pointing to this version of RUBiS.
 
-1. Move to the `$RUBIS_HOME' directory.
+1. Move to the `$RUBIS\_HOME' directory.
 
 	$ cd $RUBIS_HOME
 
@@ -49,7 +53,7 @@ In the following we refer to the variable `$RUBIS_HOME` as a variable containing
 
 	$ cp setup/user.properties.template user.properties
 
-3. Edit the file `user.properties` to set properties to a proper value (e.g., the path to Apache Tomcat).
+3. Edit the file `user.properties` to set properties to a proper value (e.g., if you use Apache Tomcat this is the same of `$CATALINA\_HOME`).
 
 	$ vi user.properties
 
@@ -57,13 +61,46 @@ In the following we refer to the variable `$RUBIS_HOME` as a variable containing
 
 	$ cd servlets
 
-5. Edit the file `mysql.properties` to set properties to a proper value (e.g., the host name where the DBMS runs).
+5. Edit the file `src/java/edu/rice/rubis/servlets/Config.java` to set the following properties
+ * `J2eeContainerPath`: this is the path to the J2EE container (e.g., if you use Apache Tomcat this is the same of `$CATALINA\_HOME`).
+ * `DatabaseConnectionStrategy`: this is the type of strategy you want to use to connect to the database.
+   You can choose among the following values:
+   - `UNPOOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY`: don't use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
+   - `POOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY`: use connection pooling and connect to the database by means the `java.sql.DriverManager` class.
+   - `DATASOURCE\_DB\_CONNECTION\_STRATEGY`: setup and manage database connections by means of `javax.sql.DataSource` class (recommended).
 
-	$ vi src/conf/mysql.properties
+6. Edit the database properties
+   - If you chose `DATASOURCE\_DB\_CONNECTION\_STRATEGY` as database connection strategy, you have to edit the context file to set properties to a proper value:
 
-6. Run Ant:
+     $ vi web/META-INF/context.xml
+
+   - Otherwise, if you chose either `UNPOOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY` or`POOLED\_DRIVERMANAGER\_DB\_CONNECTION\_STRATEGY` as database connection strategy, you have to create a property file in `src/conf/dbms.property` directory (optionally, replace `dbms' with the name of your DBMS).
+     For instance, if you use MySQL you can edit the file `src/conf/mysql.properties` to set properties to a proper value (e.g., the host name where the DBMS runs).
+
+	 $ vi src/conf/mysql.properties
+
+     Then you have to edit the file `src/java/edu/rice/rubis/servlets/Config.java` and change the value of `DatabaseProperties` to point to the name of your `dbms.property` file.
+     If you use MySQL, you can use the default value.
+
+7. Copy the JAR file of the JDBC database driver in `$RUBIS\_HOME/lib`.
+   For instance, if you use MySQL you have to copy the Connector/J JAR file in that location:
+
+   $ cp mysql-connector-java-5.1.22-bin.jar lib/
+
+8. Run Ant:
 
 	$ ant clean all
+
+9. Copy the WAR file to your container.
+   For instance, if you use Apache Tomcat:
+
+   $ cp dist/rubis\_servlets.war $CATALINA\_HOME/webapps/
+
+10. Try to connect to the RUBiS web application by pointing your browser at the RUBiS home page.
+    For instance:
+
+   $ elinks localhot:8080/rubis\_servlets
+
 
 ## References
 
