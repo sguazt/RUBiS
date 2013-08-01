@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServlet;
  *
  * @author <a href="mailto:marco.guazzone@gmail.com">Marco Guazzone</a>
  */
-public class BaseRubisHttpServlet extends HttpServlet
+public abstract class BaseRubisHttpServlet extends HttpServlet
 {
 	private Logger _logger = null;
 
