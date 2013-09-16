@@ -4,7 +4,7 @@
 <Context debug="5" reloadable="true" crossContext="true" path="/rubis_servlets">
 <Context path="/rubis_servlets">
 -->
-<Context>
+<Context path="/rubis_servlets" swallowOutput="true">
     <Resource   name="jdbc/RUBiS"
                 auth="Container"
                 type="javax.sql.DataSource"
@@ -17,13 +17,16 @@
                 removeAbandoned="true"
                 removeAbandonedTimeout="300"
                 logAbandoned="true"/>
+<!-- Valves that are useful for debugging purpose -->
 <!--
-    <Valve  className="org.apache.catalina.valves.AccessLogValve"
+         <Valve  className="org.apache.catalina.valves.AccessLogValve"
             rotatable="true"
-            suffix="rubis"
-            pattern="combined"
-            directory="/opt/apache-tomcat6/logs"
+            prefix="rubis-access_log"
+            pattern="common"
             resolveHosts="false"/>
+    <Valve  className="org.apache.catalina.valves.StuckThreadDetectionValve"
+            threshold="600"/>
+    <Valve  className="org.apache.catalina.valves.RequestDumperValve"/>
 -->
 </Context>
 
