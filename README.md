@@ -108,9 +108,11 @@ In the following we refer to the variable `$RUBIS_HOME` as a variable containing
      If you use MySQL, you can use the default value.
 
 7. Copy the JAR file of the JDBC database driver in `$RUBIS_HOME/lib`.
-   For instance, if you use MySQL you have to copy the Connector/J JAR file in that location:
+   For instance, if you use MySQL you have to copy the Connector/J JAR file in that location (we assume that you have already download the Connector/J JAR in `/tmp/mysql-connector-java-5.1.25`):
 
-   $ cp mysql-connector-java-5.1.22-bin.jar lib/
+   $ mkdir -p $RUBIS\_HOME/lib
+
+   $ cp /tmp/mysql-connector-java-5.1.25-bin.jar lib/
 
 8. Run Ant:
 
