@@ -185,9 +185,11 @@
       <fileset dir="${lib.path}">
         <include name="*.jar"/>
       </fileset>
+<!--
       <fileset dir="${web.path}/WEB-INF/lib">
         <patternset refid="web.lib.files"/>
       </fileset>
+-->
     </copy>
     <!-- Copy static files from external dependencies as needed -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
