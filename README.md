@@ -52,10 +52,15 @@ If you use MySQL, you can perform the following steps.
 2. Add the `rubis` user:
 
 	$ mysql -uroot mysql
+
 	mysql> CREATE USER 'rubis'@'%' IDENTIFIED BY 'rubis';
+
 	mysql> GRANT ALL PRIVILEGES ON *.* TO 'rubis'@'%' IDENTIFIED BY 'rubis' WITH GRANT OPTION;
+
 	mysql> CREATE USER 'rubis'@'localhost' IDENTIFIED BY 'rubis';
+
 	mysql> GRANT ALL PRIVILEGES ON *.* TO 'rubis'@'localhost' IDENTIFIED BY 'rubis' WITH GRANT OPTION;
+
 	mysql> exit;
 
 Finally, you have to check possible firewall settings on both Web and DB server in order to enable the Web and DB server to accept remote connections.
