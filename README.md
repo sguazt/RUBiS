@@ -112,7 +112,7 @@ In the following we refer to the variable `$RUBIS_HOME` as a variable containing
 
    $ mkdir -p $RUBIS\_HOME/lib
 
-   $ cp /tmp/mysql-connector-java-5.1.25-bin.jar lib/
+   $ cp /tmp/mysql-connector-java-5.1.25/mysql-connector-java-5.1.25-bin.jar lib/
 
 8. Run Ant:
 
