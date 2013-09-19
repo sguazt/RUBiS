@@ -3,9 +3,9 @@
 ## Script to run when the native RUBiS client is used
 
 cwd=$(dirname $0)
-mysqladmin -f -uroot -p drop rubis
-mysqladmin -uroot -p create rubis
-mysql -uroot rubis <$cwd/rubis-no_fk.sql
-mysql -uroot rubis <$cwd/categories.sql
-mysql -uroot rubis <$cwd/regions.sql
-#mysql -uroot rubis <$cwd/update_ids.sql
+mysqladmin -f -urubis -prubis drop rubis
+mysqladmin -urubis -prubis create rubis
+mysql -urubis -prubis rubis <$cwd/rubis-no_fk.sql
+mysql -urubis -prubis rubis <$cwd/categories.sql
+mysql -urubis -prubis rubis <$cwd/regions.sql
+#mysql -urubis -prubis rubis <$cwd/update_ids.sql
