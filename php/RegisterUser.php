@@ -6,71 +6,90 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $firstname = $_POST['firstname'];
-    if ($firstname == null)
-    {
-      $firstname = $_GET['firstname'];
-      if ($firstname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a first name!<br>");
-         exit();
-      }
-    }
-      
-    $lastname = $_POST['lastname'];
-    if ($lastname == null)
-    {
-      $lastname = $_GET['lastname'];
-      if ($lastname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a last name!<br>");
-         exit();
-      }
-    }
-      
-    $nickname = $_POST['nickname'];
-    if ($nickname == null)
-    {
-      $nickname = $_GET['nickname'];
-      if ($nickname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a nick name!<br>");
-         exit();
-      }
-    }
-
-    $email = $_POST['email'];
-    if ($email == null)
-    {
-      $email = $_GET['email'];
-      if ($email == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide an email address!<br>");
-         exit();
-      }
-    }
-
-    $password = $_POST['password'];
-    if ($password == null)
-    {
-      $password = $_GET['password'];
-      if ($password == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a password!<br>");
-         exit();
-      }
-    }
-
-    $region = $_POST['region'];
-    if ($region == null)
-    {
-      $region = $_GET['region'];
-      if ($region == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a region!<br>");
-         exit();
-      }
-    }
+	$firstname = NULL;
+	if (isset($_POST['firstname']))
+	{
+    	$firstname = $_POST['firstname'];
+	}
+	else if (isset($_GET['firstname']))
+	{
+    	$firstname = $_GET['firstname'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide a first name!<br>");
+		exit();
+	}
+	$lastname = NULL;
+	if (isset($_POST['lastname']))
+	{
+    	$lastname = $_POST['lastname'];
+	}
+	else if (isset($_GET['lastname']))
+	{
+    	$lastname = $_GET['lastname'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide a last name!<br>");
+		exit();
+	}
+	$nickname = NULL;
+	if (isset($_POST['nickname']))
+	{
+    	$nickname = $_POST['nickname'];
+	}
+	else if (isset($_GET['nickname']))
+	{
+    	$nickname = $_GET['nickname'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide a nick name!<br>");
+		exit();
+	}
+	$email = NULL;
+	if (isset($_POST['email']))
+	{
+    	$email = $_POST['email'];
+	}
+	else if (isset($_GET['email']))
+	{
+    	$email = $_GET['email'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide an email address!<br>");
+		exit();
+	}
+	$password = NULL;
+	if (isset($_POST['password']))
+	{
+    	$password = $_POST['password'];
+	}
+	else if (isset($_GET['password']))
+	{
+    	$password = $_GET['password'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide a password!<br>");
+		exit();
+	}
+	$region = NULL;
+	if (isset($_POST['region']))
+	{
+    	$region = $_POST['region'];
+	}
+	else if (isset($_GET['region']))
+	{
+    	$region = $_GET['region'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Register user", "You must provide a region!<br>");
+		exit();
+	}
 
     getDatabaseLink($link);
 

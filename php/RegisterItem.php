@@ -6,101 +6,131 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $userId = $_POST['userId'];
-    if ($userId == null)
-    {
-      $userId = $_GET['userId'];
-      if ($userId == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a user identifier!<br></h3>");
-         exit();
-      }
-    }
-      
-    $categoryId = $_POST['categoryId'];
-    if ($categoryId == null)
-    {
-      $categoryId = $_GET['categoryId'];
-      if ($categoryId == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a category identifier !<br></h3>");
-         exit();
-      }
-    }
-      
-    $name = $_POST['name'];
-    if ($name == null)
-    {
-      $name = $_GET['name'];
-      if ($name == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide an item name !<br></h3>");
-         exit();
-      }
-    }
-
-    $initialPrice = $_POST['initialPrice'];
-    if ($initialPrice == null)
-    {
-      $initialPrice = $_GET['initialPrice'];
-      if ($initialPrice == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide an initial price !<br></h3>");
-         exit();
-      }
-    }
-
-    $reservePrice = $_POST['reservePrice'];
-    if ($reservePrice == null)
-    {
-      $reservePrice = $_GET['reservePrice'];
-      if ($reservePrice == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a reserve price !<br></h3>");
-         exit();
-      }
-    }
-
-    $buyNow = $_POST['buyNow'];
-    if ($buyNow == null)
-    {
-      $buyNow = $_GET['buyNow'];
-      if ($buyNow == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a Buy Now price !<br></h3>");
-         exit();
-      }
-    }
-
-    $duration = $_POST['duration'];
-    if ($duration == null)
-    {
-      $duration = $_GET['duration'];
-      if ($duration == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a duration !<br></h3>");
-         exit();
-      }
-    }
-
-    $qty = $_POST['quantity'];
-    if ($qty == null)
-    {
-      $qty = $_GET['quantity'];
-      if ($qty == null)
-      {
-         printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a quantity !<br></h3>");
-         exit();
-      }
-    }
-
-    $description = $_POST['description'];
-    if ($description == null)
-    {
-      $description = $_GET['description'];
-      if ($description == null)
-        $description = "No description";
-    }
+	$userId = NULL;
+	if (isset($_POST['userId']))
+	{
+    	$userId = $_POST['userId'];
+	}
+	else if (isset($_GET['userId']))
+	{
+    	$userId = $_GET['userId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a user identifier!<br></h3>");
+		exit();
+	}
+	$categoryId = NULL;
+	if (isset($_POST['categoryId']))
+	{
+    	$categoryId = $_POST['categoryId'];
+	}
+	else if (isset($_GET['categoryId']))
+	{
+    	$categoryId = $_GET['categoryId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a category identifier !<br></h3>");
+		exit();
+	}
+	$name = NULL;
+	if (isset($_POST['name']))
+	{
+    	$name = $_POST['name'];
+	}
+	else if (isset($_GET['name']))
+	{
+    	$name = $_GET['name'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide an item name !<br></h3>");
+		exit();
+	}
+	$initialPrice = NULL;
+	if (isset($_POST['initialPrice']))
+	{
+    	$initialPrice = $_POST['initialPrice'];
+	}
+	else if (isset($_GET['initialPrice']))
+	{
+    	$initialPrice = $_GET['initialPrice'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide an initial price !<br></h3>");
+		exit();
+	}
+	$reservePrice = NULL;
+	if (isset($_POST['reservePrice']))
+	{
+    	$reservePrice = $_POST['reservePrice'];
+	}
+	else if (isset($_GET['reservePrice']))
+	{
+    	$reservePrice = $_GET['reservePrice'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a reserve price !<br></h3>");
+		exit();
+	}
+	$buyNow = NULL;
+	if (isset($_POST['buyNow']))
+	{
+    	$buyNow = $_POST['buyNow'];
+	}
+	else if (isset($_GET['buyNow']))
+	{
+    	$buyNow = $_GET['buyNow'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a Buy Now price !<br></h3>");
+		exit();
+	}
+	$duration = NULL;
+	if (isset($_POST['duration']))
+	{
+    	$duration = $_POST['duration'];
+	}
+	else if (isset($_GET['duration']))
+	{
+    	$duration = $_GET['duration'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a duration !<br></h3>");
+		exit();
+	}
+	$qty = NULL;
+	if (isset($_POST['quantity']))
+	{
+    	$qty = $_POST['quantity'];
+	}
+	else if (isset($_GET['quantity']))
+	{
+    	$qty = $_GET['quantity'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a quantity !<br></h3>");
+		exit();
+	}
+	$description = NULL;
+	if (isset($_POST['description']))
+	{
+    	$description = $_POST['description'];
+	}
+	else if (isset($_GET['description']))
+	{
+    	$description = $_GET['description'];
+	}
+	else
+	{
+		$description = "No description";
+	}
 
     getDatabaseLink($link);
 

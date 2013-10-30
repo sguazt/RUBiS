@@ -17,38 +17,48 @@
       }
     }      
 
-    $nickname = $_POST['nickname'];
-    if ($nickname == null)
-    {
-      $nickname = $_GET['nickname'];
-      if ($nickname == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a nick name!<br>");
-         exit();
-      }
-    }
-
-    $password = $_POST['password'];
-    if ($password == null)
-    {
-      $password = $_GET['password'];
-      if ($password == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a password!<br>");
-         exit();
-      }
-    }
-
-    $itemId = $_POST['itemId'];
-    if ($itemId == null)
-    {
-      $itemId = $_GET['itemId'];
-      if ($itemId == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide an item identifier!<br>");
-         exit();
-      }
-    }
+	$nickname = NULL;
+	if (isset($_POST['nickname']))
+	{
+    	$nickname = $_POST['nickname'];
+	}
+	else if (isset($_GET['nickname']))
+	{
+    	$nickname = $_GET['nickname'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide a nick name!<br>");
+		exit();
+	}
+	$password = NULL;
+	if (isset($_POST['password']))
+	{
+    	$password = $_POST['password'];
+	}
+	else if (isset($_GET['password']))
+	{
+    	$password = $_GET['password'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide a password!<br>");
+		exit();
+	}
+	$itemId = NULL;
+	if (isset($_POST['itemId']))
+	{
+    	$itemId = $_POST['itemId'];
+	}
+	else if (isset($_GET['itemId']))
+	{
+    	$itemId = $_GET['itemId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide an item identifier!<br>");
+		exit();
+	}
 
     getDatabaseLink($link);
 

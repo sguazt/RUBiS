@@ -6,43 +6,60 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $categoryName = $_POST['categoryName'];
-    if ($categoryName == null)
-    {
-      $categoryName = $_GET['categoryName'];
-      if ($categoryName == null)
-      {
-         printError($scriptName, $startTime, "Search Items By Category", "You must provide a category name!<br>");
-         exit();
-      }
+	$categoryName = NULL;
+	if (isset($_POST['categoryName']))
+	{
+    	$categoryName = $_POST['categoryName'];
+	}
+	else if (isset($_GET['categoryName']))
+	{
+    	$categoryName = $_GET['categoryName'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Search Items By Category", "You must provide a category name!<br>");
+		exit();
+	}
+	$categoryId = NULL;
+	if (isset($_POST['category']))
+	{
+    	$categoryId = $_POST['category'];
+	}
+	else if (isset($_GET['category']))
+	{
+    	$categoryId = $_GET['category'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Search Items By Category", "You must provide a category identifier!<br>");
+		exit();
+	}
+	$page = NULL;
+	if (isset($_POST['page']))
+	{
+    	$page = $_POST['page'];
+	}
+	else if (isset($_GET['page']))
+	{
+    	$page = $_GET['page'];
+	}
+	else
+	{
+		$page = 0;
     }
-      
-    $categoryId = $_POST['category'];
-    if ($categoryId == null)
-    {
-      $categoryId = $_GET['category'];
-      if ($categoryId == null)
-      {
-         printError($scriptName, $startTime, "Search Items By Category", "You must provide a category identifier!<br>");
-         exit();
-      }
-    }
-      
-    $page = $_POST['page'];
-    if ($page == null)
-    {
-      $page = $_GET['page'];
-      if ($page == null)
-        $page = 0;
-    }
-      
-    $nbOfItems = $_POST['nbOfItems'];
-    if ($nbOfItems == null)
-    {
-      $nbOfItems = $_GET['nbOfItems'];
-      if ($nbOfItems == null)
-        $nbOfItems = 25;
-    }
+	$nbOfItems = NULL;
+	if (isset($_POST['nbOfItems']))
+	{
+    	$nbOfItems = $_POST['nbOfItems'];
+	}
+	else if (isset($_GET['nbOfItems']))
+	{
+    	$nbOfItems = $_GET['nbOfItems'];
+	}
+	else
+	{
+		$nbOfItems = 25;
+	}
 
     printHTMLheader("RUBiS: Items in category $categoryName");
     print("<h2>Items in category $categoryName</h2><br><br>");

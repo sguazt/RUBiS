@@ -6,43 +6,60 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $regionId = $_POST['region'];
-    if ($regionId == null)
-    {
-      $regionId = $_GET['region'];
-      if ($regionId == null)
-      {
-         printError($scriptName, $startTime, "Search Items By Region", "You must provide a region!<br>");
-         exit();
-      }
-    }
-      
-    $categoryId = $_POST['category'];
-    if ($categoryId == null)
-    {
-      $categoryId = $_GET['category'];
-      if ($categoryId == null)
-      {
-         printError($scriptName, $startTime, "Search Items By Region", "You must provide a category identifier!<br>");
-         exit();
-      }
-    }
-      
-    $page = $_POST['page'];
-    if ($page == null)
-    {
-      $page = $_GET['page'];
-      if ($page == null)
-        $page = 0;
-    }
-      
-    $nbOfItems = $_POST['nbOfItems'];
-    if ($nbOfItems == null)
-    {
-      $nbOfItems = $_GET['nbOfItems'];
-      if ($nbOfItems == null)
-        $nbOfItems = 25;
-    }
+	$regionId = NULL;
+	if (isset($_POST['region']))
+	{
+    	$regionId = $_POST['region'];
+	}
+	else if (isset($_GET['region']))
+	{
+    	$regionId = $_GET['region'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Search Items By Region", "You must provide a region!<br>");
+		exit();
+	}
+	$categoryId = NULL;
+	if (isset($_POST['category']))
+	{
+    	$categoryId = $_POST['category'];
+	}
+	else if (isset($_GET['category']))
+	{
+    	$categoryId = $_GET['category'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Search Items By Region", "You must provide a category identifier!<br>");
+		exit();
+	}
+	$page = NULL;
+	if (isset($_POST['page']))
+	{
+    	$page = $_POST['page'];
+	}
+	else if (isset($_GET['page']))
+	{
+    	$page = $_GET['page'];
+	}
+	else
+	{
+		$page = 0;
+	}
+	$nbOfItems = NULL;
+	if (isset($_POST['nbOfItems']))
+	{
+    	$nbOfItems = $_POST['nbOfItems'];
+	}
+	else if (isset($_GET['nbOfItems']))
+	{
+    	$nbOfItems = $_GET['nbOfItems'];
+	}
+	else
+	{
+		$nbOfItems = 25;
+	}
 
     printHTMLheader("RUBiS: Search items by region");
     print("<h2>Items in category $categoryName</h2><br><br>");
@@ -73,7 +90,7 @@
     while ($row = mysql_fetch_array($result))
     {
       $maxBid = $row["max_bid"];
-      if (($maxBid == null) ||($maxBid == 0))
+      if ((is_null($maxBid)) ||($maxBid == 0))
 	$maxBid = $row["initial_price"];
 
       print("<TR><TD><a href=\"/PHP/ViewItem.php?itemId=".$row["id"]."\">".$row["name"].

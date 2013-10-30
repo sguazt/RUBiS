@@ -6,16 +6,20 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $userId = $_POST['userId'];
-    if ($userId == null)
-    {
-      $userId = $_GET['userId'];
-      if ($userId == null)
-      {
-         printError($scriptName, $startTime, "Viewing user information", "You must provide an item identifier!<br>");
-         exit();
-      }
-    }
+	$userId = NULL;
+	if (isset($_POST['userId']))
+	{
+    	$userId = $_POST['userId'];
+	}
+	else if (isset($_GET['userId']))
+	{
+    	$userId = $_GET['userId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Viewing user information", "You must provide an item identifier!<br>");
+		exit();
+	}
       
     getDatabaseLink($link);
     begin($link);

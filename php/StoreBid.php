@@ -6,82 +6,104 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $userId = $_POST['userId'];
-    if ($userId == null)
-    {
-      $userId = $_GET['userId'];
-      if ($userId == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a user identifier!<br></h3>");
-         exit();
-      }
-    }
-      
-    $itemId = $_POST['itemId'];
-    if ($itemId == null)
-    {
-      $itemId = $_GET['itemId'];
-      if ($itemId == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide an item identifier !<br></h3>");
-         exit();
-      }
-    }
-      
-    $minBid = $_POST['minBid'];
-    if ($minBid == null)
-    {
-      $minBid = $_GET['minBid'];
-      if ($minBid == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide an item identifier !<br></h3>");
-         exit();
-      }
-    }
-
-    $bid = $_POST['bid'];
-    if ($bid == null)
-    {
-      $bid = $_GET['bid'];
-      if ($bid == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a minimum bid !<br></h3>");
-         exit();
-      }
-    }
-
-    $maxBid = $_POST['maxBid'];
-    if ($maxBid == null)
-    {
-      $maxBid = $_GET['maxBid'];
-      if ($maxBid == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a maximum bid !<br></h3>");
-         exit();
-      }
-    }
-
-    $maxQty = $_POST['maxQty'];
-    if ($maxQty == null)
-    {
-      $maxQty = $_GET['maxQty'];
-      if ($maxQty == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a maximum quantity !<br></h3>");
-         exit();
-      }
-    }
-
-    $qty = $_POST['qty'];
-    if ($qty == null)
-    {
-      $qty = $_GET['qty'];
-      if ($qty == null)
-      {
-         printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a quantity !<br></h3>");
-         exit();
-      }
-    }
+	$userId = NULL;
+	if (isset($_POST['userId']))
+	{
+    	$userId = $_POST['userId'];
+	}
+	else if (isset($_GET['userId']))
+	{
+    	$userId = $_GET['userId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a user identifier!<br></h3>");
+		exit();
+	}
+	$itemId = NULL;
+	if (isset($_POST['itemId']))
+	{
+    	$itemId = $_POST['itemId'];
+	}
+	else if (isset($_GET['itemId']))
+	{
+    	$itemId = $_GET['itemId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide an item identifier !<br></h3>");
+		exit();
+	}
+	$minBid = NULL;
+	if (isset($_POST['minBid']))
+	{
+    	$minBid = $_POST['minBid'];
+	}
+	else if (isset($_GET['minBid']))
+	{
+    	$minBid = $_GET['minBid'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide an item identifier !<br></h3>");
+		exit();
+	}
+	$bid = NULL;
+	if (isset($_POST['bid']))
+	{
+    	$bid = $_POST['bid'];
+	}
+	else if (isset($_GET['bid']))
+	{
+    	$bid = $_GET['bid'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a minimum bid !<br></h3>");
+		exit();
+	}
+	$maxBid = NULL;
+	if (isset($_POST['maxBid']))
+	{
+    	$maxBid = $_POST['maxBid'];
+	}
+	else if (isset($_GET['maxBid']))
+	{
+    	$maxBid = $_GET['maxBid'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a maximum bid !<br></h3>");
+		exit();
+	}
+	$maxQty = NULL;
+	if (isset($_POST['maxQty']))
+	{
+    	$maxQty = $_POST['maxQty'];
+	}
+	else if (isset($_GET['maxQty']))
+	{
+    	$maxQty = $_GET['maxQty'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a maximum quantity !<br></h3>");
+		exit();
+	}
+	$qty = NULL;
+	if (isset($_POST['qty']))
+	{
+    	$qty = $_POST['qty'];
+	}
+	else if (isset($_GET['qty']))
+	{
+    	$qty = $_GET['qty'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreBid", "<h3>You must provide a quantity !<br></h3>");
+		exit();
+	}
 
     /* Check for invalid values */
 

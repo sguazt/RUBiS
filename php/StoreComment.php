@@ -6,60 +6,76 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $to = $_POST['to'];
-    if ($to == null)
-    {
-      $to = $_GET['to'];
-      if ($to == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a 'to user' identifier!<br>");
-         exit();
-      }
-    }      
-
-    $from = $_POST['from'];
-    if ($from == null)
-    {
-      $from = $_GET['from'];
-      if ($from == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a 'from user' identifier!<br>");
-         exit();
-      }
-    }
-
-    $itemId = $_POST['itemId'];
-    if ($itemId == null)
-    {
-      $itemId = $_GET['itemId'];
-      if ($itemId == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide an item identifier!<br>");
-         exit();
-      }
-    }
-
-    $rating = $_POST['rating'];
-    if ($rating == null)
-    {
-      $rating = $_GET['rating'];
-      if ($rating == null)
-      {
-         printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a user identifier!<br></h3>");
-         exit();
-      }
-    }
-      
-    $comment = $_POST['comment'];
-    if ($comment == null)
-    {
-      $comment = $_GET['comment'];
-      if ($comment == null)
-      {
-         printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a comment !<br></h3>");
-         exit();
-      }
-    }
+	$to = NULL;
+	if (isset($_POST['to']))
+	{
+    	$to = $_POST['to'];
+	}
+	else if (isset($_GET['to']))
+	{
+    	$to = $_GET['to'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide a 'to user' identifier!<br>");
+		exit();
+	}
+	$from = NULL;
+	if (isset($_POST['from']))
+	{
+    	$from = $_POST['from'];
+	}
+	else if (isset($_GET['from']))
+	{
+    	$from = $_GET['from'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide a 'from user' identifier!<br>");
+		exit();
+	}
+	$itemId = NULL;
+	if (isset($_POST['itemId']))
+	{
+    	$itemId = $_POST['itemId'];
+	}
+	else if (isset($_GET['itemId']))
+	{
+    	$itemId = $_GET['itemId'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "PutComment", "You must provide an item identifier!<br>");
+		exit();
+	}
+	$rating = NULL;
+	if (isset($_POST['rating']))
+	{
+    	$rating = $_POST['rating'];
+	}
+	else if (isset($_GET['rating']))
+	{
+    	$rating = $_GET['rating'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a user identifier!<br></h3>");
+		exit();
+	}
+	$comment = NULL;
+	if (isset($_POST['comment']))
+	{
+    	$comment = $_POST['comment'];
+	}
+	else if (isset($_GET['comment']))
+	{
+    	$comment = $_GET['comment'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a comment !<br></h3>");
+		exit();
+	}
 
     getDatabaseLink($link);
     begin($link);
