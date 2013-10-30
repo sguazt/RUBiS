@@ -37,7 +37,7 @@
     getDatabaseLink($link);
 
     $userId = -1;
-    if ((!is_null($username && $username != "") || (!is_null($password) && $password !=""))
+    if ((!is_null($username) && $username != "") || (!is_null($password) && $password !=""))
     { // Authenticate the user
       $userId = authenticate($username, $password, $link);
       if ($userId == -1)
