@@ -160,7 +160,9 @@
         <include name="**/*.xml"/>
         <include name="**/*.html"/>
         <include name="images/**"/>
+<!--
         <exclude name="**/lib/**"/>
+-->
       </fileset>
     </copy>
 
