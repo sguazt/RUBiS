@@ -6,10 +6,10 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $itemId = $HTTP_POST_VARS['itemId'];
+    $itemId = $_POST['itemId'];
     if ($itemId == null)
     {
-      $itemId = $HTTP_GET_VARS['itemId'];
+      $itemId = $_GET['itemId'];
       if ($itemId == null)
       {
          printError($scriptName, $startTime, "Authentification for buying an item", "You must provide an item identifier!<br>");

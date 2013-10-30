@@ -6,10 +6,10 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $firstname = $HTTP_POST_VARS['firstname'];
+    $firstname = $_POST['firstname'];
     if ($firstname == null)
     {
-      $firstname = $HTTP_GET_VARS['firstname'];
+      $firstname = $_GET['firstname'];
       if ($firstname == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide a first name!<br>");
@@ -17,10 +17,10 @@
       }
     }
       
-    $lastname = $HTTP_POST_VARS['lastname'];
+    $lastname = $_POST['lastname'];
     if ($lastname == null)
     {
-      $lastname = $HTTP_GET_VARS['lastname'];
+      $lastname = $_GET['lastname'];
       if ($lastname == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide a last name!<br>");
@@ -28,10 +28,10 @@
       }
     }
       
-    $nickname = $HTTP_POST_VARS['nickname'];
+    $nickname = $_POST['nickname'];
     if ($nickname == null)
     {
-      $nickname = $HTTP_GET_VARS['nickname'];
+      $nickname = $_GET['nickname'];
       if ($nickname == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide a nick name!<br>");
@@ -39,10 +39,10 @@
       }
     }
 
-    $email = $HTTP_POST_VARS['email'];
+    $email = $_POST['email'];
     if ($email == null)
     {
-      $email = $HTTP_GET_VARS['email'];
+      $email = $_GET['email'];
       if ($email == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide an email address!<br>");
@@ -50,10 +50,10 @@
       }
     }
 
-    $password = $HTTP_POST_VARS['password'];
+    $password = $_POST['password'];
     if ($password == null)
     {
-      $password = $HTTP_GET_VARS['password'];
+      $password = $_GET['password'];
       if ($password == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide a password!<br>");
@@ -61,10 +61,10 @@
       }
     }
 
-    $region = $HTTP_POST_VARS['region'];
+    $region = $_POST['region'];
     if ($region == null)
     {
-      $region = $HTTP_GET_VARS['region'];
+      $region = $_GET['region'];
       if ($region == null)
       {
          printError($scriptName, $startTime, "Register user", "You must provide a region!<br>");

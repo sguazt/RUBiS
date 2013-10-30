@@ -6,20 +6,20 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $nickname = $HTTP_POST_VARS['nickname'];
+    $nickname = $_POST['nickname'];
     if ($nickname == null)
     {
-      $nickname = $HTTP_GET_VARS['nickname'];
+      $nickname = $_GET['nickname'];
       if ($nickname == null)
       {
          printError($scriptName, $startTime, "About me", "You must provide your nick name!<br>");
          exit();
       }
     }
-    $password = $HTTP_POST_VARS['password'];
+    $password = $_POST['password'];
     if ($password == null)
     {
-      $password = $HTTP_GET_VARS['password'];
+      $password = $_GET['password'];
       if ($password == null)
       {
          printError($scriptName, $startTime, "About me", "You must provide your password!<br>");

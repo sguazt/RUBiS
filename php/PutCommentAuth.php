@@ -6,10 +6,10 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $itemId = $HTTP_POST_VARS['itemId'];
+    $itemId = $_POST['itemId'];
     if ($itemId == null)
     {
-      $itemId = $HTTP_GET_VARS['itemId'];
+      $itemId = $_GET['itemId'];
       if ($itemId == null)
       {
          printError($scriptName, $startTime, "Authentification for comment", "You must provide an item identifier!<br>");
@@ -17,10 +17,10 @@
       }
     }      
 
-    $to = $HTTP_POST_VARS['to'];
+    $to = $_POST['to'];
     if ($to == null)
     {
-      $to = $HTTP_GET_VARS['to'];
+      $to = $_GET['to'];
       if ($to == null)
       {
          printError($scriptName, $startTime, "Authentification for comment", "You must provide a user identifier!<br>");

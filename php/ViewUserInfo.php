@@ -6,10 +6,10 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $userId = $HTTP_POST_VARS['userId'];
+    $userId = $_POST['userId'];
     if ($userId == null)
     {
-      $userId = $HTTP_GET_VARS['userId'];
+      $userId = $_GET['userId'];
       if ($userId == null)
       {
          printError($scriptName, $startTime, "Viewing user information", "You must provide an item identifier!<br>");

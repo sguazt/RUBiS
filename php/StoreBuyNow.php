@@ -6,10 +6,10 @@
     include("PHPprinter.php");
     $startTime = getMicroTime();
     
-    $userId = $HTTP_POST_VARS['userId'];
+    $userId = $_POST['userId'];
     if ($userId == null)
     {
-      $userId = $HTTP_GET_VARS['userId'];
+      $userId = $_GET['userId'];
       if ($userId == null)
       {
          printError($scriptName, $startTime, "StoreBuyNow", "<h3>You must provide a user identifier!<br></h3>");
@@ -17,10 +17,10 @@
       }
     }
       
-    $itemId = $HTTP_POST_VARS['itemId'];
+    $itemId = $_POST['itemId'];
     if ($itemId == null)
     {
-      $itemId = $HTTP_GET_VARS['itemId'];
+      $itemId = $_GET['itemId'];
       if ($itemId == null)
       {
          printError($scriptName, $startTime, "StoreBuyNow", "<h3>You must provide an item identifier !<br></h3>");
@@ -28,10 +28,10 @@
       }
     }
       
-    $maxQty = $HTTP_POST_VARS['maxQty'];
+    $maxQty = $_POST['maxQty'];
     if ($maxQty == null)
     {
-      $maxQty = $HTTP_GET_VARS['maxQty'];
+      $maxQty = $_GET['maxQty'];
       if ($maxQty == null)
       {
          printError($scriptName, $startTime, "StoreBuyNow", "<h3>You must provide a maximum quantity !<br></h3>");
@@ -39,10 +39,10 @@
       }
     }
 
-    $qty = $HTTP_POST_VARS['qty'];
+    $qty = $_POST['qty'];
     if ($qty == null)
     {
-      $qty = $HTTP_GET_VARS['qty'];
+      $qty = $_GET['qty'];
       if ($qty == null)
       {
          printError($scriptName, $startTime, "StoreBuyNow", "<h3>You must provide a quantity !<br></h3>");
