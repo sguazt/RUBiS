@@ -41,7 +41,7 @@
     $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed");
     if (mysql_num_rows($userResult) == 0)
     {
-      rollback();
+      rollback($link);
       die("<h3>ERROR: Sorry, but this user does not exist.</h3><br>\n");
     }
 
@@ -81,7 +81,7 @@
 	$itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for item the user has put a bid on.");
 	if (mysql_num_rows($itemResult) == 0)
         {
-          rollback();
+          rollback($link);
 	  die("<h3>ERROR: This item does not exist.</h3><br>\n");
         }
 	  
