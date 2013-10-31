@@ -36,6 +36,7 @@
     $maxBidResult = mysql_query("SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Max bid query failed");
     $maxBidRow = mysql_fetch_array($maxBidResult);
     $maxBid = $maxBidRow["bid"];
+    $buyNow = 0;
     if ($maxBid == 0)
     {
       $maxBid = $row["initial_price"];
