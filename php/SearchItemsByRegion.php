@@ -34,6 +34,20 @@
 		printError($scriptName, $startTime, "Search Items By Region", "You must provide a category identifier!<br>");
 		exit();
 	}
+	$categoryName = NULL;
+	if (isset($_POST['categoryName']))
+	{
+    	$categoryName = $_POST['categoryName'];
+	}
+	else if (isset($_GET['categoryName']))
+	{
+    	$categoryName = $_GET['categoryName'];
+	}
+	else
+	{
+		printError($scriptName, $startTime, "Search Items By Region", "You must provide a category name!<br>");
+		exit();
+	}
 	$page = NULL;
 	if (isset($_POST['page']))
 	{
