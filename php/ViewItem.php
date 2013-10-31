@@ -54,7 +54,7 @@
           $nb = $nb + $xRow["qty"];
           if ($nb > $row["quantity"])
           {
-            $maxBid = $row["bid"];
+            $maxBid = $xRow["bid"];
             break;
           }
         }
