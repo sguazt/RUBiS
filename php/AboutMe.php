@@ -40,7 +40,7 @@
     begin($link);
     // Authenticate the user 
     $userId = authenticate($nickname, $password, $link);
-    if ( userId == -1)
+    if ($userId == -1)
     {
       rollback($link);
       die("<h2>ERROR: You don't have an account on RUBis! You have to register first.</h2><br>");
