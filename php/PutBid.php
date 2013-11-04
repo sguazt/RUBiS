@@ -69,6 +69,7 @@
       exit();
     }
 
+	$buyNow = 0;
     $row = mysql_fetch_array($result);
     $maxBidResult = mysql_query("SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Max bid query failed");
     $maxBidRow = mysql_fetch_array($maxBidResult);
