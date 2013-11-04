@@ -262,7 +262,7 @@
 		  "<TD>".$itemReservePrice."<TD>".$buyNow.
                   "<TD>".$startDate."<TD>".$endDate."\n");
 
-	   mysql_free_result($currentPriceResult);
+	   //mysql_free_result($currentPriceResult);
        }
        print("</TABLE><p>\n");
      }
@@ -303,7 +303,7 @@
 		  "<TD>".$itemReservePrice."<TD>".$buyNow.
                   "<TD>".$startDate."<TD>".$endDate."\n");
 
-	   mysql_free_result($currentPriceResult);
+	   //mysql_free_result($currentPriceResult);
        }
        print("</TABLE><p>\n");
 
