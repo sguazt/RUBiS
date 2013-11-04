@@ -126,7 +126,7 @@
 		"<TD><a href=\"/PHP/PutBid.php?itemId=".$itemId."&nickname=".urlencode($nickname)."&password=".urlencode($password)."\"><IMG SRC=\"/PHP/bid_now.jpg\" height=22 width=90></a>\n");
 	
 	  mysql_free_result($sellerResult);
-	  mysql_free_result($currentPriceResult);
+	  //mysql_free_result($currentPriceResult);
 	}
 	mysql_free_result($itemResult);
 	print("</TBODY></TABLE><p>\n");
@@ -175,7 +175,7 @@
                "\n");
          
          mysql_free_result($sellerResult);
-         mysql_free_result($currentPriceResult);
+         //mysql_free_result($currentPriceResult);
        }
        
        print("</TBODY></TABLE><p>\n");
