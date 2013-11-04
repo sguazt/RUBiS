@@ -82,7 +82,7 @@
 
     mysql_query("LOCK TABLES users WRITE, comments WRITE", $link) or die("ERROR: Failed to acquire locks on users and comments tables.");
     // Update user rating
-    $toRes = mysql_query("SELECT id FROM users WHERE id=\"$to\"") or die("ERROR: User query failed");
+    $toRes = mysql_query("SELECT rating FROM users WHERE id=\"$to\"") or die("ERROR: User query failed");
     if (mysql_num_rows($toRes) == 0)
     {
       printError($scriptName, $startTime, "StoreComment", "<h3>Sorry, but this user does not exist.</h3><br>");
