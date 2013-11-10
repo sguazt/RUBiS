@@ -42,6 +42,7 @@
       $maxBid = $row["initial_price"];
       $buyNow = $row["buy_now"];
       $firstBid = "none";
+      $nbOfBids = 0;
     }
     else
     {
