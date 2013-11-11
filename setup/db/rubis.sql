@@ -93,8 +93,8 @@ CREATE TABLE bids (
    CONSTRAINT pk_bids PRIMARY KEY (id),
    INDEX idx_bids_item (item_id),
    INDEX idx_bids_user (user_id),
-   CONSTRAINT fk_bids_user FOREIGN KEY (user_id) REFERENCES users (id),
-   CONSTRAINT fk_bids_item FOREIGN KEY (item_id) REFERENCES items (id)
+   CONSTRAINT fk_bids_user FOREIGN KEY (user_id) REFERENCES users (id)
+--   CONSTRAINT fk_bids_item FOREIGN KEY (item_id) REFERENCES items (id)
 );
 
 DROP TABLE IF EXISTS comments;
@@ -112,8 +112,8 @@ CREATE TABLE comments
    INDEX idx_comments_to_user (to_user_id),
    INDEX idx_comments_item (item_id),
    CONSTRAINT fk_comments_from_user FOREIGN KEY (from_user_id) REFERENCES users (id),
-   CONSTRAINT fk_comments_to_user FOREIGN KEY (to_user_id) REFERENCES users (id),
-   CONSTRAINT fk_comments_item FOREIGN KEY (item_id) REFERENCES items (id)
+   CONSTRAINT fk_comments_to_user FOREIGN KEY (to_user_id) REFERENCES users (id)
+--   CONSTRAINT fk_comments_item FOREIGN KEY (item_id) REFERENCES items (id)
 );
 
 DROP TABLE IF EXISTS buy_now;
@@ -127,8 +127,8 @@ CREATE TABLE buy_now
    CONSTRAINT pk_buy_now PRIMARY KEY (id),
    INDEX idx_buy_now_buyer (buyer_id),
    INDEX idx_buy_now_item (item_id),
-   CONSTRAINT fk_buy_now_buyer FOREIGN KEY (buyer_id) REFERENCES users (id),
-   CONSTRAINT fk_buy_now_item FOREIGN KEY (item_id) REFERENCES items (id)
+   CONSTRAINT fk_buy_now_buyer FOREIGN KEY (buyer_id) REFERENCES users (id)
+--   CONSTRAINT fk_buy_now_item FOREIGN KEY (item_id) REFERENCES items (id)
 );
 
 DROP TABLE IF EXISTS ids;
