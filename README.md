@@ -32,18 +32,12 @@ In our implementation, unlike the OW2 one, we do not focus on the performance ev
 Instead, our aim is to provide a fully functional implementation that can be used to benchmark real computing systems and evaluate their performance.
 Most of the changes will focus on stability and improvements to the original OW2 version.
 
-For these reasons, currently we only provide an implementation based on Java servlets.
+For these reasons, currently we only provide an implementation based on Java servlets and on PHP.
 
 ## Compile and Install
 
-To compile RUBiS you need Java &ge; 1.5 and [Apache Ant](http://ant.apache.org).
-To run RUBiS you need a Java Servlet container &ge; 2.5, like [Apache Tomcat](http://tomcat.apache.org), and a DBMS like [MySQL](http://www.mysql.com).
-
-While the code should compile and run with every J2EE container and DBMS, we have currently tested it only with Apache Tomcat 6 and MySQL 5.6.\* (with MySQL Connector/J 5.0.\*).
-
 ### Precompilation Steps
 
-You need to install and setup the Java Servlet container and the DBMS.
 Also, you need to setup the RUBiS database.
 If you use MySQL, you can perform the following steps.
 
@@ -69,6 +63,24 @@ For instance, if you use Apache Tomcat and MySQL, you typically need to instruct
 ### Compilation Steps
 
 In the following we refer to the variable `$RUBIS_HOME` as a variable containing the path pointing to this version of RUBiS.
+
+#### PHP Incarnation
+
+No compilation is required.
+You only need to copy the `$RUBIS_HOME/php` directory to the document root of your Web Server and properly configure it.
+For instance, if you use the Apache HTTPD 2 server under Linux, the document root is typically located in `/var/www`.
+So, you only need to copy the `$RUBIS_HOME/php` directory to `/var/www/`.
+For instance:
+
+	$ mkdir -p /var/www/rubis
+	$ cp -r $RUBIS_HOME/php /var/www/rubis/PHP
+
+#### Java Servlets Incarnation
+
+To compile the Java Servlets incarnation of RUBiS you need Java &ge; 1.5 and [Apache Ant](http://ant.apache.org).
+To run RUBiS you need a Java Servlet container &ge; 2.5, like [Apache Tomcat](http://tomcat.apache.org), and a DBMS like [MySQL](http://www.mysql.com).
+
+While the code should compile and run fine with every J2EE container and DBMS, we have currently tested it only with Apache Tomcat 6 and MySQL 5.6.\* (with MySQL Connector/J 5.0.\*).
 
 1. Move to the `$RUBIS_HOME` directory.
 
