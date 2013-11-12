@@ -133,7 +133,7 @@
     }
 
      // Get the items the user won in the past 30 days
-     $wonItemsResult = mysql_query("SELECT item_id FROM bids, old_items WHERE bids.user_id=$userId AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id", $link) or die("ERROR: Query failed for getting current sellings.");
+     $wonItemsResult = mysql_query("SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id", $link) or die("ERROR: Query failed for getting current sellings.");
      if (mysql_num_rows($wonItemsResult) == 0)
          printHTMLHighlighted("<h3>You didn't win any item.</h3>\n");
      else
@@ -146,7 +146,7 @@
        while ($wonItemsRow = mysql_fetch_array($wonItemsResult))
        {
          $itemId = $wonItemsRow["item_id"];
-         $itemResult = mysql_query("SELECT * FROM old_items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the items the user won.");
+         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the items the user won.");
          if (mysql_num_rows($itemResult) == 0)
           {
             rollback($link);
@@ -195,7 +195,7 @@
        while ($buyNowRow = mysql_fetch_array($buyNowResult))
        {
          $itemId = $buyNowRow["item_id"];
-         $itemResult = mysql_query("SELECT * FROM old_items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the item the user bought.");
+         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the item the user bought.");
          if (mysql_num_rows($itemResult) == 0)
           {
             rollback($link);
@@ -268,7 +268,7 @@
      }
 
      // Get the items the user sold the last 30 days
-     $pastSellsResult = mysql_query("SELECT * FROM old_items WHERE old_items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30", $link) or die("ERROR: Query failed for getting sold items list.");
+     $pastSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30", $link) or die("ERROR: Query failed for getting sold items list.");
      if (mysql_num_rows($pastSellsResult) == 0)
       printHTMLHighlighted("<h3>You didn't sell any item in the last 30 days.</h3>\n");
      else
