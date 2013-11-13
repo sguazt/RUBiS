@@ -46,7 +46,7 @@
       die("<h2>ERROR: You don't have an account on RUBis! You have to register first.</h2><br>");
     }
 
-    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed");
+    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($userResult) == 0)
     {
       rollback($link);
@@ -71,7 +71,7 @@
     print("Current rating : <b>".$rating."</b><br><p>");
 
      // Get the items the user has bid on
-    $bidsResult = mysql_query("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id", $link) or die("ERROR: Query failed for getting bids list.");
+    $bidsResult = mysql_query("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id", $link) or die("ERROR: Query failed for getting bids list: " + mysql_error($link));
     if (mysql_num_rows($bidsResult) == 0)
       printHTMLHighlighted("<h2>You did not bid on any item.</h2>\n");
     else
@@ -86,7 +86,7 @@
       {
 	$maxBid = $bidsRow["max_bid"];
 	$itemId = $bidsRow["item_id"];
-	$itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for item the user has put a bid on.");
+	$itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for item the user has put a bid on: " + mysql_error($link));
 	if (mysql_num_rows($itemResult) == 0)
         {
           rollback($link);
@@ -110,7 +110,7 @@
 	  $endDate = $itemRow["end_date"];
 	  $sellerId = $itemRow["seller"];
 
-	  $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname.");
+	  $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname: " + mysql_error($link));
 	  if (mysql_num_rows($sellerResult) == 0)
           {
             rollback($link);
@@ -133,7 +133,7 @@
     }
 
      // Get the items the user won in the past 30 days
-     $wonItemsResult = mysql_query("SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id", $link) or die("ERROR: Query failed for getting current sellings.");
+     $wonItemsResult = mysql_query("SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id", $link) or die("ERROR: Query failed for getting current sellings: " + mysql_error($link));
      if (mysql_num_rows($wonItemsResult) == 0)
          printHTMLHighlighted("<h3>You didn't win any item.</h3>\n");
      else
@@ -146,7 +146,7 @@
        while ($wonItemsRow = mysql_fetch_array($wonItemsResult))
        {
          $itemId = $wonItemsRow["item_id"];
-         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the items the user won.");
+         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the items the user won: " + mysql_error($link));
          if (mysql_num_rows($itemResult) == 0)
           {
             rollback($link);
@@ -160,7 +160,7 @@
          $itemName = $itemRow["name"];
          $sellerId = $itemRow["seller"];
          
-         $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname.");
+         $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname: " + mysql_error($link));
          if (mysql_num_rows($sellerResult) == 0)
           {
             rollback($link);
@@ -182,7 +182,7 @@
      }
 
      // Get the items the user bought in the past 30 days
-     $buyNowResult = mysql_query("SELECT * FROM buy_now WHERE buy_now.buyer_id=$userId AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30", $link)or die("ERROR: Query failed for getting buy now list.");    
+     $buyNowResult = mysql_query("SELECT * FROM buy_now WHERE buy_now.buyer_id=$userId AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30", $link)or die("ERROR: Query failed for getting buy now list: " + mysql_error($link));
      if (mysql_num_rows($buyNowResult) == 0)
        printHTMLHighlighted("<h3>You didn't buy any item in the past 30 days.</h3>\n");
      else
@@ -195,7 +195,7 @@
        while ($buyNowRow = mysql_fetch_array($buyNowResult))
        {
          $itemId = $buyNowRow["item_id"];
-         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the item the user bought.");
+         $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link) or die("ERROR: Query failed for getting the item the user bought: " + mysql_error($link));
          if (mysql_num_rows($itemResult) == 0)
           {
             rollback($link);
@@ -207,7 +207,7 @@
          $sellerId = $itemRow["seller"];
          $price = $itemRow["buy_now"]*$buyNowRow["qty"];
          
-         $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname.");
+         $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link) or die("ERROR: Query failed for getting the seller nickname: " + mysql_error($link));
          if (mysql_num_rows($sellerResult) == 0)
           {
             rollback($link);
@@ -228,7 +228,7 @@
      }
 
      // Get the items the user is currently selling
-     $currentSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND items.end_date>=NOW()", $link) or die("ERROR: Query failed for getting current sellings.");
+     $currentSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND items.end_date>=NOW()", $link) or die("ERROR: Query failed for getting current sellings: " + mysql_error($link));
      if (mysql_num_rows($currentSellsResult) == 0)
       printHTMLHighlighted("<h3>You are currently selling no item.</h3>\n");
      else
@@ -268,7 +268,7 @@
      }
 
      // Get the items the user sold the last 30 days
-     $pastSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30", $link) or die("ERROR: Query failed for getting sold items list.");
+     $pastSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30", $link) or die("ERROR: Query failed for getting sold items list: " + mysql_error($link));
      if (mysql_num_rows($pastSellsResult) == 0)
       printHTMLHighlighted("<h3>You didn't sell any item in the last 30 days.</h3>\n");
      else
@@ -310,7 +310,7 @@
      }
 
     // Get the comments about the user
-    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link) or die("ERROR: Query failed for the list of comments.");
+    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link) or die("ERROR: Query failed for the list of comments: " + mysql_error($link));
     if (mysql_num_rows($commentsResult) == 0)
       printHTMLHighlighted("<h2>There is no comment for this user.</h2>\n");
     else
@@ -320,7 +320,7 @@
 	while ($commentsRow = mysql_fetch_array($commentsResult))
 	{
 	    $authorId = $commentsRow["from_user_id"];
-	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link) or die("ERROR: Query failed for the comment author.");
+	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link) or die("ERROR: Query failed for the comment author: " + mysql_error($link));
 	    if (mysql_num_rows($authorResult) == 0)
             {
               rollback($link);
