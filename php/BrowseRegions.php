@@ -10,7 +10,7 @@
     
     getDatabaseLink($link);
     begin($link);
-    $result = mysql_query("SELECT * FROM regions", $link) or die("ERROR: Query failed");
+    $result = mysql_query("SELECT * FROM regions", $link) or die("ERROR: Query failed: " + mysql_error($link));
     commit($link);
     if (mysql_num_rows($result) == 0)
       print("<h2>Sorry, but there is no region available at this time. Database table is empty</h2><br>");

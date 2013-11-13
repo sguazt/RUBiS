@@ -79,7 +79,7 @@
     print("<h2>Items in category $categoryName</h2><br><br>");
     
     getDatabaseLink($link);
-    $result = mysql_query("SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items,users WHERE items.category=$categoryId AND items.seller=users.id AND users.region=$regionId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems") or die("ERROR: Query failed");
+    $result = mysql_query("SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items,users WHERE items.category=$categoryId AND items.seller=users.id AND users.region=$regionId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems") or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($result) == 0)
     {
       if ($page == 0)

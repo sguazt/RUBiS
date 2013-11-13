@@ -133,15 +133,15 @@
 
     // Add bid to database and update values in item
     $now = date("Y:m:d H:i:s");
-    mysql_query("LOCK TABLES bids WRITE, items WRITE", $link) or die("ERROR: Failed to acquire locks on items and bids tables.");
-    $result = mysql_query("SELECT max_bid FROM items WHERE id=$itemId", $link) or die("ERROR: Failed to update number of bids in database. DEADLOCK!!");
+    mysql_query("LOCK TABLES bids WRITE, items WRITE", $link) or die("ERROR: Failed to acquire locks on items and bids tables: " + mysql_error($link));
+    $result = mysql_query("SELECT max_bid FROM items WHERE id=$itemId", $link) or die("ERROR: Failed to update number of bids in database: " + mysql_error($link) + ". DEADLOCK!!");
     $row = mysql_fetch_array($result);
     if ($maxBid > $row["max_bid"])
-      mysql_query("UPDATE items SET max_bid=$maxBid WHERE id=$itemId", $link) or die("ERROR: Failed to update maximum bid in database. DEADLOCK!!");
+      mysql_query("UPDATE items SET max_bid=$maxBid WHERE id=$itemId", $link) or die("ERROR: Failed to update maximum bid in database: " + mysql_error($link) + ". DEADLOCK!!");
 
-    mysql_query("INSERT INTO bids VALUES (NULL, $userId, $itemId, $qty, $bid, $maxBid, '$now')", $link) or die("ERROR: Failed to insert new bid in database. DEADLOCK!!");
-    mysql_query("UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId", $link) or die("ERROR: Failed to update number of bids in database. DEADLOCK!!");
-    mysql_query("UNLOCK TABLES", $link) or die("ERROR: Failed to unlock items and bids tables.");
+    mysql_query("INSERT INTO bids VALUES (NULL, $userId, $itemId, $qty, $bid, $maxBid, '$now')", $link) or die("ERROR: Failed to insert new bid in database: " + mysql_error($link) + ". DEADLOCK!!");
+    mysql_query("UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId", $link) or die("ERROR: Failed to update number of bids in database: " + mysql_error($link) + ". DEADLOCK!!");
+    mysql_query("UNLOCK TABLES", $link) or die("ERROR: Failed to unlock items and bids tables: " + mysql_error($link));
     commit($link);
 
     printHTMLheader("RUBiS: Bidding result");

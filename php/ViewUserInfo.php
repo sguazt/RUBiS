@@ -23,7 +23,7 @@
       
     getDatabaseLink($link);
     begin($link);
-    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed");
+    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($userResult) == 0)
     {
       commit($link);
@@ -48,7 +48,7 @@
     print("Current rating : <b>".$rating."</b><br>");
 
       // Get the comments about the user
-    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link) or die("ERROR: Query failed for the list of comments.");
+    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link) or die("ERROR: Query failed for the list of comments: " + mysql_error($link));
     if (mysql_num_rows($commentsResult) == 0)
       print("<h2>There is no comment for this user.</h2><br>\n");
     else
@@ -57,7 +57,7 @@
 	while ($commentsRow = mysql_fetch_array($commentsResult))
 	{
 	    $authorId = $commentsRow["from_user_id"];
-	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link) or die("ERROR: Query failed for the comment author.");
+	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link) or die("ERROR: Query failed for the comment author: " + mysql_error($link));
 	    if (mysql_num_rows($authorResult) == 0)
 		die("ERROR: This author does not exist.<br>\n");
 	    else

@@ -25,9 +25,9 @@
     begin($link);
 
     // Get the item name
-    $itemNameResult = mysql_query("SELECT name FROM items WHERE items.id=$itemId", $link) or die("ERROR: Query failed");
+    $itemNameResult = mysql_query("SELECT name FROM items WHERE items.id=$itemId", $link) or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($itemNameResult) == 0)
-      $itemNameResult = mysql_query("SELECT name FROM old_items WHERE old_items.id=$itemId", $link) or die("ERROR: Query failed");
+      $itemNameResult = mysql_query("SELECT name FROM old_items WHERE old_items.id=$itemId", $link) or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($itemNameResult) == 0)
     {
       commit($link);
@@ -38,7 +38,7 @@
 
     
     // Get the list of bids for this item
-    $bidsListResult = mysql_query("SELECT * FROM bids WHERE item_id=$itemId ORDER BY date DESC", $link) or die("ERROR: Bids list query failed");
+    $bidsListResult = mysql_query("SELECT * FROM bids WHERE item_id=$itemId ORDER BY date DESC", $link) or die("ERROR: Bids list query failed: "  + mysql_error($link));
     if (mysql_num_rows($bidsListResult) == 0)
       print ("<h2>There is no bid for $itemName. </h2><br>");
     else
@@ -58,7 +58,7 @@
 	// Get the bidder nickname	
     	if ($userId != 0)
 	{
-	  $userNameResult = mysql_query("SELECT nickname FROM users WHERE id=$userId", $link) or die("ERROR: User nickname query failed");
+	  $userNameResult = mysql_query("SELECT nickname FROM users WHERE id=$userId", $link) or die("ERROR: User nickname query failed: " + mysql_error($link));
 	  $userNameRow = mysql_fetch_array($userNameResult);
 	  $nickname = $userNameRow["nickname"];
 	  mysql_free_result($userNameResult);

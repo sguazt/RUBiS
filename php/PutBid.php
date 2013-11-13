@@ -61,7 +61,7 @@
       exit();	
     }
 
-    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId") or die("ERROR: Query failed");
+    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId") or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($result) == 0)
     {
       printError($scriptName, $startTime, "PutBid", "<h3>Sorry, but this item does not exist.</h3><br>");
@@ -71,7 +71,7 @@
 
 	$buyNow = 0;
     $row = mysql_fetch_array($result);
-    $maxBidResult = mysql_query("SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Max bid query failed");
+    $maxBidResult = mysql_query("SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Max bid query failed: " + mysql_error($link));
     $maxBidRow = mysql_fetch_array($maxBidResult);
     $maxBid = $maxBidRow["bid"];
     if ($maxBid == 0)
@@ -85,7 +85,7 @@
     {
       if ($row["quantity"] > 1)
       {
-        $xRes = mysql_query("SELECT bid,qty FROM bids WHERE item_id=".$row["id"]." ORDER BY bid DESC LIMIT ".$row["quantity"], $link) or die("ERROR: Quantity query failed");
+        $xRes = mysql_query("SELECT bid,qty FROM bids WHERE item_id=".$row["id"]." ORDER BY bid DESC LIMIT ".$row["quantity"], $link) or die("ERROR: Quantity query failed: " + mysql_error($link));
         $nb = 0;
         while ($xRow = mysql_fetch_array($xRes))
         {
@@ -98,7 +98,7 @@
         }
       }
       $firstBid = $maxBid;
-      $nbOfBidsResult = mysql_query("SELECT COUNT(*) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Nb of bids query failed");
+      $nbOfBidsResult = mysql_query("SELECT COUNT(*) AS bid FROM bids WHERE item_id=".$row["id"], $link) or die("ERROR: Nb of bids query failed: " + mysql_error($link));
       $nbOfBidsRow = mysql_fetch_array($nbOfBidsResult);
       $nbOfBids = $nbOfBidsRow["bid"];
       mysql_free_result($nbOfBidsResult);
@@ -123,7 +123,7 @@
 	}
     }
 
-    $sellerNameResult = mysql_query("SELECT users.nickname FROM users WHERE id=".$row["seller"], $link) or die("ERROR: Seller name query failed");
+    $sellerNameResult = mysql_query("SELECT users.nickname FROM users WHERE id=".$row["seller"], $link) or die("ERROR: Seller name query failed: "  + mysql_error($link));
     $sellerNameRow = mysql_fetch_array($sellerNameResult);
     $sellerName = $sellerNameRow["nickname"];
     mysql_free_result($sellerNameResult);

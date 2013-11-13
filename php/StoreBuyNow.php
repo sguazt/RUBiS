@@ -74,8 +74,8 @@
     getDatabaseLink($link);
     begin($link);
 
-    mysql_query("LOCK TABLES buy_now WRITE, items WRITE", $link) or die("ERROR: Failed to acquire locks on items and buy_now tables.");
-    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId") or die("ERROR: Query failed");
+    mysql_query("LOCK TABLES buy_now WRITE, items WRITE", $link) or die("ERROR: Failed to acquire locks on items and buy_now tables: " + mysql_error($link));
+    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId") or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($result) == 0)
     {
       printError($scriptName, $startTime, "BuyNow", "<h3>Sorry, but this item does not exist.</h3><br>");
@@ -85,13 +85,13 @@
     $row = mysql_fetch_array($result);
     $newQty = $row["quantity"]-$qty;
     if ($newQty == 0)
-      mysql_query("UPDATE items SET end_date=NOW(),quantity=$newQty WHERE id=$itemId") or die("ERROR: Failed to update item");
+      mysql_query("UPDATE items SET end_date=NOW(),quantity=$newQty WHERE id=$itemId") or die("ERROR: Failed to update item: " + mysql_error($link));
     else
-      mysql_query("UPDATE items SET quantity=$newQty WHERE id=$itemId") or die("ERROR: Failed to update item");
+      mysql_query("UPDATE items SET quantity=$newQty WHERE id=$itemId") or die("ERROR: Failed to update item: " + mysql_error($link));
     // Add BuyNow to database
     $now = date("Y:m:d H:i:s");
-    mysql_query("INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')", $link) or die("ERROR: Failed to insert new BuyNow in database.");
-    mysql_query("UNLOCK TABLES", $link) or die("ERROR: Failed to unlock items and buy_now tables.");
+    mysql_query("INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')", $link) or die("ERROR: Failed to insert new BuyNow in database: " + mysql_error($link));
+    mysql_query("UNLOCK TABLES", $link) or die("ERROR: Failed to unlock items and buy_now tables: "  + mysql_error($link));
 
     printHTMLheader("RUBiS: BuyNow result");
     if ($qty == 1)

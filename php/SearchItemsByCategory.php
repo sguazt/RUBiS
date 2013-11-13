@@ -66,7 +66,7 @@
     
     getDatabaseLink($link);
     begin($link);
-    $result = mysql_query("SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items WHERE category=$categoryId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems", $link) or die("ERROR: Query failed");
+    $result = mysql_query("SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items WHERE category=$categoryId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems", $link) or die("ERROR: Query failed: " + mysql_error($link));
     if (mysql_num_rows($result) == 0)
     {
       if ($page == 0)
