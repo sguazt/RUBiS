@@ -54,7 +54,7 @@
 
       // Get the comments about the user
     $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link);
-	if (!$commentResult)
+	if (!$commentsResult)
 	{
 		error_log("Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " + mysql_error($link));
 		die("ERROR: Query failed for the list of comments: " + mysql_error($link));

@@ -114,14 +114,14 @@
 	}
     // Add BuyNow to database
     $now = date("Y:m:d H:i:s");
-    $result = mysql_query("INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')", $link);
-	if (!$result)
+    $result2 = mysql_query("INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')", $link);
+	if (!$result2)
 	{
 		error_log("Failed to insert new BuyNow in database 'INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')': " + mysql_error($link));
 		die("ERROR: Failed to insert new BuyNow for user '$userId' and item '$itemId' in database: " + mysql_error($link));
 	}
-    $result = mysql_query("UNLOCK TABLES", $link);
-	if (!$result)
+    $result2 = mysql_query("UNLOCK TABLES", $link);
+	if (!$result2)
 	{
 		error_log("Failed to unlock items and buy_now tables: "  + mysql_error($link));
 		die("ERROR: Failed to unlock items and buy_now tables: "  + mysql_error($link));

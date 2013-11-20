@@ -77,7 +77,7 @@
 
      // Get the items the user has bid on
     $bidsResult = mysql_query("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id", $link);
-	if (!$bidResult)
+	if (!$bidsResult)
 	{
 		error_log("Query 'SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id' failed for getting bids list: " + mysql_error($link));
 		die("ERROR: Query failed for getting bids list: " + mysql_error($link));
