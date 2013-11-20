@@ -98,8 +98,8 @@
     $regionResult = mysql_query("SELECT * FROM regions WHERE name=\"$region\"", $link);
 	if (!$regionResult)
 	{
-		error_log("Query 'SELECT * FROM regions WHERE name=\"$region\"' failed: " + mysql_error($link));
-		die("ERROR: Region query failed for region '$region': " + mysql_error($link));
+		error_log("Query 'SELECT * FROM regions WHERE name=\"$region\"' failed: " . mysql_error($link));
+		die("ERROR: Region query failed for region '$region': " . mysql_error($link));
 	}
     if (mysql_num_rows($regionResult) == 0)
     {
@@ -120,8 +120,8 @@
     $nicknameResult = mysql_query("SELECT * FROM users WHERE nickname=\"$nickname\"", $link);
 	if (!$nicknameResult)
 	{
-		error_log("Query 'SELECT * FROM users WHERE nickname=\"$nickname\"' failed: " + mysql_error($link));
-		die("ERROR: Nickname query failed: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM users WHERE nickname=\"$nickname\"' failed: " . mysql_error($link));
+		die("ERROR: Nickname query failed: " . mysql_error($link));
 	}
     if (mysql_num_rows($nicknameResult) > 0)
     {
@@ -136,15 +136,15 @@
     $result = mysql_query("INSERT INTO users VALUES (NULL, \"$firstname\", \"$lastname\", \"$nickname\", \"$password\", \"$email\", 0, 0, '$now', $regionId)", $link);
 	if (!$result)
 	{
-		error_log("Failed to insert new user in database INSERT INTO users VALUES (NULL, \"$firstname\", \"$lastname\", \"$nickname\", \"$password\", \"$email\", 0, 0, '$now', $regionId)': " + mysql_error($link));
-		die("ERROR: Failed to insert new user '$nickname' in database: " + mysql_error($link));
+		error_log("Failed to insert new user in database INSERT INTO users VALUES (NULL, \"$firstname\", \"$lastname\", \"$nickname\", \"$password\", \"$email\", 0, 0, '$now', $regionId)': " . mysql_error($link));
+		die("ERROR: Failed to insert new user '$nickname' in database: " . mysql_error($link));
 	}
 
     $result = mysql_query("SELECT * FROM users WHERE nickname=\"$nickname\"", $link);
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM users WHERE nickname=\"$nickname\"' failed: " + mysql_error($link));
-		die("ERROR: Query user failed: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM users WHERE nickname=\"$nickname\"' failed: " . mysql_error($link));
+		die("ERROR: Query user failed: " . mysql_error($link));
 	}
     $row = mysql_fetch_array($result);
     commit($link);

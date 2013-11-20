@@ -75,8 +75,8 @@
     $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " + mysql_error($link));
-		die("ERROR: Item query failed for item '$itemId': " + mysql_error($link));
+		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
+		die("ERROR: Item query failed for item '$itemId': " . mysql_error($link));
 	}
     if (mysql_num_rows($result) == 0)
     {
@@ -88,8 +88,8 @@
     $toRes = mysql_query("SELECT * FROM users WHERE id=\"$to\"");
 	if (!$toRes)
 	{
-		error_log("Query 'SELECT * FROM users WHERE id=\"$to\"' failed: " + mysql_error($link));
-		die("ERROR: User query failed for user '$to': " + mysql_error($link));
+		error_log("Query 'SELECT * FROM users WHERE id=\"$to\"' failed: " . mysql_error($link));
+		die("ERROR: User query failed for user '$to': " . mysql_error($link));
 	}
     if (mysql_num_rows($toRes) == 0)
     {

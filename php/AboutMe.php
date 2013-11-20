@@ -49,8 +49,8 @@
     $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link);
 	if (!$userResult)
 	{
-		error_log("Query 'SELECT * FROM users WHERE users.id=$userId' failed: " + mysql_error($link));
-		die("ERROR: Query failed: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM users WHERE users.id=$userId' failed: " . mysql_error($link));
+		die("ERROR: Query failed: " . mysql_error($link));
 	}
     if (mysql_num_rows($userResult) == 0)
     {
@@ -79,8 +79,8 @@
     $bidsResult = mysql_query("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id", $link);
 	if (!$bidsResult)
 	{
-		error_log("Query 'SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id' failed for getting bids list: " + mysql_error($link));
-		die("ERROR: Query failed for getting bids list: " + mysql_error($link));
+		error_log("Query 'SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id' failed for getting bids list: " . mysql_error($link));
+		die("ERROR: Query failed for getting bids list: " . mysql_error($link));
 	}
     if (mysql_num_rows($bidsResult) == 0)
       printHTMLHighlighted("<h2>You did not bid on any item.</h2>\n");
@@ -99,8 +99,8 @@
 	$itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link);
 	if (!$itemResult)
 	{
-		error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for item the user has put a bid on: " + mysql_error($link));
-		die("ERROR: Query failed for item '$itemId' the user has put a bid on: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for item the user has put a bid on: " . mysql_error($link));
+		die("ERROR: Query failed for item '$itemId' the user has put a bid on: " . mysql_error($link));
 	}
 	if (mysql_num_rows($itemResult) == 0)
     {
@@ -128,8 +128,8 @@
 	  $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link);
 	  if (!$sellerResult)
 	  {
-		error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " + mysql_error($link));
-		die("ERROR: Query failed for getting the seller '$sellerId' nickname: " + mysql_error($link));
+		error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " . mysql_error($link));
+		die("ERROR: Query failed for getting the seller '$sellerId' nickname: " . mysql_error($link));
 	  }
 	  if (mysql_num_rows($sellerResult) == 0)
 	  {
@@ -156,8 +156,8 @@
      $wonItemsResult = mysql_query("SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id", $link);
 	 if (!$wonItemsResult)
 	 {
-		error_log("Query 'SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id' failed for getting current sellings: " + mysql_error($link));
-		die("ERROR: Query failed for getting current sellings: " + mysql_error($link));
+		error_log("Query 'SELECT item_id FROM bids, items WHERE bids.user_id=$userId AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id' failed for getting current sellings: " . mysql_error($link));
+		die("ERROR: Query failed for getting current sellings: " . mysql_error($link));
 	 }
      if (mysql_num_rows($wonItemsResult) == 0)
          printHTMLHighlighted("<h3>You didn't win any item.</h3>\n");
@@ -174,8 +174,8 @@
          $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link);
 		 if (!$itemResult)
 		 {
-			error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for getting the item the user won: " + mysql_error($link));
-			die("ERROR: Query failed for getting the item '$itemId' the user won: " + mysql_error($link));
+			error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for getting the item the user won: " . mysql_error($link));
+			die("ERROR: Query failed for getting the item '$itemId' the user won: " . mysql_error($link));
 		 }
          if (mysql_num_rows($itemResult) == 0)
          {
@@ -193,8 +193,8 @@
          $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link);
 		 if (!$sellerResult)
 		 {
-			error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " + mysql_error($link));
-			die("ERROR: Query failed for getting the seller '$sellerId' nickname: " + mysql_error($link));
+			error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " . mysql_error($link));
+			die("ERROR: Query failed for getting the seller '$sellerId' nickname: " . mysql_error($link));
 		 }
          if (mysql_num_rows($sellerResult) == 0)
          {
@@ -220,8 +220,8 @@
      $buyNowResult = mysql_query("SELECT * FROM buy_now WHERE buy_now.buyer_id=$userId AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30", $link);
 	 if (!$buyNowResult)
 	 {
-		error_log("Query 'SELECT * FROM buy_now WHERE buy_now.buyer_id=$userId AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30' failed for getting buy now list: " + mysql_error($link));
-		die("ERROR: Query failed for getting buy now list: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM buy_now WHERE buy_now.buyer_id=$userId AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30' failed for getting buy now list: " . mysql_error($link));
+		die("ERROR: Query failed for getting buy now list: " . mysql_error($link));
 	 }
      if (mysql_num_rows($buyNowResult) == 0)
        printHTMLHighlighted("<h3>You didn't buy any item in the past 30 days.</h3>\n");
@@ -238,8 +238,8 @@
          $itemResult = mysql_query("SELECT * FROM items WHERE id=$itemId", $link);
 		 if (!$itemResult)
 		 {
-			error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for getting the item the user bought: " + mysql_error($link));
-			die("ERROR: Query failed for getting the item '$itemId' the user bought: " + mysql_error($link));
+			error_log("Query 'SELECT * FROM items WHERE id=$itemId' failed for getting the item the user bought: " . mysql_error($link));
+			die("ERROR: Query failed for getting the item '$itemId' the user bought: " . mysql_error($link));
 		 }
          if (mysql_num_rows($itemResult) == 0)
          {
@@ -255,8 +255,8 @@
          $sellerResult = mysql_query("SELECT nickname FROM users WHERE id=$sellerId", $link);
 		 if (!$sellerResult)
 		 {
-			error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " + mysql_error($link));
-			die("ERROR: Query failed for getting the seller '$sellerId' nickname: " + mysql_error($link));
+			error_log("Query 'SELECT nickname FROM users WHERE id=$sellerId' failed for getting the seller nickname: " . mysql_error($link));
+			die("ERROR: Query failed for getting the seller '$sellerId' nickname: " . mysql_error($link));
 		 }
          if (mysql_num_rows($sellerResult) == 0)
          {
@@ -281,8 +281,8 @@
      $currentSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND items.end_date>=NOW()", $link);
 	 if (!$currentSellsResult)
 	 {
-		error_log("Query 'SELECT * FROM items WHERE items.seller=$userId AND items.end_date>=NOW()' failed for getting current sellings: " + mysql_error($link));
-		die("ERROR: Query failed for getting current sellings: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM items WHERE items.seller=$userId AND items.end_date>=NOW()' failed for getting current sellings: " . mysql_error($link));
+		die("ERROR: Query failed for getting current sellings: " . mysql_error($link));
 	 }
      if (mysql_num_rows($currentSellsResult) == 0)
       printHTMLHighlighted("<h3>You are currently selling no item.</h3>\n");
@@ -326,8 +326,8 @@
      $pastSellsResult = mysql_query("SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30", $link);
 	 if (!$pastSellsResult)
 	 {
-		error_log("Query 'SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30' failed for getting sold items list: " + mysql_error($link));
-		die("ERROR: Query failed for getting sold items list: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM items WHERE items.seller=$userId AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30' failed for getting sold items list: " . mysql_error($link));
+		die("ERROR: Query failed for getting sold items list: " . mysql_error($link));
 	 }
      if (mysql_num_rows($pastSellsResult) == 0)
       printHTMLHighlighted("<h3>You didn't sell any item in the last 30 days.</h3>\n");
@@ -373,8 +373,8 @@
     $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link);
 	if (!$commentsResult)
 	{
-		error_log("Query 'SELECT * FROM comments WHERE comments.to_user_id=$userId' failed for the list of comments: " + mysql_error($link));
-		die("ERROR: Query failed for the list of comments: " + mysql_error($link));
+		error_log("Query 'SELECT * FROM comments WHERE comments.to_user_id=$userId' failed for the list of comments: " . mysql_error($link));
+		die("ERROR: Query failed for the list of comments: " . mysql_error($link));
 	}
     if (mysql_num_rows($commentsResult) == 0)
       printHTMLHighlighted("<h2>There is no comment for this user.</h2>\n");
@@ -388,8 +388,8 @@
 	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link);
 		if (!$authorResult)
 		{
-			error_log("Query 'SELECT nickname FROM users WHERE users.id=$authorId' failed for the comment author: " + mysql_error($link));
-			die("ERROR: Query failed for the comment author '$authorId': " + mysql_error($link));
+			error_log("Query 'SELECT nickname FROM users WHERE users.id=$authorId' failed for the comment author: " . mysql_error($link));
+			die("ERROR: Query failed for the comment author '$authorId': " . mysql_error($link));
 		}
 	    if (mysql_num_rows($authorResult) == 0)
             {

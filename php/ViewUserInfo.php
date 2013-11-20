@@ -56,8 +56,8 @@
     $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link);
 	if (!$commentsResult)
 	{
-		error_log("Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " + mysql_error($link));
-		die("ERROR: Query failed for the list of comments: " + mysql_error($link));
+		error_log("Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " . mysql_error($link));
+		die("ERROR: Query failed for the list of comments: " . mysql_error($link));
 	}
     if (mysql_num_rows($commentsResult) == 0)
       print("<h2>There is no comment for this user.</h2><br>\n");
@@ -70,8 +70,8 @@
 	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link);
 		if (!$authorResult)
 		{
-			error_log("Query failed 'SELECT nickname FROM users WHERE users.id=$authorId': " + mysql_error($link));
-			die("ERROR: Query failed for the comment author '$authorId': " + mysql_error($link));
+			error_log("Query failed 'SELECT nickname FROM users WHERE users.id=$authorId': " . mysql_error($link));
+			die("ERROR: Query failed for the comment author '$authorId': " . mysql_error($link));
 		}
 	    if (mysql_num_rows($authorResult) == 0)
 		{

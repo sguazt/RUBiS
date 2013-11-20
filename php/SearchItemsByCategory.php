@@ -69,8 +69,8 @@
     $result = mysql_query("SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items WHERE category=$categoryId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems", $link);
 	if (!$result)
 	{
-		error_log("Query 'SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items WHERE category=$categoryId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems' failed: " + mysql_error($link));
-		die("ERROR: Query failed for category '$categoryId', page '$page' and nbOfItems '$nbOfItems': " + mysql_error($link));
+		error_log("Query 'SELECT items.id,items.name,items.initial_price,items.max_bid,items.nb_of_bids,items.end_date FROM items WHERE category=$categoryId AND end_date>=NOW() LIMIT ".$page*$nbOfItems.",$nbOfItems' failed: " . mysql_error($link));
+		die("ERROR: Query failed for category '$categoryId', page '$page' and nbOfItems '$nbOfItems': " . mysql_error($link));
 	}
     if (mysql_num_rows($result) == 0)
     {

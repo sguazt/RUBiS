@@ -5,14 +5,14 @@ function getDatabaseLink(&$link)
   $link = mysql_pconnect("localhost", "cecchet", "");
   if (!$link)
   {
-	error_log("Could not connect to database: " + mysql_error());
-	die("ERROR: Could not connect to database: " + mysql_error());
+	error_log("Could not connect to database: " . mysql_error());
+	die("ERROR: Could not connect to database: " . mysql_error());
   }
   mysql_select_db("rubis", $link);
   if (!$link)
   {
-	error_log("Couldn't select RUBiS database: " + mysql_error($link));
-	die("ERROR: Couldn't select RUBiS database: " + mysql_error($link));
+	error_log("Couldn't select RUBiS database: " . mysql_error($link));
+	die("ERROR: Couldn't select RUBiS database: " . mysql_error($link));
   }
 }
 
@@ -57,8 +57,8 @@ function authenticate($nickname, $password, $link)
   $result = mysql_query("SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"", $link);
   if (!$result)
   {
-	error_log("Authentification query 'SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"' failed: " + mysql_error($link));
-	die("ERROR: Authentification query failed for user '$nickname': " + mysql_error($link));
+	error_log("Authentification query 'SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"' failed: " . mysql_error($link));
+	die("ERROR: Authentification query failed for user '$nickname': " . mysql_error($link));
   }
   if (mysql_num_rows($result) == 0)
     return -1;

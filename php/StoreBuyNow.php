@@ -77,14 +77,14 @@
     $result = mysql_query("LOCK TABLES buy_now WRITE, items WRITE", $link);
 	if (!$result)
 	{
-		error_log("Failed to acquire locks on items and buy_now tables: " + mysql_error($link));
-		die("ERROR: Failed to acquire locks on items and buy_now tables: " + mysql_error($link));
+		error_log("Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
+		die("ERROR: Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
 	}
     $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " + mysql_error($link));
-		die("ERROR: Query failed for item '$itemId': " + mysql_error($link));
+		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
+		die("ERROR: Query failed for item '$itemId': " . mysql_error($link));
 	}
     if (mysql_num_rows($result) == 0)
     {
@@ -99,8 +99,8 @@
       $result2 = mysql_query("UPDATE items SET end_date=NOW(),quantity=$newQty WHERE id=$itemId");
 	  if (!$result2)
 	  {
-		error_log("Failed to update item 'UPDATE items SET end_date=NOW(),quantity=$newQty WHERE id=$itemId': " + mysql_error($link));
-		die("ERROR: Failed to update item '$itemId': " + mysql_error($link));
+		error_log("Failed to update item 'UPDATE items SET end_date=NOW(),quantity=$newQty WHERE id=$itemId': " . mysql_error($link));
+		die("ERROR: Failed to update item '$itemId': " . mysql_error($link));
 	  }
 	}
     else
@@ -108,8 +108,8 @@
       $result2 = mysql_query("UPDATE items SET quantity=$newQty WHERE id=$itemId");
 	  if (!$result2)
 	  {
-		error_log("Failed to update item 'UPDATE items SET quantity=$newQty WHERE id=$itemId': " + mysql_error($link));
-		die("ERROR: Failed to update item '$itemId': " + mysql_error($link));
+		error_log("Failed to update item 'UPDATE items SET quantity=$newQty WHERE id=$itemId': " . mysql_error($link));
+		die("ERROR: Failed to update item '$itemId': " . mysql_error($link));
 	  }
 	}
     // Add BuyNow to database
@@ -117,14 +117,14 @@
     $result2 = mysql_query("INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')", $link);
 	if (!$result2)
 	{
-		error_log("Failed to insert new BuyNow in database 'INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')': " + mysql_error($link));
-		die("ERROR: Failed to insert new BuyNow for user '$userId' and item '$itemId' in database: " + mysql_error($link));
+		error_log("Failed to insert new BuyNow in database 'INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')': " . mysql_error($link));
+		die("ERROR: Failed to insert new BuyNow for user '$userId' and item '$itemId' in database: " . mysql_error($link));
 	}
     $result2 = mysql_query("UNLOCK TABLES", $link);
 	if (!$result2)
 	{
-		error_log("Failed to unlock items and buy_now tables: "  + mysql_error($link));
-		die("ERROR: Failed to unlock items and buy_now tables: "  + mysql_error($link));
+		error_log("Failed to unlock items and buy_now tables: "  . mysql_error($link));
+		die("ERROR: Failed to unlock items and buy_now tables: "  . mysql_error($link));
 	}
 
     printHTMLheader("RUBiS: BuyNow result");

@@ -83,15 +83,15 @@
     $result = mysql_query("LOCK TABLES users WRITE, comments WRITE", $link);
 	if (!$result)
 	{
-		error_log("Failed to acquire locks on users and comments tables: " + mysql_error($link));
-		die("ERROR: Failed to acquire locks on users and comments tables: " + mysql_error($link));
+		error_log("Failed to acquire locks on users and comments tables: " . mysql_error($link));
+		die("ERROR: Failed to acquire locks on users and comments tables: " . mysql_error($link));
 	}
     // Update user rating
     $toRes = mysql_query("SELECT rating FROM users WHERE id=\"$to\"");
 	if (!$toRes)
 	{
-		error_log("Query 'SELECT rating FROM users WHERE id=\"$to\"' failed: " + mysql_error($link));
-		die("ERROR: User query failed for user '$to': " + mysql_error($link));
+		error_log("Query 'SELECT rating FROM users WHERE id=\"$to\"' failed: " . mysql_error($link));
+		die("ERROR: User query failed for user '$to': " . mysql_error($link));
 	}
     if (mysql_num_rows($toRes) == 0)
     {
@@ -103,8 +103,8 @@
     $result = mysql_query("UPDATE users SET rating=$rating WHERE id=$to");
 	if (!$result)
 	{
-		error_log("Unable to update user's rating 'UPDATE users SET rating=$rating WHERE id=$to': " + mysql_error($link));
-		die("ERROR: Unable to update user's rating for user '$to': " + mysql_error($link));
+		error_log("Unable to update user's rating 'UPDATE users SET rating=$rating WHERE id=$to': " . mysql_error($link));
+		die("ERROR: Unable to update user's rating for user '$to': " . mysql_error($link));
 	}
 
     // Add bid to database
@@ -112,14 +112,14 @@
     $result = mysql_query("INSERT INTO comments VALUES (NULL, $from, $to, $itemId, $rating, '$now', \"$comment\")", $link);
 	if (!$result)
 	{
-		error_log("Failed to insert new comment in database 'INSERT INTO comments VALUES (NULL, $from, $to, $itemId, $rating, '$now', \"$comment\")': " + mysql_error($link));
-		die("ERROR: Failed to insert new comment in database: " + mysql_error($link));
+		error_log("Failed to insert new comment in database 'INSERT INTO comments VALUES (NULL, $from, $to, $itemId, $rating, '$now', \"$comment\")': " . mysql_error($link));
+		die("ERROR: Failed to insert new comment in database: " . mysql_error($link));
 	}
     $result = mysql_query("UNLOCK TABLES", $link);
 	if (!$result)
 	{
-		error_log("Failed to unlock users and comments tables: " + mysql_error($link));
-		die("ERROR: Failed to unlock users and comments tables: " + mysql_error($link));
+		error_log("Failed to unlock users and comments tables: " . mysql_error($link));
+		die("ERROR: Failed to unlock users and comments tables: " . mysql_error($link));
 	}
     commit($link);
 
