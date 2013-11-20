@@ -72,7 +72,12 @@
       exit();	
     }
 
-    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId") or die("ERROR: Item query failed: " + mysql_error($link));
+    $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
+	if (!$result)
+	{
+		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " + mysql_error($link));
+		die("ERROR: Item query failed for item '$itemId': " + mysql_error($link));
+	}
     if (mysql_num_rows($result) == 0)
     {
       printError($scriptName, $startTime, "PutComment", "<h3>Sorry, but this item does not exist.</h3><br>");
@@ -80,7 +85,12 @@
       exit();
     }
 
-    $toRes = mysql_query("SELECT * FROM users WHERE id=\"$to\"") or die("ERROR: User query failed: " + mysql_error($link));
+    $toRes = mysql_query("SELECT * FROM users WHERE id=\"$to\"");
+	if (!$toRes)
+	{
+		error_log("Query 'SELECT * FROM users WHERE id=\"$to\"' failed: " + mysql_error($link));
+		die("ERROR: User query failed for user '$to': " + mysql_error($link));
+	}
     if (mysql_num_rows($toRes) == 0)
     {
       printError($scriptName, $startTime, "PutComment", "<h3>Sorry, but this user does not exist.</h3><br>");
