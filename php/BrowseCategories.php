@@ -53,7 +53,7 @@
     $result = mysql_query("SELECT * FROM categories", $link);
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM categories' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM categories' failed: " . mysql_error($link));
 		die("ERROR: Query failed: " . mysql_error($link));
 	}
     commit($link);

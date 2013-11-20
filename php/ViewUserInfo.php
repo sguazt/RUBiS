@@ -26,7 +26,7 @@
     $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link);
 	if (!$userResult)
 	{
-		error_log("Query 'SELECT * FROM users WHERE users.id=$userId' failed: " + mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM users WHERE users.id=$userId' failed: " + mysql_error($link));
 		die("ERROR: Query failed for user '$userId': " + mysql_error($link));
 	}
     if (mysql_num_rows($userResult) == 0)
@@ -56,7 +56,7 @@
     $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link);
 	if (!$commentsResult)
 	{
-		error_log("Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " . mysql_error($link));
+		error_log("[".__FILE__."] Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " . mysql_error($link));
 		die("ERROR: Query failed for the list of comments: " . mysql_error($link));
 	}
     if (mysql_num_rows($commentsResult) == 0)
@@ -70,7 +70,7 @@
 	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link);
 		if (!$authorResult)
 		{
-			error_log("Query failed 'SELECT nickname FROM users WHERE users.id=$authorId': " . mysql_error($link));
+			error_log("[".__FILE__."] Query failed 'SELECT nickname FROM users WHERE users.id=$authorId': " . mysql_error($link));
 			die("ERROR: Query failed for the comment author '$authorId': " . mysql_error($link));
 		}
 	    if (mysql_num_rows($authorResult) == 0)

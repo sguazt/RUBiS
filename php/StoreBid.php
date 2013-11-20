@@ -136,13 +136,13 @@
     $result = mysql_query("LOCK TABLES bids WRITE, items WRITE", $link);
 	if (!$result)
 	{
-		error_log("Failed to acquire locks on items and bids tables: " . mysql_error($link));
+		error_log("[".__FILE__."] Failed to acquire locks on items and bids tables: " . mysql_error($link));
 		die("ERROR: Failed to acquire locks on items and bids tables: " . mysql_error($link));
 	}
     $result = mysql_query("SELECT max_bid FROM items WHERE id=$itemId", $link);
 	if (!$result)
 	{
-		error_log("Query 'SELECT max_bid FROM items WHERE id=$itemId' failed: " . mysql_error($link) . ". DEADLOCK!!");
+		error_log("[".__FILE__."] Query 'SELECT max_bid FROM items WHERE id=$itemId' failed: " . mysql_error($link) . ". DEADLOCK!!");
 		die("ERROR: Failed to query the number of bids for item '$itemId' in database: " . mysql_error($link) . ". DEADLOCK!!");
 	}
     $row = mysql_fetch_array($result);
@@ -151,7 +151,7 @@
       $result2 = mysql_query("UPDATE items SET max_bid=$maxBid WHERE id=$itemId", $link);
 	  if (!$result2)
 	  {
-		error_log("Failed to update maximum bid in database 'UPDATE items SET max_bid=$maxBid WHERE id=$itemId': " . mysql_error($link) . ". DEADLOCK!!");
+		error_log("[".__FILE__."] Failed to update maximum bid in database 'UPDATE items SET max_bid=$maxBid WHERE id=$itemId': " . mysql_error($link) . ". DEADLOCK!!");
 		die("ERROR: Failed to update maximum bid '$maxBid' for item '$itemId' in database: " . mysql_error($link) . ". DEADLOCK!!");
 	  }
 	}
@@ -159,19 +159,19 @@
     $result = mysql_query("INSERT INTO bids VALUES (NULL, $userId, $itemId, $qty, $bid, $maxBid, '$now')", $link);
 	if (!$result)
 	{
-		error_log("Failed to insert new bid in database 'INSERT INTO bids VALUES (NULL, $userId, $itemId, $qty, $bid, $maxBid, '$now')': " . mysql_error($link) . ". DEADLOCK!!");
+		error_log("[".__FILE__."] Failed to insert new bid in database 'INSERT INTO bids VALUES (NULL, $userId, $itemId, $qty, $bid, $maxBid, '$now')': " . mysql_error($link) . ". DEADLOCK!!");
 		die("ERROR: Failed to insert new bid for user '$userId' and item '$itemId' in database: " . mysql_error($link) . ". DEADLOCK!!");
 	}
     $result = mysql_query("UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId", $link);
 	if (!$result)
 	{
-		error_log("Failed to update number of bids in database 'UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId': " . mysql_error($link) . ". DEADLOCK!!");
+		error_log("[".__FILE__."] Failed to update number of bids in database 'UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId': " . mysql_error($link) . ". DEADLOCK!!");
 		die("ERROR: Failed to update number of bids for item '$itemId' in database: " . mysql_error($link) . ". DEADLOCK!!");
 	}
     $result = mysql_query("UNLOCK TABLES", $link);
 	if (!$result)
 	{
-		error_log("Failed to unlock items and bids tables: " . mysql_error($link));
+		error_log("[".__FILE__."] Failed to unlock items and bids tables: " . mysql_error($link));
 		die("ERROR: Failed to unlock items and bids tables: " . mysql_error($link));
 	}
     commit($link);

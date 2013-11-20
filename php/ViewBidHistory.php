@@ -28,7 +28,7 @@
     $itemNameResult = mysql_query("SELECT name FROM items WHERE items.id=$itemId", $link);
 	if (!$itemNameResult)
 	{
-		error_log("Query 'SELECT name FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT name FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
 		die("ERROR: Query failed for item '$itemId': " . mysql_error($link));
 	}
     if (mysql_num_rows($itemNameResult) == 0)
@@ -36,7 +36,7 @@
       $itemNameResult = mysql_query("SELECT name FROM old_items WHERE old_items.id=$itemId", $link);
 	  if (!$itemNameResult)
 	  {
-		error_log("Query 'SELECT name FROM old_items WHERE old_items.id=$itemId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT name FROM old_items WHERE old_items.id=$itemId' failed: " . mysql_error($link));
 		die("ERROR: Query failed: " . mysql_error($link));
 	  }
 	}
@@ -53,7 +53,7 @@
     $bidsListResult = mysql_query("SELECT * FROM bids WHERE item_id=$itemId ORDER BY date DESC", $link);
 	if (!$bidsListResult)
 	{
-		error_log("Query 'SELECT * FROM bids WHERE item_id=$itemId ORDER BY date DESC' failed: "  . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM bids WHERE item_id=$itemId ORDER BY date DESC' failed: "  . mysql_error($link));
 		die("ERROR: Bids list query failed for item '$itemId': "  . mysql_error($link));
 	}
     if (mysql_num_rows($bidsListResult) == 0)
@@ -78,7 +78,7 @@
 	  $userNameResult = mysql_query("SELECT nickname FROM users WHERE id=$userId", $link);
 	  if (!$userNameResult)
 	  {
-		error_log("Query 'SELECT nickname FROM users WHERE id=$userId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT nickname FROM users WHERE id=$userId' failed: " . mysql_error($link));
 		die("User nickname query failed: " . mysql_error($link));
 	  }
 	  $userNameRow = mysql_fetch_array($userNameResult);

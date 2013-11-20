@@ -26,7 +26,7 @@
     $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
 		die("ERROR: Query failed for item '$itemId': " . mysql_error($link));
 	}
     if (mysql_num_rows($result) == 0)
@@ -34,7 +34,7 @@
       $result = mysql_query("SELECT * FROM old_items WHERE old_items.id=$itemId");
 	  if (!$result)
 	  {
-		error_log("Query 'SELECT * FROM old_items WHERE old_items.id=$itemId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM old_items WHERE old_items.id=$itemId' failed: " . mysql_error($link));
 		die("ERROR: Query failed: " . mysql_error($link));
 	  }
 	}
@@ -48,7 +48,7 @@
     $maxBidResult = mysql_query("SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"], $link);
 	if (!$maxBidResult)
 	{
-		error_log("Query 'SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"]."' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT MAX(bid) AS bid FROM bids WHERE item_id=".$row["id"]."' failed: " . mysql_error($link));
 		die("ERROR: Max bid query failed for item '".$row["id"]."': " . mysql_error($link));
 	}
     $maxBidRow = mysql_fetch_array($maxBidResult);
@@ -68,7 +68,7 @@
         $xRes = mysql_query("SELECT bid,qty FROM bids WHERE item_id=".$row["id"]." ORDER BY bid DESC LIMIT ".$row["quantity"], $link);
 		if (!$xRes)
 		{
-			error_log("Query 'SELECT bid,qty FROM bids WHERE item_id=".$row["id"]." ORDER BY bid DESC LIMIT ".$row["quantity"]."' failed: " . mysql_error($link));
+			error_log("[".__FILE__."] Query 'SELECT bid,qty FROM bids WHERE item_id=".$row["id"]." ORDER BY bid DESC LIMIT ".$row["quantity"]."' failed: " . mysql_error($link));
 			die("ERROR: Quantity query failed for item '".$row["id"]."': " . mysql_error($link));
 		}
         $nb = 0;
@@ -86,7 +86,7 @@
       $nbOfBidsResult = mysql_query("SELECT COUNT(*) AS bid FROM bids WHERE item_id=".$row["id"], $link);
 	  if (!$nbOfBidsResult)
 	  {
-		error_log("Query 'SELECT COUNT(*) AS bid FROM bids WHERE item_id=".$row["id"]."' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT COUNT(*) AS bid FROM bids WHERE item_id=".$row["id"]."' failed: " . mysql_error($link));
 		die("ERROR: Nb of bids query failed: " . mysql_error($link));
 	  }
       $nbOfBidsRow = mysql_fetch_array($nbOfBidsResult);
@@ -116,7 +116,7 @@
     $sellerNameResult = mysql_query("SELECT users.nickname FROM users WHERE id=".$row["seller"], $link);
 	if (!$sellerNameResult)
 	{
-		error_log("Query 'SELECT users.nickname FROM users WHERE id=".$row["seller"]."' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT users.nickname FROM users WHERE id=".$row["seller"]."' failed: " . mysql_error($link));
 		die("ERROR: Seller name query failed for user '".$row["seller"]."': " . mysql_error($link));
 	}
     $sellerNameRow = mysql_fetch_array($sellerNameResult);

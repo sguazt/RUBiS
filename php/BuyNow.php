@@ -63,7 +63,7 @@
     $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
 	if (!$result)
 	{
-		error_log("Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT * FROM items WHERE items.id=$itemId' failed: " . mysql_error($link));
 		die("ERROR: Query failed for item '$itemId': " . mysql_error($link));
 	}
     if (mysql_num_rows($result) == 0)
@@ -77,7 +77,7 @@
     $sellerNameResult = mysql_query("SELECT nickname FROM users WHERE id=$userId", $link);
 	if (!$sellerNameResult)
 	{
-		error_log("Query 'SELECT nickname FROM users WHERE id=$userId' failed: " . mysql_error($link));
+		error_log("[".__FILE__."] Query 'SELECT nickname FROM users WHERE id=$userId' failed: " . mysql_error($link));
 		die("ERROR: Seller '$userId' name query failed: " . mysql_error($link));
 	}
     $sellerNameRow = mysql_fetch_array($sellerNameResult);
