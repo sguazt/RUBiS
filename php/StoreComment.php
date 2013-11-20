@@ -80,12 +80,12 @@
     getDatabaseLink($link);
     begin($link);
 
-    $result = mysql_query("LOCK TABLES users WRITE, comments WRITE", $link);
-	if (!$result)
-	{
-		error_log("[".__FILE__."] Failed to acquire locks on users and comments tables: " . mysql_error($link));
-		die("ERROR: Failed to acquire locks on users and comments tables: " . mysql_error($link));
-	}
+//    $result = mysql_query("LOCK TABLES users WRITE, comments WRITE", $link);
+//	if (!$result)
+//	{
+//		error_log("[".__FILE__."] Failed to acquire locks on users and comments tables: " . mysql_error($link));
+//		die("ERROR: Failed to acquire locks on users and comments tables: " . mysql_error($link));
+//	}
     // Update user rating
     $toRes = mysql_query("SELECT rating FROM users WHERE id=\"$to\"");
 	if (!$toRes)
@@ -115,12 +115,12 @@
 		error_log("[".__FILE__."] Failed to insert new comment in database 'INSERT INTO comments VALUES (NULL, $from, $to, $itemId, $rating, '$now', \"$comment\")': " . mysql_error($link));
 		die("ERROR: Failed to insert new comment in database: " . mysql_error($link));
 	}
-    $result = mysql_query("UNLOCK TABLES", $link);
-	if (!$result)
-	{
-		error_log("[".__FILE__."] Failed to unlock users and comments tables: " . mysql_error($link));
-		die("ERROR: Failed to unlock users and comments tables: " . mysql_error($link));
-	}
+//    $result = mysql_query("UNLOCK TABLES", $link);
+//	if (!$result)
+//	{
+//		error_log("[".__FILE__."] Failed to unlock users and comments tables: " . mysql_error($link));
+//		die("ERROR: Failed to unlock users and comments tables: " . mysql_error($link));
+//	}
     commit($link);
 
     printHTMLheader("RUBiS: Comment posting");

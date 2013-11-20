@@ -133,12 +133,12 @@
 
     // Add bid to database and update values in item
     $now = date("Y:m:d H:i:s");
-    $result = mysql_query("LOCK TABLES bids WRITE, items WRITE", $link);
-	if (!$result)
-	{
-		error_log("[".__FILE__."] Failed to acquire locks on items and bids tables: " . mysql_error($link));
-		die("ERROR: Failed to acquire locks on items and bids tables: " . mysql_error($link));
-	}
+//    $result = mysql_query("LOCK TABLES bids WRITE, items WRITE", $link);
+//	if (!$result)
+//	{
+//		error_log("[".__FILE__."] Failed to acquire locks on items and bids tables: " . mysql_error($link));
+//		die("ERROR: Failed to acquire locks on items and bids tables: " . mysql_error($link));
+//	}
     $result = mysql_query("SELECT max_bid FROM items WHERE id=$itemId", $link);
 	if (!$result)
 	{
@@ -168,12 +168,12 @@
 		error_log("[".__FILE__."] Failed to update number of bids in database 'UPDATE items SET nb_of_bids=nb_of_bids+1 WHERE id=$itemId': " . mysql_error($link) . ". DEADLOCK!!");
 		die("ERROR: Failed to update number of bids for item '$itemId' in database: " . mysql_error($link) . ". DEADLOCK!!");
 	}
-    $result = mysql_query("UNLOCK TABLES", $link);
-	if (!$result)
-	{
-		error_log("[".__FILE__."] Failed to unlock items and bids tables: " . mysql_error($link));
-		die("ERROR: Failed to unlock items and bids tables: " . mysql_error($link));
-	}
+//    $result = mysql_query("UNLOCK TABLES", $link);
+//	if (!$result)
+//	{
+//		error_log("[".__FILE__."] Failed to unlock items and bids tables: " . mysql_error($link));
+//		die("ERROR: Failed to unlock items and bids tables: " . mysql_error($link));
+//	}
     commit($link);
 
     printHTMLheader("RUBiS: Bidding result");

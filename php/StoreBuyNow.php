@@ -74,12 +74,12 @@
     getDatabaseLink($link);
     begin($link);
 
-    $result = mysql_query("LOCK TABLES buy_now WRITE, items WRITE", $link);
-	if (!$result)
-	{
-		error_log("[".__FILE__."] Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
-		die("ERROR: Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
-	}
+//    $result = mysql_query("LOCK TABLES buy_now WRITE, items WRITE", $link);
+//	if (!$result)
+//	{
+//		error_log("[".__FILE__."] Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
+//		die("ERROR: Failed to acquire locks on items and buy_now tables: " . mysql_error($link));
+//	}
     $result = mysql_query("SELECT * FROM items WHERE items.id=$itemId");
 	if (!$result)
 	{
@@ -120,12 +120,12 @@
 		error_log("[".__FILE__."] Failed to insert new BuyNow in database 'INSERT INTO buy_now VALUES (NULL, $userId, $itemId, $qty, '$now')': " . mysql_error($link));
 		die("ERROR: Failed to insert new BuyNow for user '$userId' and item '$itemId' in database: " . mysql_error($link));
 	}
-    $result2 = mysql_query("UNLOCK TABLES", $link);
-	if (!$result2)
-	{
-		error_log("[".__FILE__."] Failed to unlock items and buy_now tables: "  . mysql_error($link));
-		die("ERROR: Failed to unlock items and buy_now tables: "  . mysql_error($link));
-	}
+//    $result2 = mysql_query("UNLOCK TABLES", $link);
+//	if (!$result2)
+//	{
+//		error_log("[".__FILE__."] Failed to unlock items and buy_now tables: "  . mysql_error($link));
+//		die("ERROR: Failed to unlock items and buy_now tables: "  . mysql_error($link));
+//	}
 
     printHTMLheader("RUBiS: BuyNow result");
     if ($qty == 1)
