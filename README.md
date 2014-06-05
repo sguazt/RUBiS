@@ -1,5 +1,5 @@
-dcsj-rubis
-==========
+RUBiS
+=====
 
 A java implementation of the _Rice University Bidding System_ (RUBiS).
 
