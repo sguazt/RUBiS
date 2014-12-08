@@ -1,11 +1,11 @@
 RUBiS
 =====
 
-A java implementation of the _Rice University Bidding System_ (RUBiS).
+A java and PHP implementation of the _Rice University Bidding System_ (RUBiS).
 
 RUBiS is a free, open source initiative.
-This implementation is a fork of version 1.4.3 of [http://rubis.ow2.org](OW2 RUBiS).
-As of 2012, the original 1.4.3 version can still be downloaded at the [http://forge.objectweb.org/project/showfiles.php?group_id=44](OW2 site)
+This implementation is a fork of version 1.4.3 of [OW2 RUBiS](http://rubis.ow2.org).
+As of 2012, the original 1.4.3 version can still be downloaded at the [OW2 site](http://forge.objectweb.org/project/showfiles.php?group_id=44)
 
 
 ## Overview
