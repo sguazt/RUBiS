@@ -89,7 +89,7 @@
         packagenames="edu.rice.rubis.*"
         sourcepath="${java.path}"
         defaultexcludes="yes"
-        destdir="${docs.path}/docs/api"
+        destdir="${docs.path}/api"
         author="true"
         version="true"
         use="true"
