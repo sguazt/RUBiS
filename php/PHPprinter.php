@@ -2,8 +2,18 @@
  
 function getDatabaseLink(&$link)
 {
-  $link = mysql_pconnect("localhost", "cecchet", "") or die ("ERROR: Could not connect to database");
-  mysql_select_db("rubis", $link) or die("ERROR: Couldn't select RUBiS database");
+  $link = mysql_pconnect("localhost", "cecchet", "");
+  if (!$link)
+  {
+	error_log("[".__FILE__."] Could not connect to database: " . mysql_error());
+	die("ERROR: Could not connect to database: " . mysql_error());
+  }
+  mysql_select_db("rubis", $link);
+  if (!$link)
+  {
+	error_log("[".__FILE__."] Couldn't select RUBiS database: " . mysql_error($link));
+	die("ERROR: Couldn't select RUBiS database: " . mysql_error($link));
+  }
 }
 
 function getMicroTime()
@@ -44,7 +54,12 @@ function printError($scriptName, $startTime, $title, $error)
 
 function authenticate($nickname, $password, $link)
 {
-  $result = mysql_query("SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"", $link) or die("ERROR: Authentification query failed");
+  $result = mysql_query("SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"", $link);
+  if (!$result)
+  {
+	error_log("[".__FILE__."] Authentification query 'SELECT id FROM users WHERE nickname=\"$nickname\" AND password=\"$password\"' failed: " . mysql_error($link));
+	die("ERROR: Authentification query failed for user '$nickname': " . mysql_error($link));
+  }
   if (mysql_num_rows($result) == 0)
     return -1;
   $row = mysql_fetch_array($result);

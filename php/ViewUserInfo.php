@@ -23,11 +23,16 @@
       
     getDatabaseLink($link);
     begin($link);
-    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link) or die("ERROR: Query failed");
+    $userResult = mysql_query("SELECT * FROM users WHERE users.id=$userId", $link);
+	if (!$userResult)
+	{
+		error_log("[".__FILE__."] Query 'SELECT * FROM users WHERE users.id=$userId' failed: " + mysql_error($link));
+		die("ERROR: Query failed for user '$userId': " + mysql_error($link));
+	}
     if (mysql_num_rows($userResult) == 0)
     {
       commit($link);
-      die("<h3>ERROR: Sorry, but this user does not exist.</h3><br>\n");
+      die("<h3>ERROR: Sorry, but this user '$userId' does not exist.</h3><br>\n");
     }
 
     printHTMLheader("RUBiS: View user information");
@@ -48,7 +53,12 @@
     print("Current rating : <b>".$rating."</b><br>");
 
       // Get the comments about the user
-    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link) or die("ERROR: Query failed for the list of comments.");
+    $commentsResult = mysql_query("SELECT * FROM comments WHERE comments.to_user_id=$userId", $link);
+	if (!$commentsResult)
+	{
+		error_log("[".__FILE__."] Query failed 'SELECT * FROM comments WHERE comments.to_user_id=$userId': " . mysql_error($link));
+		die("ERROR: Query failed for the list of comments: " . mysql_error($link));
+	}
     if (mysql_num_rows($commentsResult) == 0)
       print("<h2>There is no comment for this user.</h2><br>\n");
     else
@@ -57,9 +67,16 @@
 	while ($commentsRow = mysql_fetch_array($commentsResult))
 	{
 	    $authorId = $commentsRow["from_user_id"];
-	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link) or die("ERROR: Query failed for the comment author.");
+	    $authorResult = mysql_query("SELECT nickname FROM users WHERE users.id=$authorId", $link);
+		if (!$authorResult)
+		{
+			error_log("[".__FILE__."] Query failed 'SELECT nickname FROM users WHERE users.id=$authorId': " . mysql_error($link));
+			die("ERROR: Query failed for the comment author '$authorId': " . mysql_error($link));
+		}
 	    if (mysql_num_rows($authorResult) == 0)
-		die("ERROR: This author does not exist.<br>\n");
+		{
+			die("ERROR: This author '$authorId' does not exist.<br>\n");
+		}
 	    else
 	    {
 		$authorRow = mysql_fetch_array($authorResult);
