@@ -1,0 +1,73 @@
+# HTTP server information
+httpd_hostname = sci23
+httpd_port = 80
+
+# C-JDBC server information
+cjdbc_hostname = 
+
+# Precise which version to use. Valid options are : PHP, Servlets, EJB
+httpd_use_version = EJB
+
+ejb_server = sci20
+ejb_html_path = /EJB_HTML
+ejb_script_path = /servlet
+
+servlets_server = sci21
+servlets_html_path = /Servlet_HTML
+servlets_script_path = /servlet
+
+php_html_path = /PHP
+php_script_path = /PHP
+
+# Workload: precise which transition table to use
+workload_remote_client_nodes = 
+workload_remote_client_command = /usr/local/jdk1.3.1/bin/java -classpath RUBiS edu.rice.rubis.client.ClientEmulator
+workload_number_of_clients_per_node = 280
+
+workload_transition_table = /users/cecchet/RUBiS/workload/transitions.txt
+workload_number_of_columns = 27
+workload_number_of_rows = 29
+workload_maximum_number_of_transitions = 1000
+workload_number_of_items_per_page = 20
+workload_use_tpcw_think_time = yes
+workload_up_ramp_time_in_ms = 120000
+workload_up_ramp_slowdown_factor = 2
+workload_session_run_time_in_ms = 900000
+workload_down_ramp_time_in_ms = 60000
+workload_down_ramp_slowdown_factor = 3
+
+
+#Database information
+database_server = sci22
+
+# Users policy
+database_number_of_users = 1000000
+
+# Region & Category definition files
+database_regions_file = /users/cecchet/RUBiS/database/ebay_regions.txt
+database_categories_file = /users/cecchet/RUBiS/database/ebay_simple_categories.txt
+
+# Items policy
+database_number_of_old_items = 1000000
+database_percentage_of_unique_items = 80
+database_percentage_of_items_with_reserve_price = 40
+database_percentage_of_buy_now_items = 10
+database_max_quantity_for_multiple_items = 10
+database_item_description_length = 8192
+
+# Bids policy
+database_max_bids_per_item = 20
+
+# Comments policy
+database_max_comments_per_user = 20
+database_comment_max_length = 2048
+
+
+# Monitoring Information
+monitoring_debug_level = 0
+monitoring_program = /usr/bin/sar
+monitoring_options = -n DEV -n SOCK -rubcw
+monitoring_sampling_in_seconds = 1
+monitoring_rsh = /usr/bin/rsh
+monitoring_scp = /usr/bin/scp
+monitoring_gnuplot_terminal = gif
